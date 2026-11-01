@@ -10,4 +10,6 @@ RUN pnpm build
 FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
+# Fail the build (and keep the running site) if the nginx config is invalid.
+RUN nginx -t
 EXPOSE 80

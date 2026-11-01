@@ -8,7 +8,8 @@ import {
 } from '~/utils/og-image/routing'
 import { silentLogger } from '~/utils/server'
 import { withBasePath } from '~/utils/path'
-import { SITE } from '~/config'
+import { SITE, UI } from '~/config'
+import { markdownMirrorPath } from '~/utils/ai'
 
 interface Props {
   title?: string
@@ -39,6 +40,30 @@ const ogImagePathname = ogImageConfig
 const ogImageURL = ogImagePathname
   ? new URL(withBasePath(ogImagePathname), Astro.url).href
   : undefined
+
+const markdownMirror = markdownMirrorPath(Astro.url.pathname)
+const isHome = (Astro.url.pathname.replace(/\/+$/, '') || '/') === '/'
+
+// Who this site is about, for search engines and answer engines.
+const personData = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  'name': SITE.author,
+  'alternateName': 'Rüzgar Samet Samyeli',
+  'url': SITE.website,
+  'jobTitle': 'Senior Full-Stack Engineer',
+  'description': SITE.description,
+  'homeLocation': { '@type': 'Place', 'name': 'Istanbul, Türkiye' },
+  'founder': [
+    { '@type': 'Organization', 'name': 'lodos.md', 'url': 'https://lodos.md/' },
+    { '@type': 'Organization', 'name': 'gazla.co', 'url': 'https://gazla.co' },
+  ],
+  'alumniOf': {
+    '@type': 'CollegeOrUniversity',
+    'name': 'Süleyman Demirel University',
+  },
+  'sameAs': UI.socialLinks.map((l) => l.link),
+}
 
 // https://jsonld.com/blog-post/
 const blogPostingData = {
@@ -162,7 +187,28 @@ const webPageData = {
   href="/rss.xml"
 />
 
+<!-- Plain-markdown mirror of this page, and the site summary for LLMs -->
+{
+  markdownMirror && (
+    <link
+      rel="alternate"
+      type="text/markdown"
+      href={withBasePath(markdownMirror)}
+    />
+  )
+}
+<link rel="alternate" type="text/plain" title="llms.txt" href={withBasePath('/llms.txt')} />
+
 <!-- Google JSON-LD Structured Data -->
+{
+  isHome && (
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(personData)}
+    />
+  )
+}
 {
   pubDate ? (
     <script
