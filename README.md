@@ -1,6 +1,6 @@
 # samye.li
 
-Personal site and blog of Samet Samyeli — https://samye.li
+Personal site and blog of Samet Samyeli: https://samye.li
 
 Built with [Astro](https://astro.build) on top of the [AntfuStyle theme](https://github.com/lin-stephanie/astro-antfustyle-theme) (MIT) by Stephanie Lin. Deployed with Coolify (Dockerfile → nginx) behind Cloudflare.
 

@@ -93,11 +93,9 @@ const webPageData = {
 <!-- Initialize as inline scripts for faster response, avoiding FOUC  -->
 <script is:inline data-astro-rerun>
   ;(() => {
-    const storedTheme = localStorage.getItem('theme')
-    const prefersDark = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    ).matches
-    const theme = storedTheme || (prefersDark ? 'dark' : 'light')
+    // Dark by default; only an explicit toggle by the visitor switches to light.
+    const storedTheme = localStorage.getItem('site-theme')
+    const theme = storedTheme === 'light' ? 'light' : 'dark'
     const themeColor = theme === 'dark' ? '#050505' : '#fff'
 
     if (theme === 'dark') {
@@ -105,7 +103,6 @@ const webPageData = {
     } else {
       document.documentElement.classList.remove('dark')
     }
-    window.localStorage.setItem('theme', theme)
 
     const colorScheme = document.querySelector("meta[name='color-scheme']")
     colorScheme?.setAttribute(

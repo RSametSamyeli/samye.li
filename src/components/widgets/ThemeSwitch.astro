@@ -70,7 +70,7 @@
   }
 
   const saveTheme = (isDark: boolean) => {
-    window.localStorage.setItem('theme', isDark ? 'dark' : 'light')
+    window.localStorage.setItem('site-theme', isDark ? 'dark' : 'light')
   }
 
   const getThemeSwitchButton = () => {
@@ -89,12 +89,6 @@
     saveTheme(isDark)
   }
 
-  /* Listening system changes */
-  window
-    .matchMedia('(prefers-color-scheme: dark)')
-    .addEventListener('change', ({ matches }) => {
-      syncTheme(matches)
-    })
 
   /* Handle user toggle button */
   document.addEventListener('astro:page-load', () => {
