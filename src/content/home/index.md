@@ -1,9 +1,9 @@
-Hey, I'm Samet 👋 — a senior full-stack engineer and founder based in Istanbul. For 8+ years I've been designing and running production systems: async Python and TypeScript backends, PostgreSQL schemas, real-time event flows, and the Next.js/React products on top of them.
+Hey, I'm Samet 👋 — a senior full-stack engineer and founder based in Istanbul. For 12+ years I've been designing and running production systems: async Python and TypeScript backends, PostgreSQL schemas, real-time event flows, and the Next.js/React products on top of them.
 
 **Currently building**
 
-- :link[lodos.md]{id=https://lodos.md/} — an MCP-native, local-first **Founder OS**: wiki, vault, kanban and workflows, every surface exposed as a first-class Model Context Protocol tool with zero-knowledge encryption at the boundary. In closed beta.
-- :link[gazla.co]{id=https://gazla.co} — a startup ecosystem connecting founders with investors and each other. 1,500 members and 180 startups, bootstrapped with zero funding.
+- :link[lodos.md]{id=https://lodos.md/} — **the company that runs itself**: an AI team that learns your company and works across every department, while you make the decisions and nobody else can see your data. In closed beta — [read more](./lodos/).
+- :link[gazla.co]{id=https://gazla.co} — a startup community of 50,000+ people and 280+ startups, bootstrapped with zero funding.
 
 **Previously**
 
@@ -14,7 +14,7 @@ Hey, I'm Samet 👋 — a senior full-stack engineer and founder based in Istanb
 
 **Beyond code**
 
-- Co-founded the **Open Software Network (AYA)** during the 2023 Türkiye earthquakes: 10K+ IT volunteers, building [AfetHarita](https://afetharita.com) and [deprem.io](https://deprem.io). Covered by [TIME](https://time.com/6254500/turkey-earthquake-twitter-musk-rescue/).
+- Co-founded the **Open Software Network (AYA)** during the 2023 Türkiye earthquakes: 25,000+ volunteer developers, building [AfetHarita](https://afetharita.com) (used by AFAD) and [deprem.io](https://deprem.io). Covered by [TIME](https://time.com/6254500/turkey-earthquake-twitter-musk-rescue/).
 - Mediterranean **ILCA sailing champion** — 13 medals, 2 cups, racing since age six.
 
 I write about software architecture, security and AI on the [blog](./blog/). Some of my work is on the [projects](./projects/) page.
