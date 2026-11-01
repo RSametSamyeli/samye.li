@@ -2,7 +2,7 @@ Hey, I'm Samet 👋 I'm a senior full-stack engineer and founder based in Istanb
 
 **Currently building**
 
-- :link[lodos.md]{id=https://lodos.md/}: **the company that runs itself**: an AI team that learns your company and works across every department, while you make the decisions and nobody else can see your data. In closed beta. [Read more](./lodos/).
+- :link[lodos.md]{id=https://lodos.md/ img=/icons/lodos.svg}: **the company that runs itself**: an AI team that learns your company and works across every department, while you make the decisions and nobody else can see your data. In closed beta. [Read more](./lodos/).
 - :link[gazla.co]{id=https://gazla.co}: a startup community of 50,000+ people and 280+ startups, bootstrapped with zero funding.
 
 **Previously**
