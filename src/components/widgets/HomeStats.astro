@@ -1,0 +1,164 @@
+---
+import stats from '~/data/stats.json'
+
+interface Day {
+  date: string
+  count: number
+  level: number
+}
+
+const x = stats.x as { handle: string; followers: number } | null
+const github = stats.github as
+  | { user: string; total: number; days: Day[] }
+  | null
+
+const fmt = new Intl.NumberFormat('en-US')
+
+// Lay days out GitHub-style: one column per week, Sunday on top.
+const CELL = 11
+const GAP = 3
+const days: Day[] = github?.days ?? []
+const offset = days.length ? new Date(days[0].date + 'T00:00:00Z').getUTCDay() : 0
+const cells = days.map((d, i) => ({
+  ...d,
+  col: Math.floor((i + offset) / 7),
+  row: (i + offset) % 7,
+}))
+const cols = cells.length ? cells[cells.length - 1].col + 1 : 0
+const width = cols * (CELL + GAP) - GAP
+const height = 7 * (CELL + GAP) - GAP
+
+// Month labels at the first column that starts in a new month.
+const months: { label: string; col: number }[] = []
+let lastMonth = -1
+for (const c of cells) {
+  if (c.row !== 0 && c !== cells[0]) continue
+  const m = new Date(c.date + 'T00:00:00Z').getUTCMonth()
+  if (m !== lastMonth) {
+    months.push({
+      label: new Date(c.date + 'T00:00:00Z').toLocaleString('en-US', {
+        month: 'short',
+        timeZone: 'UTC',
+      }),
+      col: c.col,
+    })
+    lastMonth = m
+  }
+}
+if (months.length > 1 && months[1].col - months[0].col < 3) months.shift()
+if (months.length && cols - months[months.length - 1].col < 3) months.pop()
+---
+
+{
+  (x || github) && (
+    <h2 id="activity">Activity</h2>
+  )
+}
+{
+  (x || github) && (
+    <div class="not-prose flex flex-wrap gap-x-8 gap-y-3">
+      {x && (
+        <a
+          class="stat"
+          href={`https://x.com/${x.handle}`}
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="i-ri-twitter-x-fill op-60" />
+          <span class="stat-value">{fmt.format(x.followers)}</span>
+          <span class="op-60">followers on X</span>
+        </a>
+      )}
+      {github && (
+        <a
+          class="stat"
+          href={`https://github.com/${github.user}`}
+          target="_blank"
+          rel="noopener"
+        >
+          <span class="i-uil-github-alt op-60" />
+          <span class="stat-value">{fmt.format(github.total)}</span>
+          <span class="op-60">contributions in the last year</span>
+        </a>
+      )}
+    </div>
+  )
+}
+{
+  github && cols > 0 && (
+    <div class="not-prose heatmap-wrap">
+      <svg
+        class="heatmap"
+        viewBox={`0 -16 ${width} ${height + 16}`}
+        width={width}
+        role="img"
+        aria-label={`${fmt.format(github.total)} GitHub contributions in the last year`}
+      >
+        {months.map((m) => (
+          <text x={m.col * (CELL + GAP)} y={-5} class="heatmap-month">
+            {m.label}
+          </text>
+        ))}
+        {cells.map((c) => (
+          <rect
+            x={c.col * (CELL + GAP)}
+            y={c.row * (CELL + GAP)}
+            width={CELL}
+            height={CELL}
+            rx={2}
+            class={`lvl-${c.level}`}
+          >
+            <title>{`${c.count} contribution${c.count === 1 ? '' : 's'} on ${c.date}`}</title>
+          </rect>
+        ))}
+      </svg>
+    </div>
+  )
+}
+
+<style>
+  .stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    border: none;
+    font-size: 0.95rem;
+  }
+
+  .stat-value {
+    font-weight: 600;
+    color: var(--fg-deeper, currentColor);
+  }
+
+  .heatmap-wrap {
+    margin-top: 1.25rem;
+    overflow-x: auto;
+  }
+
+  .heatmap {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .heatmap-month {
+    font-size: 9px;
+    fill: currentColor;
+    opacity: 0.5;
+  }
+
+  .heatmap rect {
+    fill: #a3a3a3;
+  }
+  .heatmap .lvl-0 { fill-opacity: 0.15; }
+  .heatmap .lvl-1 { fill-opacity: 0.35; }
+  .heatmap .lvl-2 { fill-opacity: 0.55; }
+  .heatmap .lvl-3 { fill-opacity: 0.78; }
+  .heatmap .lvl-4 { fill-opacity: 1; }
+
+  :global(html.dark) .heatmap rect {
+    fill: #d4d4d4;
+  }
+  :global(html.dark) .heatmap .lvl-0 { fill-opacity: 0.08; }
+</style>
