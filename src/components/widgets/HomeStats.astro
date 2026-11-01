@@ -51,7 +51,7 @@ if (months.length && cols - months[months.length - 1].col < 3) months.pop()
 
 {
   (x || github) && (
-    <h2 id="activity">Activity</h2>
+    <p><strong>Activity</strong></p>
   )
 }
 {
@@ -149,16 +149,16 @@ if (months.length && cols - months[months.length - 1].col < 3) months.pop()
   }
 
   .heatmap rect {
-    fill: #a3a3a3;
+    fill: #d90e47;
   }
-  .heatmap .lvl-0 { fill-opacity: 0.15; }
-  .heatmap .lvl-1 { fill-opacity: 0.35; }
+  .heatmap .lvl-0 { fill: #a3a3a3; fill-opacity: 0.15; }
+  .heatmap .lvl-1 { fill-opacity: 0.3; }
   .heatmap .lvl-2 { fill-opacity: 0.55; }
-  .heatmap .lvl-3 { fill-opacity: 0.78; }
+  .heatmap .lvl-3 { fill-opacity: 0.8; }
   .heatmap .lvl-4 { fill-opacity: 1; }
 
   :global(html.dark) .heatmap rect {
-    fill: #d4d4d4;
+    fill: #ff2d6a;
   }
-  :global(html.dark) .heatmap .lvl-0 { fill-opacity: 0.08; }
+  :global(html.dark) .heatmap .lvl-0 { fill: #d4d4d4; fill-opacity: 0.08; }
 </style>

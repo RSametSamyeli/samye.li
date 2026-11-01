@@ -1,0 +1,1 @@
+Hey, I'm Samet 👋 I'm a senior full-stack engineer and founder based in Istanbul. For 12+ years I've been designing and running production systems: async Python and TypeScript backends, PostgreSQL schemas, real-time event flows, and the Next.js/React products on top of them.

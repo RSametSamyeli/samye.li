@@ -18,7 +18,8 @@ import HomeStats from '~/components/widgets/HomeStats.astro'
   ogImage={frontmatter.ogImage}
 >
   <StandardLayout title={frontmatter.title} subtitle={frontmatter.subtitle}>
-    <RenderPage slot="article" collectionType="home" id="index" />
+    <RenderPage slot="article" collectionType="home" id="intro" />
     <HomeStats slot="article" />
+    <RenderPage slot="article" collectionType="home" id="index" />
   </StandardLayout>
 </BaseLayout>

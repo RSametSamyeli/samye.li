@@ -1,5 +1,3 @@
-Hey, I'm Samet 👋 I'm a senior full-stack engineer and founder based in Istanbul. For 12+ years I've been designing and running production systems: async Python and TypeScript backends, PostgreSQL schemas, real-time event flows, and the Next.js/React products on top of them.
-
 **Currently building**
 
 - :link[lodos.md]{id=https://lodos.md/ img=/icons/lodos.svg}: **the company that runs itself**: an AI team that learns your company and works across every department, while you make the decisions and nobody else can see your data. In closed beta. [Read more](./lodos/).

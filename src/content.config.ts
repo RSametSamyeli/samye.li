@@ -9,7 +9,7 @@ const pages = defineCollection({
 })
 
 const home = defineCollection({
-  loader: glob({ base: './src/content/home', pattern: 'index.{md,mdx}' }),
+  loader: glob({ base: './src/content/home', pattern: '*.{md,mdx}' }),
 })
 
 const blog = defineCollection({
