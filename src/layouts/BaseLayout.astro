@@ -56,6 +56,8 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
     style={Object.keys(style).length !== 0 ? style : undefined}
     data-no-sliding={enableSlideEnterAnim ? undefined : ''}
   >
+    <!-- Cloudflare email obfuscation breaks on client-side navigation, so opt out. -->
+    <!--email_off-->
     <!-- Background -->
     {bgType && <Background type={bgType} />}
 
@@ -91,6 +93,7 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
     <!-- Footer -->
     <Footer />
     <ToTopButton />
+    <!--/email_off-->
 
     <!-- Panel Backdrop (on mobile) -->
     <Backdrop />
