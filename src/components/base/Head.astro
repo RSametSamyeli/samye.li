@@ -62,7 +62,10 @@ const personData = {
     '@type': 'CollegeOrUniversity',
     'name': 'Süleyman Demirel University',
   },
-  'sameAs': UI.socialLinks.map((l) => l.link),
+  'email': 'mailto:sam@samye.li',
+  'sameAs': UI.socialLinks
+    .map((l) => l.link)
+    .filter((link) => link.startsWith('http')),
 }
 
 // https://jsonld.com/blog-post/

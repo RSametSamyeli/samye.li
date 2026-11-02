@@ -4,7 +4,7 @@
 
 **The personal site and blog of Samet Samyeli.**
 
-[samye.li](https://samye.li) · [lodos.md](https://lodos.md) · [X](https://x.com/SametSamyeli2) · [LinkedIn](https://www.linkedin.com/in/sametsamyeli/) · [Medium](https://medium.com/@sametsamyeli)
+[samye.li](https://samye.li) · [lodos.md](https://lodos.md) · [X](https://x.com/SametSamyeli2) · [LinkedIn](https://www.linkedin.com/in/sametsamyeli/) · [Medium](https://medium.com/@sametsamyeli) · [sam@samye.li](mailto:sam@samye.li)
 
 </div>
 

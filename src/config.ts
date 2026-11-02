@@ -59,6 +59,12 @@ export const UI: Ui = {
       displayMode: 'alwaysIcon',
       icon: 'i-ri-medium-fill',
     },
+    {
+      link: 'mailto:sam@samye.li',
+      title: 'Email Samet Samyeli',
+      displayMode: 'alwaysIcon',
+      icon: 'i-ri-mail-line',
+    },
   ],
   navBarLayout: {
     left: [],

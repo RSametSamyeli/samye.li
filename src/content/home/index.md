@@ -30,5 +30,7 @@ I write about software architecture, security and AI on the [blog](./blog/). Som
       <span i-ri-twitter-x-fill></span> X</a>
     <a href="https://medium.com/@sametsamyeli">
       <span i-simple-icons-medium></span> Medium</a>
+    <a href="mailto:sam@samye.li">
+      <span i-ri-mail-line></span> sam@samye.li</a>
   </span>
 </p>
