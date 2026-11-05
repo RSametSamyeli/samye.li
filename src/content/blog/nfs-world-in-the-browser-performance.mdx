@@ -1,0 +1,335 @@
+---
+title: 'NFS World in the Browser: From 11 fps to 80'
+subtitle: A Windows game, lifted to WebAssembly, and everything it took to make it fast
+description: Need for Speed World is a 2010 Windows game. We run it in Chrome by lifting its x86 code to WebAssembly and its Direct3D 9 calls to WebGPU. It started at 10–11 fps. This is how we profiled it, what was actually slow, and what fixed it.
+tags: [webassembly, performance, webgpu, reverse-engineering, nfsworld]
+pubDate: 2026-11-02
+draft: true
+---
+
+Need for Speed World is a Windows game. It shipped in 2010 as an x86 executable that talks to Direct3D 9,
+Win32 and a handful of Microsoft DLLs. There is no source code, no Linux port, no web version. The servers
+were shut down years ago and the game now lives on through community servers.
+
+We run it in Chrome. Not in a VM and not through streaming: the game's own machine code is translated ahead of
+time to WebAssembly, its Direct3D 9 calls are drawn with WebGPU, and the Windows API it expects is
+re-implemented underneath it. The project is open source and will live at
+[nfsworld.online](https://nfsworld.online).
+
+The first time it drove through the city on the HIGH preset, it ran at **10–11 fps**.
+
+The goal was never "playable for a browser". It was: **never below 60 fps, and aim for 144**. This post is about
+how we got from the first number towards the second, and what we learned about where time really goes when a
+Windows game runs inside a browser tab.
+
+## How the game gets into the browser
+
+Before talking about speed, it helps to see the layers. Every frame the game renders passes through all of them.
+
+<figure>
+<svg viewBox="0 0 720 230" width="100%" role="img" aria-label="Pipeline: nfsw.exe and its DLLs are lifted to C, compiled to WebAssembly, and run in Chrome workers; Direct3D 9 is drawn with WebGPU on the page.">
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="10" y="20" width="140" height="56" rx="6" />
+    <rect x="200" y="20" width="140" height="56" rx="6" />
+    <rect x="390" y="20" width="140" height="56" rx="6" />
+    <rect x="580" y="20" width="130" height="56" rx="6" />
+    <rect x="200" y="150" width="140" height="56" rx="6" />
+    <rect x="390" y="150" width="140" height="56" rx="6" />
+    <rect x="580" y="150" width="130" height="56" rx="6" />
+    <path d="M150 48 H196 M340 48 H386 M530 48 H576" />
+    <path d="M460 76 V146 M340 178 H386 M530 178 H576" />
+  </g>
+  <g fill="currentColor" style={{fontSize:'15px'}} text-anchor="middle" font-family="ui-monospace, monospace">
+    <text x="80" y="44">nfsw.exe</text><text x="80" y="62" opacity="0.65">+ 7 DLLs (x86)</text>
+    <text x="270" y="44">lifter</text><text x="270" y="62" opacity="0.65">x86 → C</text>
+    <text x="460" y="44">clang</text><text x="460" y="62" opacity="0.65">C → wasm</text>
+    <text x="645" y="44">Web Workers</text><text x="645" y="62" opacity="0.65">guest threads</text>
+    <text x="270" y="174">Win32 / COM</text><text x="270" y="192" opacity="0.65">re-implemented</text>
+    <text x="460" y="174">D3D9 recorder</text><text x="460" y="192" opacity="0.65">draw calls</text>
+    <text x="645" y="174">WebGPU</text><text x="645" y="192" opacity="0.65">page, GPU</text>
+    <text x="360" y="118" style={{fontSize:'13px'}} opacity="0.65">ahead of time ↑   ·   every frame ↓</text>
+  </g>
+</svg>
+</figure>
+
+- **The lifter** reads the executable and its DLLs and turns every x86 function into a C function. Registers
+  become variables, flags become variables, memory is a big linear array. Eight modules come out as about
+  2.1 GB of generated C.
+- **clang** (wasi-sdk) compiles that into one WebAssembly module of a few hundred megabytes, which brotli
+  shrinks to about 50 MB on the wire.
+- **The runtime** is the part we wrote: the Windows API (threads, events, critical sections, files, sockets),
+  COM, and a Direct3D 9 implementation that records draw calls and hands them to the page, where WebGPU draws
+  them.
+- **Each Windows thread** the game creates becomes a Web Worker sharing the same memory.
+
+A rule we kept the whole way: **graphics must stay 1\:1 with the original**. No lowered resolution, no skipped
+passes, no "close enough" shaders. Every speed-up had to leave the picture exactly as it was.
+
+## Rule one: measure, don't guess
+
+The first instinct with a slow WebGPU port is "the GPU path is slow". We measured instead, and that guess was
+wrong.
+
+| Scene (HIGH) | Frame time | Our draw recording | Page encoding | GPU |
+|---|---|---|---|---|
+| City, driving | 42–91 ms | 1.5–3.9 ms | ~4–7 ms | ~14 ms |
+
+The GPU finished its work in about 14 ms: enough for 70 fps. Our draw-call recording took a few milliseconds.
+The page encoded commands in 4–7 ms. Yet a frame took 42–91 ms. **The game's own thread was the bottleneck**,
+and the time was somewhere inside the translated game code and the Windows layer under it.
+
+To see inside, we built a small toolchain:
+
+- **`perfrun`** starts a separate Chrome, logs in to a local test server, writes the graphics preset, drives
+  into the world, and records CPU profiles of every worker and the page for a fixed time. It also takes a
+  lossless screenshot of a fixed screen at a fixed viewport, so every run can be compared pixel by pixel.
+- **`perfsum`** turns those profiles into tables: time per thread, split into running, sleeping, waiting for
+  I/O and **waiting for a lock**, plus the hottest functions and their callers.
+- **`imgdiff`** compares two screenshots. Two runs of the same build differ in about 0.13% of pixels (engine
+  idle, particles). A broken draw shows up as far more. Any optimisation that went above the noise was not
+  taken.
+
+One unglamorous lesson from measuring: the dev machine is a fanless MacBook Air M1. After a long build it
+throttles itself, and **the same build runs at 71 fps cold and 31 fps warm**. Every comparison in this post was
+made back to back, at the same temperature. Before we learned that, a few "regressions" were just a hot laptop.
+
+## What was actually slow
+
+The profiles told a story none of us expected. On HIGH, in the city, per frame:
+
+<figure>
+<svg viewBox="0 0 720 150" width="100%" role="img" aria-label="Main thread frame on HIGH: about 50 ms running and 37 ms waiting for the guest lock.">
+  <g font-family="ui-monospace, monospace" style={{fontSize:'14px'}} fill="currentColor">
+    <text x="10" y="20">main thread, one frame ≈ 90 ms</text>
+    <rect x="10" y="32" width="350" height="34" rx="3" opacity="0.85" />
+    <rect x="360" y="32" width="260" height="34" rx="3" fill="#e5484d" />
+    <text x="185" y="84" text-anchor="middle">running game code ~50 ms</text>
+    <text x="490" y="84" text-anchor="middle" fill="#e5484d">waiting for the lock ~37 ms</text>
+    <text x="10" y="112" opacity="0.7">~1.9 million Win32 calls every 5 s (≈ 380,000 per second)</text>
+    <text x="10" y="132" opacity="0.7">TlsGetValue · GetLastError · SetLastError · EnterCriticalSection · HeapAlloc …</text>
+  </g>
+</svg>
+</figure>
+
+Two things stood out.
+
+**The game was waiting on itself.** The runtime ran all guest code under one big lock: only one game thread
+could execute at a time. On Windows the streaming loader, audio mixer, network thread and a worker pool run in
+parallel with the main thread. Here they took turns, and **about 40% of every frame was the main thread waiting
+for them**.
+
+**The Windows layer was hit hundreds of thousands of times per second.** The game's C runtime calls
+`TlsGetValue`, `GetLastError` and `SetLastError` on almost every allocation and string operation. Each call went
+through our generic import dispatcher: a fairness yield, statistics, and a chain of string comparisons to find
+the handler. Individually cheap. At 380,000 calls a second, not cheap at all.
+
+## Step 1: a hot path through the Windows layer
+
+The first fixes were the boring, safe ones.
+
+- **Direct handlers for hot imports.** The few dozen functions that make up most calls (critical sections,
+  TLS, last error, `Interlocked*`, `QueryPerformanceCounter`, events) are now bound straight to their handler
+  when the import is resolved. String comparisons on the main thread went from 10–15% of its time to about 1%.
+- **A cheaper `RDTSC`.** The game's audio mixer times every stage of its work with the x86 cycle counter. Our
+  version went through WASI's `clock_time_get`, which costs a BigInt and a DataView per call in JavaScript.
+  That alone was a third of the audio thread. Reading the clock directly fixed it.
+- **Native `memcpy`/`memset`/`strlen`.** The game calls the C runtime's copy routines through its import
+  table. The translated SSE copy loop was ~5% of the main thread. Replacing those few functions with native
+  WebAssembly versions behaves identically and costs a fraction.
+
+HIGH went from **16.7 to 23.8 fps** standing in the world. Better, but nowhere near 60. The real problem was
+still the lock.
+
+### A detour: the clock the game didn't want cached
+
+`RDTSC` was still a third of the audio thread after that, so we tried caching it: read the real clock every
+16 calls and return the cached value plus one tick in between. Much faster, and the game immediately broke:
+**"Login Failed"**.
+
+NFS World times parts of its login handshake with `RDTSC`. With a counter that barely moved between real reads,
+the game concluded that time had stopped. We reverted it. The lesson went into our notes as a rule: *`RDTSC`
+must advance on every read.* Speed tricks that change what the game observes are not optimisations, they are
+behaviour changes.
+
+## Step 2: let the game run in parallel
+
+This was the big one. The idea: **the lock should protect our runtime, not the game.** Guest code runs freely
+on every worker at the same time, like it would on a multi-core PC. A thread takes the lock only when it enters
+the runtime (a Windows or COM call) and releases it on the way back.
+
+<figure>
+<svg viewBox="0 0 720 220" width="100%" role="img" aria-label="Before: game threads take turns under one lock. After: they run at the same time and only take the lock inside the runtime.">
+  <g font-family="ui-monospace, monospace" style={{fontSize:'14px'}} fill="currentColor">
+    <text x="10" y="18" font-weight="bold">before: one lock around all game code</text>
+    <text x="10" y="46" opacity="0.7">main</text>
+    <text x="10" y="70" opacity="0.7">stream</text>
+    <text x="10" y="94" opacity="0.7">audio</text>
+    <rect x="80" y="34" width="120" height="16" rx="2" />
+    <rect x="200" y="58" width="80" height="16" rx="2" opacity="0.6" />
+    <rect x="280" y="82" width="60" height="16" rx="2" opacity="0.4" />
+    <rect x="340" y="34" width="120" height="16" rx="2" />
+    <rect x="460" y="58" width="80" height="16" rx="2" opacity="0.6" />
+    <rect x="540" y="82" width="60" height="16" rx="2" opacity="0.4" />
+    <rect x="200" y="38" width="140" height="8" fill="#e5484d" opacity="0.8" />
+    <rect x="460" y="38" width="140" height="8" fill="#e5484d" opacity="0.8" />
+
+    <text x="10" y="134" font-weight="bold">after: game code in parallel, lock only inside the runtime</text>
+    <text x="10" y="162" opacity="0.7">main</text>
+    <text x="10" y="186" opacity="0.7">stream</text>
+    <text x="10" y="210" opacity="0.7">audio</text>
+    <rect x="80" y="150" width="520" height="16" rx="2" />
+    <rect x="80" y="174" width="520" height="16" rx="2" opacity="0.6" />
+    <rect x="80" y="198" width="520" height="16" rx="2" opacity="0.4" />
+    <rect x="230" y="150" width="6" height="16" fill="#e5484d" />
+    <rect x="420" y="174" width="6" height="16" fill="#e5484d" />
+    <rect x="510" y="198" width="6" height="16" fill="#e5484d" />
+    <text x="598" y="20" opacity="0.7">■ red: waiting</text>
+  </g>
+</svg>
+</figure>
+
+Simple to say. Making it correct took three pieces.
+
+**Locked x86 instructions become atomics.** x86 code synchronises with `lock cmpxchg`, `lock xadd`,
+`xchg` and friends. Once two threads really run at once, those must really be atomic, so the lifter now emits
+WebAssembly atomics for every locked instruction.
+
+**x86 is strongly ordered; ARM and WebAssembly are not.** On x86 a store from one core is seen by others in
+order. Code written for x86 relies on that without saying so. Spin-wait loops in particular.
+
+That one cost us a hang. The game's worker pool meets at a barrier: each worker spins until a shared counter
+reaches a target. In the translated code that is a plain loop reading memory. With no call left inside the
+loop, clang did what any optimiser may do with ordinary memory: it loaded the counter **once**, before the loop.
+The workers spun forever on a value that would never change.
+
+```c
+// Emitted inside every lifted spin-wait loop.
+#define GUEST_SPIN(c_) do {                    \
+    if (g_gil_held)                            \
+        guest_spin(c_);  /* old model: yield */ \
+    else /* parallel: memory may change */     \
+        __asm__ __volatile__("" ::: "memory"); \
+} while (0)
+```
+
+An empty `asm` with a memory clobber costs nothing at runtime. It tells the compiler that memory may have
+changed, so the loop reads the counter every time, like the x86 chip did.
+
+**The hottest imports must not take the lock at all.** After going parallel, the profile showed workers waking
+from an event and then queueing for the runtime lock just to *return* from `WaitForSingleObject`, with the main
+thread's next Direct3D call stuck behind them. On Windows, critical sections, TLS, last error, the
+performance counter and event signalling don't take a global lock either. So now they don't here: each thread
+keeps a small cache of the critical sections it uses, and these ~200,000 calls a second bypass the runtime lock
+entirely.
+
+The old model is still one environment variable away (`NFSW_PARALLEL=0`), which made a clean A/B possible.
+Same build, same temperature, back to back:
+
+| | Old model (one lock) | Parallel |
+|---|---|---|
+| HIGH | 19.3 fps | 31.5 fps |
+| MEDIUM | 27.8 fps | 43.5 fps |
+| Main thread waiting for the lock, per frame | 15–29 ms | ~1 ms |
+
+That's on a warm, throttled laptop. On a cool machine the same build reaches **59–71 fps on HIGH and 82 fps on
+MEDIUM**. A 60-second drive on HIGH: no crash, no hang, no watchdog warning.
+
+## Step 3: making the translated code itself faster
+
+Everything so far was about the layers around the game. The last step went into the generated code itself.
+
+- **Registers in locals.** Keeping x86 registers in C locals instead of a CPU struct in memory lets clang keep
+  them in WebAssembly locals, and the engine in machine registers. We extended that to the XMM (SSE) registers:
+  stored back before a call, reloaded after it.
+- **x87 stack in locals.** The 80-bit floating point stack of the x87 FPU is emulated; within a basic block its
+  slots now live in locals too.
+- **Flags only when someone reads them.** Every x86 arithmetic instruction sets flags; most are never read. An
+  inter-procedural analysis now proves which flags a function's callers actually use, so the lifter stops
+  computing the rest.
+
+Counted in WebAssembly instructions, the hottest functions shrank by 5% to 46%. Measured, alternating old and
+new builds at the same temperature, the new one was **31% faster in a heavier scene**: the game thread went from
+18.7 to 13.5 ms a frame. The download got smaller too, 50.9 to 48.8 MB.
+
+It also produced our favourite bug of the project: one of our own C macros, the one that compares two floating
+point values, called its temporary `_x`, and the new x87 locals are called `_x[...]`. Two hundred files didn't
+compile. The fix was a rename; the lasting part is a test in our ISA suite that catches the pattern.
+
+## The bug the fast machine hid
+
+One more problem only showed up when the user, not the benchmark, played. Clicking *Enter World* in the
+garage, the screen froze for 20 seconds while the last two seconds of the menu music looped.
+
+It never happened in our measuring Chrome, because that Chrome had everything cached. With an **empty
+profile**, a first visit, it happened every time. The cause:
+
+- Every Windows thread is a Web Worker, and the page allowed at most 24 of them, a limit inherited from an
+  earlier project, meant to save a phone's memory.
+- Our runtime's own threads take about 7. Entering the world, NFS World runs 18 at once. That is 25.
+- The 25th `CreateThread` waited for a free worker **while holding the runtime lock**. Every other thread
+  stopped, the sound thread included, and the thread whose exit would have freed a worker couldn't exit.
+
+The looping music was the most honest part: a DirectSound buffer that nobody refills plays what is in it,
+over and over. Real Windows does exactly that when a game hangs.
+
+The fix: no artificial limit (a worker is still only started when a thread needs it), and `CreateThread`
+gives the lock up while it waits, as no `CreateThread` on Windows stops the other threads. A first visit now
+shows the loading screen after 3 seconds and the world after about 10.
+
+## Where we are
+
+<figure>
+<svg viewBox="0 0 720 240" width="100%" role="img" aria-label="HIGH fps by step: 16.7 at start, 23.8 after the Win32 hot path, 59 to 71 after parallel guest code, 76 to 81 after the lifter work. A line marks 60 fps.">
+  <g font-family="ui-monospace, monospace" style={{fontSize:'14px'}} fill="currentColor">
+    <text x="10" y="16" font-weight="bold">HIGH preset, standing in the world (fps)</text>
+    <text x="10" y="52" opacity="0.8">start</text>
+    <rect x="200" y="38" width="84" height="22" rx="3" opacity="0.45" />
+    <text x="292" y="54">16.7</text>
+    <text x="10" y="92" opacity="0.8">Win32 hot path</text>
+    <rect x="200" y="78" width="119" height="22" rx="3" opacity="0.6" />
+    <text x="327" y="94">23.8</text>
+    <text x="10" y="132" opacity="0.8">parallel guest</text>
+    <rect x="200" y="118" width="295" height="22" rx="3" opacity="0.75" />
+    <rect x="495" y="118" width="60" height="22" rx="3" opacity="0.35" />
+    <text x="563" y="134">59–71</text>
+    <text x="10" y="172" opacity="0.8">lifter</text>
+    <rect x="200" y="158" width="380" height="22" rx="3" opacity="0.9" />
+    <rect x="580" y="158" width="25" height="22" rx="3" opacity="0.4" />
+    <text x="613" y="174">76–81</text>
+    <line x1="500" y1="28" x2="500" y2="198" stroke="#e5484d" stroke-width="1.5" stroke-dasharray="4 3" />
+    <text x="500" y="216" text-anchor="middle" fill="#e5484d">60 fps</text>
+    <text x="200" y="234" opacity="0.6" style={{fontSize:'13px'}}>0</text>
+    <text x="700" y="234" opacity="0.6" style={{fontSize:'13px'}} text-anchor="end">100</text>
+  </g>
+</svg>
+</figure>
+
+From 10–11 fps while driving on HIGH, and 16.7 standing still, to **76–81 fps** on the same preset: almost five
+times faster, without changing a pixel of what the game draws. MEDIUM went from 39.7 to around 100 fps.
+
+The GPU is no longer the question: on HIGH it needs a median of 6.6 ms a frame, enough for about 150 fps. What
+still limits the frame rate is the game's own thread, and that is where the next steps are:
+
+- **Tie the frame rate to the display.** The game currently renders ~81 frames a second for a 60 Hz screen; the
+  page shows only the newest. Waiting for the display's refresh, as Windows does with vsync on, would free
+  about a quarter of the CPU on a laptop, with no visual change.
+- **SSE as vector code.** The single hottest function, 11% of the game thread, is SSE math lifted one lane at
+  a time; WebAssembly has SIMD of its own.
+- **144 fps** needs a 6.9 ms frame. We are at ~12. It's a long way, but no longer a different universe.
+
+## What we learned
+
+- **Profile the whole stack, not the part you suspect.** We expected the WebGPU path to be slow. It was a lock.
+- **Know your measuring instrument.** A fanless laptop halves its speed when warm. Same temperature, back to
+  back, or the numbers lie.
+- **Measure the first visit too.** A warm cache hid a 20-second freeze that every new player would have seen.
+- **Every speed-up must be invisible.** Pixel diffs against a baseline caught what eyes would miss. If a change
+  moved the picture above noise, it didn't go in.
+- **Emulate behaviour, not shortcuts.** Caching the clock was faster and broke login. Atomics, memory barriers,
+  lock-free imports, a `CreateThread` that doesn't stop the world: each one is what the real CPU and the real
+  Windows already do.
+- **x86 assumptions hide in plain loops.** Strong memory ordering is a property of the chip. When you move code
+  off it, you have to put that property back by hand.
+
+The game is open source and donation-based, and the browser build will be at
+[nfsworld.online](https://nfsworld.online). The work towards 144 fps continues.
