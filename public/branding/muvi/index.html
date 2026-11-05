@@ -1,0 +1,1217 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Muvi yeni işaret</title>
+<link rel="icon" href="draft-assets/new16.png">
+<link rel="preload" as="image" href="draft-assets/seq/build/0000.webp">
+<style>
+:root { --old-ar: 1000 / 940; --eye: url("draft-assets/eye.jpg"); --flower: url("draft-assets/flower.jpg"); --hazir: url("draft-assets/hazir.jpg"); --kilit: url("draft-assets/kilit.jpg"); }
+/* Layout concept: a scroll-driven product film. Pinned scenes, rendered photography, and a technical layer in monospace. */
+:root {
+  --black: #000;
+  --white: #fff;
+  --snow: #F5F5F7;
+  --ink: #1D1D1F;
+  --grey: #86868B;
+  --tile: #1C1C1E;
+  --tile-2: #2C2C2E;
+  --orange: #FF4800;
+  --sf: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --u: min(1vw, 1.6svh);
+  --gut: max(20px, calc(var(--u) * 4));
+  --t-x: max(46px, calc(var(--u) * 8.6));
+  --t-1: max(34px, calc(var(--u) * 5.2));
+  --t-2: max(25px, calc(var(--u) * 2.9));
+  --t-3: max(19px, calc(var(--u) * 1.65));
+  --t-b: max(16px, calc(var(--u) * 1.38));
+  --t-s: max(13px, calc(var(--u) * 1));
+  --t-m: max(11px, calc(var(--u) * 0.86));
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--black); scroll-padding-top: 0; }
+body { margin: 0; background: var(--black); color: var(--snow); font-family: var(--sf); font-size: var(--t-b); line-height: 1.38; letter-spacing: -0.012em; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+h1, h2, h3, p, ul, ol, figure, dl, dd, pre { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+img, svg, canvas { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+
+.dark { --bg: var(--black); --fg: var(--snow); --dim: var(--grey); --hair: rgba(255, 255, 255, 0.16); --panel: var(--tile); }
+.light { --bg: var(--snow); --fg: var(--ink); --dim: var(--grey); --hair: rgba(0, 0, 0, 0.12); --panel: var(--white); color-scheme: light; }
+.brand { --bg: var(--orange); --fg: var(--black); --dim: rgba(0, 0, 0, 0.62); --hair: rgba(0, 0, 0, 0.22); --panel: rgba(0, 0, 0, 0.1); color-scheme: light; }
+
+/* Scenes */
+.scene { position: relative; height: calc(var(--len, 1.2) * 100svh); background: var(--bg); color: var(--fg); }
+.pin { position: sticky; top: 0; display: flex; flex-direction: column; height: 100svh; padding: calc(var(--u) * 6.4) var(--gut) calc(var(--u) * 3); overflow: hidden; background: var(--bg); }
+.full { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.seq { position: absolute; inset: 0; width: 100%; height: 100%; }
+.layer { will-change: opacity, transform; }
+.over { position: relative; z-index: 2; }
+
+/* Type */
+.h { font-weight: 600; letter-spacing: -0.024em; line-height: 1.06; text-wrap: balance; }
+.tx { font-size: var(--t-x); letter-spacing: -0.032em; line-height: 1.02; }
+.t1 { font-size: var(--t-1); }
+.t2 { font-size: var(--t-2); letter-spacing: -0.02em; line-height: 1.12; }
+.t3 { font-size: var(--t-3); font-weight: 600; letter-spacing: -0.018em; line-height: 1.18; }
+.b { max-width: 31em; color: var(--dim); text-wrap: pretty; }
+.s { font-size: var(--t-s); line-height: 1.34; color: var(--dim); text-wrap: pretty; }
+.m { font-family: var(--mono); font-size: var(--t-m); line-height: 1.5; letter-spacing: 0; color: var(--dim); font-variant-numeric: tabular-nums; }
+.dim { color: var(--dim); }
+.eye { font-size: var(--t-3); font-weight: 600; letter-spacing: -0.016em; color: var(--orange); }
+.metal { background: linear-gradient(180deg, #FFF 16%, #A1A1A6 94%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.center { text-align: center; }
+.stack { display: flex; flex-direction: column; gap: calc(var(--u) * 1); }
+.mid { margin-block: auto; }
+.bl { position: absolute; left: var(--gut); bottom: calc(var(--u) * 4); z-index: 3; width: min(calc(var(--u) * 36), 62vw); }
+.bc { position: absolute; left: 0; right: 0; bottom: calc(var(--u) * 4); z-index: 3; display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * 0.7); text-align: center; }
+.tc { position: absolute; left: 0; right: 0; top: calc(var(--u) * 6.4); z-index: 3; display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * 0.7); text-align: center; }
+.tlc { position: absolute; left: var(--gut); top: calc(var(--u) * 6.8); z-index: 3; display: flex; flex-direction: column; gap: calc(var(--u) * 0.7); }
+.mark { flex: none; display: block; width: 100%; aspect-ratio: 8 / 7; fill: currentColor; overflow: visible; }
+.turn { transform: rotate(-90deg); }
+
+/* Glass navigation */
+.nav { position: fixed; top: calc(var(--u) * 1.2); left: 50%; z-index: 40; display: flex; align-items: center; gap: 2px; padding: 4px; transform: translateX(-50%); border-radius: 999px; background: rgba(38, 38, 40, 0.58); -webkit-backdrop-filter: blur(26px) saturate(1.8); backdrop-filter: blur(26px) saturate(1.8); box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 10px 30px -12px rgba(0, 0, 0, 0.5); color: rgba(255, 255, 255, 0.86); font-size: 13px; font-weight: 500; letter-spacing: -0.008em; line-height: 1; white-space: nowrap; }
+.nav a { padding: 8px 13px; border-radius: 999px; transition: background 280ms var(--ease), color 280ms var(--ease); }
+.nav a:hover { color: var(--white); }
+.nav a.on { background: rgba(255, 255, 255, 0.92); color: var(--black); }
+.nav .brandmark { display: grid; place-items: center; padding: 6px 10px 6px 12px; }
+.nav .brandmark .mark { width: 17px; }
+
+/* 01 */
+.open-title { opacity: 0; }
+.solid { opacity: 0; transform: translateY(-6.5%) scale(0.76); pointer-events: none; }
+.scroll-cue { width: 1.5px; height: calc(var(--u) * 2.4); margin-top: calc(var(--u) * 0.8); background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), transparent); }
+
+/* Shrink */
+.shrink-stage { position: absolute; inset: 0; }
+.shrink-logo { position: absolute; top: 46%; left: 50%; width: 640px; aspect-ratio: var(--old-ar); transform-origin: center; }
+.shrink-logo img { width: 100%; height: 100%; }
+.shrink-fav { position: absolute; top: 46%; left: 30%; width: 16px; height: 16px; margin: -8px 0 0 -8px; opacity: 0; image-rendering: auto; }
+.zoom { position: absolute; top: 50%; right: var(--gut); width: min(calc(var(--u) * 37), 44vw); transform: translateY(-50%); z-index: 2; display: flex; flex-direction: column; gap: 12px; }
+.px { position: relative; width: 100%; aspect-ratio: 1; overflow: hidden; border-radius: calc(var(--u) * 1.8); background: var(--tile); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06); }
+.px img { width: 100%; height: 100%; image-rendering: pixelated; }
+.px::after { content: ""; position: absolute; inset: 0; background-image: linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px); background-size: 6.25% 6.25%; }
+.readout { position: absolute; left: var(--gut); top: calc(var(--u) * 7.4); z-index: 3; display: flex; align-items: baseline; gap: 10px; }
+.readout b { font-family: var(--mono); font-size: var(--t-3); font-weight: 500; letter-spacing: -0.02em; color: var(--fg); font-variant-numeric: tabular-nums; }
+.tab { display: inline-flex; align-items: center; gap: 8px; width: 224px; max-width: 100%; height: 36px; padding: 0 12px; border-radius: 11px 11px 0 0; background: var(--tile-2); color: rgba(255, 255, 255, 0.88); font: 400 12px / 1 var(--sf); letter-spacing: -0.003em; white-space: nowrap; }
+.tab img, .tab svg { width: 16px; height: 16px; flex: none; }
+.tab-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+
+/* Colour */
+.colour-stage { position: absolute; top: 50%; right: 9%; width: min(calc(var(--u) * 42), 56vw); aspect-ratio: var(--old-ar); transform: translateY(-50%); }
+.colour-stage img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.side { position: absolute; left: var(--gut); top: 50%; z-index: 3; width: min(calc(var(--u) * 36), 70vw); transform: translateY(-50%); }
+.side .swap { position: absolute; left: 0; right: 0; top: 0; }
+
+/* Contrast */
+.contrast-stage { position: absolute; top: 50%; right: 9%; width: min(calc(var(--u) * 36), 52vw); aspect-ratio: var(--old-ar); transform: translateY(-50%); }
+.contrast-stage img { width: 100%; height: 100%; }
+.big-num { font-size: calc(var(--u) * 15.5); font-weight: 600; letter-spacing: -0.05em; line-height: 0.94; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tone { transition: color 400ms var(--ease); }
+
+/* File */
+.file-page { display: grid; flex: 1; min-height: 0; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); grid-template-rows: minmax(0, 1fr); gap: calc(var(--u) * 4); align-items: center; }
+.stream { position: relative; height: 100%; overflow: hidden; -webkit-mask-image: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent); mask-image: linear-gradient(180deg, transparent, #000 16%, #000 84%, transparent); }
+.stream pre { font-family: var(--mono); font-size: var(--t-m); line-height: 1.55; color: rgba(255, 255, 255, 0.34); white-space: pre-wrap; word-break: break-all; }
+.stream pre b { font-weight: 400; color: var(--white); }
+
+/* Reading the name */
+.name-stage { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--u) * 2.2); }
+.name-mark { position: relative; width: calc(var(--u) * 28); max-width: 66vw; aspect-ratio: 8 / 7; }
+.name-mark svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.word { position: relative; font-size: calc(var(--u) * 10.4); font-weight: 600; letter-spacing: -0.034em; line-height: 1.04; white-space: nowrap; color: rgba(255, 255, 255, 0.16); }
+.word i { font-style: normal; }
+.word i.lit { color: var(--white); transition: color 260ms var(--ease); }
+.word i.lit.acc { color: var(--orange); }
+.name-cap { position: relative; width: 100%; height: calc(var(--t-2) * 1.3); }
+.name-cap > * { position: absolute; left: 0; right: 0; text-align: center; }
+
+/* Blueprint */
+.print { display: grid; flex: 1; min-height: 0; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: calc(var(--u) * 3.4); align-items: center; }
+.print-art { width: 100%; height: 100%; max-height: calc(100svh - var(--u) * 9); overflow: visible; }
+.print-art .gl { stroke: rgba(255, 255, 255, 0.13); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.print-art .tick { stroke: rgba(255, 255, 255, 0.4); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.print-art .dim { stroke: var(--orange); stroke-width: 1.25; fill: none; vector-effect: non-scaling-stroke; }
+.print-art text { font-family: var(--mono); font-size: 21px; fill: var(--orange); }
+.print-art .cell polygon { fill: var(--white); stroke: #000; stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+.print-art .cell text { font-size: 28px; font-weight: 500; fill: #000; text-anchor: middle; dominant-baseline: central; visibility: hidden; }
+.print-art .cell.num text { visibility: visible; }
+.print-art .cell.hide { visibility: hidden; }
+.print-art .cell.hot polygon { fill: var(--orange); }
+.print-art .cell.ghost polygon { fill: rgba(255, 255, 255, 0.025); stroke: rgba(255, 255, 255, 0.2); stroke-width: 1; }
+.print-art .cell.ghost.last polygon { fill: none; stroke: var(--orange); stroke-dasharray: 4 4; }
+.print-side { display: flex; flex-direction: column; gap: calc(var(--u) * 1.6); }
+.counter { display: flex; align-items: flex-end; gap: calc(var(--u) * 1.2); }
+.counter b { font-size: calc(var(--u) * 13); font-weight: 600; letter-spacing: -0.05em; line-height: 0.86; font-variant-numeric: tabular-nums; }
+.step-cap { min-height: calc(var(--t-2) * 2.4); }
+.specs { display: grid; }
+.specs div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-block: calc(var(--u) * 0.62); border-top: 1px solid var(--hair); }
+.specs dt { font-size: var(--t-s); color: var(--dim); }
+.specs dd { font-family: var(--mono); font-size: var(--t-m); color: var(--fg); font-variant-numeric: tabular-nums; text-align: right; }
+
+/* Bitmap and code */
+.code-page { display: grid; flex: 1; min-height: 0; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: calc(var(--u) * 4); align-items: center; }
+.code-art { width: 100%; max-height: 66svh; overflow: visible; }
+.code-art polygon { fill: var(--white); stroke: #000; stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+.code-art .o { fill: none; stroke: rgba(255, 255, 255, 0.2); stroke-width: 1; }
+.code-box { position: relative; padding: calc(var(--u) * 1.8) calc(var(--u) * 2); border-radius: calc(var(--u) * 1.5); background: var(--tile); box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.16); font-family: var(--mono); font-size: max(13px, calc(var(--u) * 1.16)); line-height: 1.6; letter-spacing: 0; word-break: break-all; color: rgba(255, 255, 255, 0.5); }
+.code-box b { font-weight: 400; color: var(--white); }
+
+/* Photography */
+.photo-copy { position: absolute; z-index: 3; }
+.scrim-b::after { content: ""; position: absolute; inset: auto 0 0; z-index: 1; height: 40%; background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), transparent); pointer-events: none; }
+.scrim-t::after { content: ""; position: absolute; inset: 0 0 auto; z-index: 1; height: 42%; background: linear-gradient(180deg, rgba(0, 0, 0, 0.66), transparent); pointer-events: none; }
+.spec-tag { position: absolute; z-index: 3; display: flex; flex-direction: column; gap: 2px; padding-left: 12px; border-left: 1px solid rgba(255, 255, 255, 0.5); }
+.spec-tag b { font-family: var(--mono); font-size: var(--t-m); font-weight: 500; color: var(--white); }
+.spec-tag span { font-family: var(--mono); font-size: var(--t-m); color: rgba(255, 255, 255, 0.6); }
+
+/* Finishes */
+.finish-img { opacity: 0; transform: scale(var(--s, 1)) translateY(-3%); transition: opacity 620ms var(--ease); }
+.finish-img.on { opacity: 1; }
+.picker { position: absolute; left: 0; right: 0; bottom: calc(var(--u) * 3.4); z-index: 3; display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * 0.9); }
+.dots { display: flex; gap: calc(var(--u) * 1); }
+.dot { width: calc(var(--u) * 2.2); min-width: 28px; aspect-ratio: 1; padding: 0; border: 0; border-radius: 50%; background: var(--c); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24), inset 0 -2px 4px rgba(0, 0, 0, 0.25); cursor: pointer; transition: box-shadow 320ms var(--ease); }
+.dot[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--black), 0 0 0 3.5px var(--white), inset 0 -2px 4px rgba(0, 0, 0, 0.25); }
+
+/* Test scenes */
+.split { display: grid; flex: 1; min-height: 0; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: calc(var(--u) * 3); align-items: center; }
+.pair { display: flex; align-items: center; justify-content: flex-end; gap: calc(var(--u) * 1.2); }
+.pair figure { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; width: min(calc(var(--u) * 28), 44svh, 44vw); }
+.mx { display: grid; flex: 1; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: calc(var(--u) * 0.6); align-content: center; width: min(100%, calc(var(--u) * 74)); margin-inline: auto; }
+.mx-row { grid-column: 1 / -1; padding-top: calc(var(--u) * 0.7); font-family: var(--mono); font-size: var(--t-m); color: var(--fg); }
+.mx-cell { display: grid; place-items: center; aspect-ratio: 1.42; border-radius: calc(var(--u) * 1); background: var(--c-bg); color: var(--c-fg); box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.16); }
+.mx-cell img, .mx-cell .mark { width: 40%; }
+.mx-cell img.grey { filter: grayscale(1); }
+.mx-col { padding-top: 2px; font-family: var(--mono); font-size: var(--t-m); text-align: center; color: var(--dim); }
+
+/* iPhone */
+.iphone { --pw: min(calc(var(--u) * 17), 27svh); position: relative; flex: none; width: var(--pw); aspect-ratio: 71.5 / 149; padding: calc(var(--pw) * 0.011); border-radius: calc(var(--pw) * 0.17); background: linear-gradient(135deg, #97979c, #3c3c40 16%, #1d1d1f 50%, #3c3c40 84%, #97979c); box-shadow: 0 calc(var(--pw) * 0.12) calc(var(--pw) * 0.24) calc(var(--pw) * -0.06) rgba(0, 0, 0, 0.5), 0 calc(var(--pw) * 0.03) calc(var(--pw) * 0.07) rgba(0, 0, 0, 0.16); }
+.iphone::before { content: ""; position: absolute; top: 25%; right: calc(var(--pw) * -0.008); width: calc(var(--pw) * 0.01); height: 13%; border-radius: 0 2px 2px 0; background: #4b4b4f; }
+.iphone-in { height: 100%; padding: calc(var(--pw) * 0.027); border-radius: calc(var(--pw) * 0.158); background: #000; }
+.screen { position: relative; display: flex; flex-direction: column; height: 100%; overflow: hidden; border-radius: calc(var(--pw) * 0.132); background: #111 center / cover no-repeat; color: var(--white); font-size: calc(var(--pw) * 0.05); line-height: 1.24; letter-spacing: -0.012em; }
+.island { position: absolute; top: calc(var(--pw) * 0.032); left: 50%; z-index: 3; width: calc(var(--pw) * 0.3); height: calc(var(--pw) * 0.086); transform: translateX(-50%); border-radius: 999px; background: #000; }
+.status { position: relative; z-index: 2; display: flex; justify-content: space-between; padding: calc(var(--pw) * 0.044) calc(var(--pw) * 0.09) 0; font-size: 0.86em; font-weight: 600; }
+.status i { display: block; width: 1.5em; height: 0.72em; margin-top: 0.14em; border-radius: 0.22em; background: var(--white); }
+.veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.1) 34%, rgba(0, 0, 0, 0.62)); }
+.blurred { position: absolute; inset: -16%; background: center / cover no-repeat; filter: blur(calc(var(--pw) * 0.05)) brightness(0.46) saturate(0.85); }
+.screen-mid { position: relative; z-index: 1; display: grid; flex: 1; place-items: center; }
+.screen-mark { width: 44%; }
+.screen-mark .acc { fill: var(--orange); }
+.screen-foot { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 0.55em; padding: 0 calc(var(--pw) * 0.08) calc(var(--pw) * 0.11); }
+.screen-title { font-size: 1.34em; font-weight: 600; letter-spacing: -0.022em; }
+.track { position: relative; height: 0.2em; overflow: hidden; border-radius: 99px; background: rgba(255, 255, 255, 0.26); }
+.track i { position: absolute; inset: 0 auto 0 0; width: 34%; border-radius: 99px; background: var(--white); }
+.track.progress i { width: 64%; }
+.times { display: flex; justify-content: space-between; font-size: 0.74em; font-variant-numeric: tabular-nums; opacity: 0.86; }
+.glass-btn { display: grid; place-items: center; width: 30%; aspect-ratio: 1; border-radius: 50%; background: rgba(255, 255, 255, 0.2); -webkit-backdrop-filter: blur(14px) saturate(1.5); backdrop-filter: blur(14px) saturate(1.5); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.34), inset 0 1px 1px rgba(255, 255, 255, 0.4); }
+.glass-btn .mark { width: 50%; }
+.chase polygon { fill: rgba(255, 255, 255, 0.2); }
+.chase polygon.on { fill: var(--white); }
+.trio { display: flex; flex: 1; align-items: center; justify-content: center; gap: calc(var(--u) * 4); padding-top: calc(var(--u) * 1.4); }
+.trio figure { display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * 1); }
+
+/* MacBook */
+.mac { --mw: min(calc(var(--u) * 68), 112svh); flex: none; width: var(--mw); }
+.mac-lid { position: relative; aspect-ratio: 1440 / 950; padding: calc(var(--mw) * 0.011); border-radius: calc(var(--mw) * 0.022) calc(var(--mw) * 0.022) 0 0; background: #050505; box-shadow: inset 0 0 0 1px #3a3a3d, 0 0 0 1px #111; }
+.mac-screen { display: flex; flex-direction: column; height: 100%; overflow: hidden; border-radius: calc(var(--mw) * 0.009) calc(var(--mw) * 0.009) 0 0; background: #000; }
+.mac-bar { display: flex; flex: none; align-items: center; gap: calc(var(--mw) * 0.012); height: calc(var(--mw) * 0.032); padding: 0 calc(var(--mw) * 0.013); background: #1E1E20; }
+.lights { display: flex; gap: calc(var(--mw) * 0.0052); }
+.lights i { width: calc(var(--mw) * 0.0078); aspect-ratio: 1; border-radius: 50%; background: var(--l); }
+.mac-url { display: flex; align-items: center; justify-content: center; gap: calc(var(--mw) * 0.004); width: 34%; height: 62%; margin-inline: auto; border-radius: calc(var(--mw) * 0.006); background: rgba(255, 255, 255, 0.09); font-size: calc(var(--mw) * 0.0108); line-height: 1; color: rgba(255, 255, 255, 0.92); }
+.mac-url .mark { width: calc(var(--mw) * 0.0122); }
+.mac-shot { flex: 1; min-height: 0; width: 100%; object-fit: cover; object-position: top; }
+.mac-base { position: relative; height: calc(var(--mw) * 0.021); margin-inline: calc(var(--mw) * -0.055); border-radius: 0 0 calc(var(--mw) * 0.022) calc(var(--mw) * 0.022); background: linear-gradient(180deg, #E4E4E6 0%, #BDBDC1 32%, #76767B 78%, #47474A 100%); }
+.mac-base::before { content: ""; position: absolute; top: 0; left: 50%; width: 15%; height: 42%; transform: translateX(-50%); border-radius: 0 0 calc(var(--mw) * 0.009) calc(var(--mw) * 0.009); background: linear-gradient(180deg, #8E8E93, #BDBDC1); }
+.mac-wrap { position: absolute; top: 50%; left: 34%; transform: translateY(-50%); }
+.mac-wrap .mac { --mw: min(calc(var(--u) * 84), 118svh); }
+
+/* Bento */
+.bento { display: grid; flex: 1; gap: calc(var(--u) * 0.8); width: 100%; min-height: 0; }
+.tile { position: relative; display: flex; flex-direction: column; gap: calc(var(--u) * 0.3); min-width: 0; min-height: 0; padding: calc(var(--u) * 1.5) calc(var(--u) * 1.7); overflow: hidden; border-radius: calc(var(--u) * 2); background: var(--tile); color: var(--snow); }
+.tile > .cap { position: relative; z-index: 2; font-size: var(--t-3); font-weight: 600; letter-spacing: -0.02em; line-height: 1.14; }
+.uses { grid-template-columns: 1.04fr 1fr 1fr 1fr; grid-template-rows: repeat(2, minmax(0, 1fr)); }
+.use-phone { grid-row: span 2; align-items: center; background: linear-gradient(180deg, #2A2A2D, #101012); }
+.use-phone > .cap { align-self: flex-start; }
+.use-phone .iphone { --pw: calc(var(--u) * 19.5); position: absolute; top: 19%; }
+.lock-time { position: relative; z-index: 1; margin-top: calc(var(--pw) * 0.1); text-align: center; }
+.lock-time b { display: block; font-size: 3.7em; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+.lock-time span { font-size: 0.94em; font-weight: 500; }
+.notice { position: absolute; z-index: 2; left: 4%; right: 4%; top: 37%; display: flex; align-items: center; gap: 0.62em; padding: 0.68em; border-radius: 1.14em; background: rgba(40, 40, 42, 0.56); -webkit-backdrop-filter: blur(16px) saturate(1.5); backdrop-filter: blur(16px) saturate(1.5); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); font-size: 0.74em; line-height: 1.22; }
+.notice b { display: block; font-weight: 600; }
+.icon26 { position: relative; display: grid; flex: none; place-items: center; width: var(--is); height: var(--is); border-radius: 22.4%; background: radial-gradient(130% 100% at 28% 0%, #FF7A3F 0%, #FF4800 48%, #E23B00 100%); box-shadow: inset 0 0 0 calc(var(--is) * 0.004) rgba(255, 255, 255, 0.28), inset 0 calc(var(--is) * 0.012) calc(var(--is) * 0.012) rgba(255, 255, 255, 0.34), inset 0 calc(var(--is) * -0.024) calc(var(--is) * 0.05) rgba(110, 28, 0, 0.3), 0 calc(var(--is) * 0.1) calc(var(--is) * 0.2) calc(var(--is) * -0.08) rgba(0, 0, 0, 0.55); color: var(--white); }
+.icon26 .mark { width: 61%; filter: drop-shadow(0 calc(var(--is) * 0.012) calc(var(--is) * 0.02) rgba(110, 28, 0, 0.34)); }
+.use-icon { background: #2A2A2D; }
+.use-icon .icon26 { --is: calc(var(--u) * 11.5); margin: auto; }
+.use-video { grid-column: span 2; background: linear-gradient(180deg, rgba(0, 0, 0, 0.42), transparent 34%, transparent 70%, rgba(0, 0, 0, 0.36)), var(--flower) center / cover no-repeat; }
+.use-video .wm { position: absolute; right: calc(var(--u) * 1.5); bottom: calc(var(--u) * 1.3); display: flex; align-items: center; gap: 8px; font-size: var(--t-s); font-weight: 600; letter-spacing: -0.015em; color: var(--white); }
+.use-video .wm .mark { width: calc(var(--u) * 1.6); min-width: 18px; }
+.use-tab { justify-content: space-between; }
+.use-tab .tabs { margin-top: auto; margin-inline: calc(var(--u) * -1.7); margin-bottom: calc(var(--u) * -1.5); padding: 12px calc(var(--u) * 1.7) 0; background: #111113; }
+.use-end { align-items: center; background: var(--black); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1); }
+.use-end > .cap { align-self: flex-start; }
+.endcard { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: calc(var(--u) * 0.8); }
+.endcard .mark { width: calc(var(--u) * 5); min-width: 52px; }
+.use-poster { background: var(--orange); color: var(--black); }
+.use-poster img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* Compare */
+.compare { flex: 1; align-self: center; width: min(100%, calc(var(--u) * 78)); margin-block: auto; border-collapse: collapse; font-size: max(14px, calc(var(--u) * 1.5)); letter-spacing: -0.02em; }
+.compare th { padding-bottom: calc(var(--u) * 1); font-weight: 600; text-align: left; font-size: var(--t-3); }
+.compare th .ic { display: flex; align-items: center; gap: 10px; }
+.compare th img, .compare th .mark { width: calc(var(--u) * 2.2); min-width: 24px; }
+.compare td { padding-block: calc(var(--u) * 1.02); border-top: 1px solid var(--hair); font-variant-numeric: tabular-nums; }
+.compare td:first-child { width: 44%; padding-right: 16px; color: var(--dim); }
+.compare td:nth-child(2), .compare th:nth-child(2) { width: 28%; padding-right: 16px; }
+.compare .no { color: var(--dim); }
+.compare .yes { font-weight: 600; }
+.compare .warn { font-weight: 600; color: var(--orange); }
+
+/* Decision */
+.pick { display: grid; flex: 1; min-height: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--u) * 0.8); }
+.opt { position: relative; overflow: hidden; border-radius: calc(var(--u) * 2); background: #000; box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18); }
+.opt img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transform: scale(1.3); }
+.opt-copy { position: absolute; left: calc(var(--u) * 2); right: calc(var(--u) * 2); top: calc(var(--u) * 1.8); z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.opt-foot { position: absolute; left: calc(var(--u) * 2); right: calc(var(--u) * 2); bottom: calc(var(--u) * 1.8); z-index: 2; display: grid; gap: 4px; }
+.pill { padding: 0.42em 0.86em; border-radius: 999px; background: var(--orange); color: var(--black); font-size: var(--t-s); font-weight: 600; letter-spacing: -0.01em; line-height: 1; }
+
+/* Plan */
+.plan { display: grid; flex: 1; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: calc(var(--u) * 4); align-items: center; width: min(100%, calc(var(--u) * 84)); margin-inline: auto; }
+.plan li { display: grid; grid-template-columns: calc(var(--u) * 3.6) minmax(0, 1fr); align-items: baseline; padding-block: calc(var(--u) * 1.3); border-top: 1px solid var(--hair); font-size: max(19px, calc(var(--u) * 2)); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; }
+.plan li:first-child { border-top: 0; }
+.plan li span:first-child { font-family: var(--mono); font-size: var(--t-m); font-weight: 400; color: var(--dim); }
+
+/* Phone: scenes stay pinned, compositions stack. */
+@media (max-width: 760px) {
+  :root { --u: 5px; --t-x: 50px; --t-1: 36px; --t-2: 26px; }
+  .nav { max-width: calc(100vw - 16px); overflow-x: auto; scrollbar-width: none; justify-content: flex-start; top: 8px; }
+  .nav::-webkit-scrollbar { display: none; }
+  .pin { padding: 68px 20px 28px; }
+  .solid { display: none; }
+  .full.fit-phone, .finish-img { object-fit: contain; }
+  .finish-img { transform: scale(1.5); }
+  .readout { top: 62px; left: 20px; }
+  #cam .full { object-position: 68% 50%; }
+  .bl { max-width: none; right: var(--gut); bottom: 28px; }
+  .shrink-logo { top: 38%; }
+  .shrink-fav { top: 38%; }
+  .zoom { top: 58%; right: 20px; left: 20px; width: auto; max-width: 240px; margin-inline: auto; }
+  .colour-stage { top: 62%; right: 50%; width: 64vw; transform: translate(50%, -50%); }
+  .side { top: 88px; transform: none; width: auto; right: 20px; }
+  .contrast-stage { top: 66%; right: 50%; width: 62vw; transform: translate(50%, -50%); }
+  .big-num { font-size: 25vw; }
+  .file-page, .print, .code-page, .plan { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .stream { height: 24svh; order: 2; }
+  .name-mark { width: 62vw; }
+  .word { font-size: 15vw; }
+  .print-art { max-height: 38svh; }
+  .counter b { font-size: 76px; }
+  .step-cap { min-height: 0; }
+  .specs { display: none; }
+  .code-art { max-height: 30svh; }
+  .pair { gap: 10px; }
+  .mx { gap: 5px; }
+  .mx-cell { aspect-ratio: 1; border-radius: 8px; }
+  .mx-col { font-size: 9px; }
+  .trio { gap: 8px; }
+  .trio .iphone { --pw: 29vw; }
+  .mac { --mw: 88vw; }
+  .mac-wrap { position: static; transform: none; display: flex; flex: 1; align-items: center; justify-content: center; }
+  .mac-wrap .mac { --mw: 88vw; }
+  .split { grid-template-columns: minmax(0, 1fr); align-content: center; gap: 24px; }
+  .pair { justify-content: center; }
+  .pair figure { width: 42vw; }
+  .tlc { top: 72px; left: 20px; right: 20px; }
+  .uses { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); }
+  .use-phone { grid-row: auto; order: -2; }
+  .use-phone .iphone { --pw: 34vw; top: 34px; }
+  .use-video { order: -1; }
+  .use-end, .use-tab { display: none; }
+  .use-icon .icon26 { --is: 88px; }
+  .compare { font-size: 14px; }
+  .pick { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .finish-img, .dot, .tone { transition: none; }
+}
+/* Pixel story additions on top of the base scene system. */
+.pix { display: block; flex: none; shape-rendering: crispEdges; fill: currentColor; }
+.tab img { image-rendering: pixelated; }
+
+/* PixelByte */
+.pb-page { display: grid; flex: 1; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: calc(var(--u) * 4); align-items: center; width: min(100%, calc(var(--u) * 86)); margin-inline: auto; }
+.pb-logo { width: 100%; border-radius: calc(var(--u) * 2); background: var(--white); overflow: hidden; }
+.pb-logo img { width: 100%; display: block; }
+.quote { font-size: var(--t-2); font-weight: 600; letter-spacing: -0.02em; line-height: 1.14; }
+.stats { display: flex; flex-wrap: wrap; gap: calc(var(--u) * 2.6); }
+.stats b { display: block; font-size: var(--t-2); font-weight: 600; letter-spacing: -0.025em; line-height: 1.1; color: var(--fg); }
+
+/* Zoom into one frame */
+.zoomc { position: absolute; inset: 0; width: 100%; height: 100%; }
+.kare-field { position: absolute; inset: 0; z-index: 1; background: var(--orange); opacity: 0; }
+.kare-read { position: absolute; left: var(--gut); top: calc(var(--u) * 7); z-index: 3; display: flex; flex-direction: column; gap: 2px; padding: 8px 12px; border-radius: 10px; background: rgba(0, 0, 0, 0.5); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.kare-read b { font-family: var(--mono); font-size: var(--t-3); font-weight: 500; letter-spacing: -0.02em; color: var(--white); font-variant-numeric: tabular-nums; }
+.kare-read span { font-family: var(--mono); font-size: var(--t-m); color: rgba(255, 255, 255, 0.7); }
+.kare-copy { position: absolute; left: var(--gut); bottom: calc(var(--u) * 4); z-index: 3; width: min(calc(var(--u) * 58), 88vw); height: calc(var(--t-1) * 3.4); color: var(--white); text-shadow: 0 1px 24px rgba(0, 0, 0, 0.42); }
+.kare-copy > * { position: absolute; left: 0; right: 0; bottom: 0; }
+.kare-copy .dim { color: rgba(255, 255, 255, 0.72); }
+.kare-end { position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; text-align: center; color: var(--black); padding-inline: var(--gut); }
+
+/* Rival */
+.rival { display: flex; flex: 1; flex-direction: column; justify-content: center; gap: calc(var(--u) * 2.6); width: min(100%, calc(var(--u) * 82)); margin-inline: auto; }
+.versus { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--u) * 0.9); }
+.side-card { display: flex; flex-direction: column; gap: calc(var(--u) * 1.2); padding: calc(var(--u) * 2) calc(var(--u) * 2.2); border-radius: calc(var(--u) * 2); background: var(--tile); }
+.side-card h3 { font-size: var(--t-3); font-weight: 600; letter-spacing: -0.018em; }
+.vrow { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-top: calc(var(--u) * 0.7); border-top: 1px solid var(--hair); }
+.vrow b { font-size: var(--t-2); font-weight: 600; letter-spacing: -0.025em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.side-card.us { background: var(--orange); color: var(--black); --hair: rgba(0, 0, 0, 0.22); --dim: rgba(0, 0, 0, 0.66); }
+.rival-end { position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; text-align: center; padding-inline: var(--gut); background: var(--black); }
+
+/* The answer */
+.answer { position: absolute; inset: 0; display: grid; place-items: center; padding-bottom: 3svh; }
+.answer-art { height: min(66svh, 58vw); width: auto; overflow: visible; }
+.answer-grid line { stroke: rgba(0, 0, 0, 0.2); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.answer-art polygon { fill: transparent; }
+.answer-art polygon.on { fill: var(--white); stroke: var(--orange); stroke-width: 3; vector-effect: non-scaling-stroke; }
+.answer-art polygon.new { fill: var(--black); stroke: var(--orange); stroke-width: 3; vector-effect: non-scaling-stroke; }
+.answer-solid { fill: var(--white); visibility: hidden; }
+.answer-solid.on { visibility: visible; }
+.use-poster .mark { position: absolute; left: -18%; top: 26%; width: 150%; color: var(--white); }
+
+/* Two languages */
+.langs { display: grid; flex: 1; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--u) * 0.9); width: min(100%, calc(var(--u) * 80)); margin: calc(var(--u) * 1.6) auto 0; min-height: 0; max-height: calc(var(--u) * 34); }
+.lang { position: relative; display: grid; place-items: center; min-height: 0; border-radius: calc(var(--u) * 2); background: var(--tile); }
+.lang img, .lang .pix { height: 58%; width: auto; }
+.lang .m { position: absolute; left: calc(var(--u) * 1.6); bottom: calc(var(--u) * 1.2); }
+.lang .small { position: absolute; right: calc(var(--u) * 1.6); bottom: calc(var(--u) * 1.2); height: auto; }
+
+/* Raster: pixel, byte */
+.bayt { display: grid; flex: 1; min-height: 0; grid-template-columns: auto auto minmax(0, 1fr); gap: calc(var(--u) * 2.4); align-items: center; }
+.bayt-grid { height: min(calc(100svh - var(--u) * 13), 56vw); aspect-ratio: 1; }
+.bayt-grid line { stroke: rgba(255, 255, 255, 0.11); stroke-width: 0.02; }
+.bayt-grid rect { fill: transparent; }
+.bayt-grid rect.s1 { fill: var(--white); }
+.bayt-grid rect.s2 { fill: var(--orange); }
+.hexes { display: grid; grid-template-rows: repeat(16, 1fr); height: min(calc(100svh - var(--u) * 13), 56vw); align-items: center; font-family: var(--mono); font-size: max(11px, calc(var(--u) * 1.02)); line-height: 1; color: rgba(255, 255, 255, 0.24); font-variant-numeric: tabular-nums; }
+.hexes .done { color: var(--white); }
+.hexes .zero { color: rgba(255, 255, 255, 0.13); }
+.hexes .cur { color: var(--orange); }
+.hex-col { display: grid; align-items: center; min-width: calc(var(--u) * 6.6); }
+.hex-col > * { grid-area: 1 / 1; }
+.bayt-stage { position: relative; display: grid; place-items: center; }
+.bayt-stage > * { grid-area: 1 / 1; }
+.bayt-old { position: absolute; inset: 0; width: 74%; height: auto; max-height: 74%; object-fit: contain; margin: auto; }
+.tally-wrap { display: grid; }
+.tally-wrap > * { grid-area: 1 / 1; align-self: start; }
+.bayt-side { display: flex; flex-direction: column; gap: calc(var(--u) * 1.8); }
+.bayt-cap { position: relative; min-height: calc(var(--u) * 11.4); }
+.bayt-cap .h { font-size: max(28px, calc(var(--u) * 3.3)); }
+.bayt-cap > * { position: absolute; left: 0; right: 0; top: 0; }
+.tally { display: flex; gap: calc(var(--u) * 3); }
+.tally b { display: block; font-size: calc(var(--u) * 6.2); font-weight: 600; letter-spacing: -0.045em; line-height: 0.96; font-variant-numeric: tabular-nums; }
+
+/* Family */
+.family { display: grid; flex: 1; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--u) * 0.9); width: min(100%, calc(var(--u) * 84)); margin: calc(var(--u) * 1.6) auto 0; min-height: 0; max-height: calc(var(--u) * 30); }
+.fam { position: relative; display: grid; place-items: center; min-height: 0; overflow: hidden; border-radius: calc(var(--u) * 2); background: var(--white); color: var(--black); }
+.fam img { width: 86%; display: block; }
+.lock { display: inline-flex; align-items: center; gap: 0.3em; font-weight: 600; letter-spacing: -0.034em; line-height: 1; white-space: nowrap; }
+.lock b { font-weight: 700; }
+.lock .thin { font-weight: 300; letter-spacing: -0.02em; }
+.fam .lock { font-size: calc(var(--u) * 5.4); }
+.fam .lock .mark { width: 1.2em; }
+
+@media (max-width: 760px) {
+  .pb-page, .bayt, .versus, .langs, .family { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .langs, .family { max-height: none; }
+  .lang, .fam { min-height: 180px; }
+  .bayt { align-content: center; justify-items: center; }
+  .bayt-grid { height: 74vw; }
+  .hex-col { display: none; }
+  .bayt-side { width: 100%; }
+  .answer-art { height: auto; width: 86vw; }
+  .tally b { font-size: 40px; }
+  .bayt-cap { min-height: 104px; }
+  .kare-read { top: 62px; left: 20px; }
+  .kare-copy { left: 20px; bottom: 28px; width: calc(100vw - 40px); }
+  .rival { gap: 16px; }
+  .side-card { padding: 16px; }
+  .fam .lock { font-size: 40px; }
+}
+
+/* Portrait on the phones: keep the face clear and its colour open. */
+#onay .veil { z-index: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0.16), transparent 22%, transparent 56%, rgba(0, 0, 0, 0.58)); }
+#onay .screen-mid.low { align-items: end; padding-bottom: calc(var(--pw) * 0.1); }
+
+/* The twelfth square */
+.answer-sq { fill: var(--orange); stroke: var(--orange); stroke-width: 1; visibility: hidden; }
+.answer-sq.on { visibility: visible; }
+.on-black { color: var(--white); --dim: #86868B; }
+.chase polygon.ac { fill: rgba(255, 72, 0, 0.3); }
+.chase polygon.ac.on { fill: var(--orange); }
+.mx-cell .mark.grey { filter: grayscale(1); }
+
+/* The company sentence */
+.sent { display: grid; flex: 1; min-height: 0; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: calc(var(--u) * 5); align-items: center; width: min(100%, calc(var(--u) * 84)); margin-inline: auto; }
+.sent-mark svg { width: 100%; height: auto; overflow: visible; }
+.sent-copy { display: flex; flex-direction: column; gap: calc(var(--u) * 1.8); }
+.sent-q { color: rgba(255, 255, 255, 0.22); }
+.sent-q span { transition: color 260ms var(--ease); }
+.sent-q .lit { color: var(--white); }
+.sent-q .acc { color: var(--orange); }
+.sent-cap { position: relative; min-height: calc(var(--t-2) * 2.4); }
+.sent-cap > * { position: absolute; left: 0; right: 0; top: 0; }
+
+/* Colour rule */
+#senaryo .pin { transition: background-color 420ms var(--ease); }
+.sn-stage { position: absolute; inset: 0; display: grid; place-items: center; padding-bottom: 17svh; }
+.sn-mark { height: min(50svh, 62vw); width: auto; overflow: visible; }
+.sn-b { fill: var(--mk, #fff); transition: fill 420ms var(--ease); }
+.sn-s { fill: var(--sq, #FF4800); transition: fill 420ms var(--ease); }
+.sn-caps { position: absolute; left: var(--gut); right: var(--gut); bottom: calc(var(--u) * 3.4); height: calc(var(--t-1) * 1.1 + var(--t-2) * 1.5); }
+.sn-cap { position: absolute; inset: auto 0 0; display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * 0.5); text-align: center; color: var(--sf); }
+.sn-d { color: var(--sd); font-weight: 500; }
+.sn-end { position: absolute; inset: 0; z-index: 4; background: var(--black); color: var(--snow); }
+.sn-grid { display: grid; height: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(3, minmax(0, 1fr)); }
+.sn-tile { display: grid; place-items: center; min-height: 0; }
+.sn-tile .mark { width: 32%; }
+.sn-text { display: flex; flex-direction: column; justify-content: space-between; gap: 12px; padding: calc(var(--u) * 2.6) var(--gut); background: var(--black); }
+.sn-t { font-size: calc(var(--u) * 3.7); line-height: 1.06; }
+
+/* States */
+.st { display: grid; flex: 1; min-height: 0; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: calc(var(--u) * 5); align-items: center; width: min(100%, calc(var(--u) * 92)); margin-inline: auto; }
+.st-art { position: relative; width: 100%; max-width: 68svh; aspect-ratio: 8 / 7; justify-self: center; }
+.st-art .mark { position: absolute; inset: 0; color: var(--white); }
+.st-side { display: flex; flex-direction: column; gap: calc(var(--u) * 2.2); }
+.st-list { display: grid; gap: calc(var(--u) * 0.9); }
+.st-list li { display: grid; gap: 2px; padding-top: calc(var(--u) * 0.9); border-top: 1px solid var(--hair); color: rgba(255, 255, 255, 0.26); transition: color 260ms var(--ease); }
+.st-list li span { max-height: 0; overflow: hidden; font-size: var(--t-b); line-height: 1.35; color: var(--dim); opacity: 0; transition: max-height 320ms var(--ease), opacity 260ms var(--ease); }
+.st-list li.on { color: var(--white); }
+.st-list li.on span { max-height: 3em; opacity: 1; }
+.st-tab { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px 14px; }
+
+/* Uses, decision */
+.icon26 { --ac: var(--black); }
+.icon26.k { --ac: var(--orange); background: radial-gradient(130% 100% at 28% 0%, #343437 0%, #161618 52%, #050506 100%); box-shadow: inset 0 0 0 calc(var(--is) * 0.004) rgba(255, 255, 255, 0.2), inset 0 calc(var(--is) * 0.012) calc(var(--is) * 0.012) rgba(255, 255, 255, 0.14), 0 calc(var(--is) * 0.1) calc(var(--is) * 0.2) calc(var(--is) * -0.08) rgba(0, 0, 0, 0.55); }
+.icons { display: flex; flex: 1; align-items: center; justify-content: center; gap: calc(var(--u) * 1); }
+.use-icon .icons .icon26 { --is: calc(var(--u) * 7.8); margin: 0; }
+.use-poster { --ac: var(--black); }
+.pick.three { grid-template-columns: minmax(0, 1.34fr) minmax(0, 1fr) minmax(0, 1fr); }
+.pick.three .opt img { transform: scale(1.5); }
+.compare.tight td { padding-block: calc(var(--u) * 0.82); }
+.compare.tight { margin-top: calc(var(--u) * 1.6); }
+
+@media (max-width: 760px) {
+  .sent { grid-template-columns: minmax(0, 1fr); gap: 24px; align-content: center; justify-items: center; }
+  .sent-mark { width: 58vw; }
+  .sent-cap { min-height: 66px; width: 100%; }
+  .sn-stage { padding-bottom: 30svh; }
+  .sn-mark { height: auto; width: 66vw; }
+  .sn-caps { bottom: 28px; height: 190px; }
+  .sn-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .sn-tile { aspect-ratio: 1.75; border-radius: 10px; }
+  .states { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .state { flex-direction: row; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; }
+  .state .mark { width: 42px; margin: 0; }
+  .state:last-child { grid-column: 1 / -1; }
+  .state-tabs { display: none; }
+  .pick.three { grid-template-columns: minmax(0, 1fr); grid-template-rows: 1.3fr 1fr 1fr; }
+  .pick.three .opt img { transform: scale(1.02); }
+  .state-h { margin-top: 0; }
+  .icons { --is: 62px; gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #senaryo .pin, .sn-b, .sn-s, .sent-q span { transition: none; }
+}
+
+/* Deck-wide: the slides own the screen; the menu and small type follow from that. */
+:root { --t-m: max(12px, calc(var(--u) * 1)); --t-s: max(14px, calc(var(--u) * 1.14)); }
+body.idle, body.idle * { cursor: none !important; }
+.scene { background: transparent; }
+.pin { padding: calc(var(--u) * 4) var(--gut); }
+.nav { opacity: 0; pointer-events: none; transition: opacity 300ms var(--ease); }
+.nav.show { opacity: 1; pointer-events: auto; }
+.nav .brandmark.on { background: transparent; }
+.prog polygon { fill: rgba(255, 255, 255, 0.28); }
+.prog polygon.on { fill: var(--white); }
+.prog polygon.ac.on { fill: var(--orange); }
+.paper { --bg: var(--white); }
+
+/* Wordmark: the dot in the address is the square. */
+.wmk { display: inline-flex; align-items: baseline; font-weight: 300; letter-spacing: -0.034em; line-height: 1; white-space: nowrap; }
+.wmk b { font-weight: 700; }
+.wd { flex: none; width: 0.15em; height: 0.15em; margin: 0 -0.052em 0 0.085em; background: var(--ac, var(--orange)); transform: translateY(-0.03em) rotate(45deg); }
+.word i.wdot { display: inline-block; width: 0.15em; height: 0.15em; margin: 0 -0.052em 0 0.085em; background: currentColor; transform: translateY(-0.03em) rotate(45deg); }
+.word i.wdot.lit { color: var(--orange); }
+.son-c { bottom: calc(var(--u) * 3); }
+.son-wm { font-size: var(--t-1); color: var(--white); }
+
+/* PixelByte */
+.pb2 { display: grid; flex: 1; min-height: 0; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-rows: minmax(0, 1fr) auto; gap: calc(var(--u) * 2) calc(var(--u) * 4); align-items: center; width: min(100%, calc(var(--u) * 92)); margin-inline: auto; }
+.pb2-t { font-size: calc(var(--u) * 6.6); letter-spacing: -0.032em; line-height: 1.02; }
+.pb2-logo { width: 100%; max-height: 54svh; object-fit: contain; }
+.pb2-foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: calc(var(--u) * 2) calc(var(--u) * 4); padding-top: calc(var(--u) * 1.8); border-top: 1px solid var(--hair); }
+
+/* Rival */
+.rv { display: flex; flex: 1; flex-direction: column; justify-content: center; gap: calc(var(--u) * 3.4); width: min(100%, calc(var(--u) * 86)); margin-inline: auto; text-align: center; }
+.rv-head { display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * 0.6); }
+.rv-stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px calc(var(--u) * 2); font-weight: 500; color: var(--dim); }
+.rv-stats b { color: var(--fg); font-weight: 600; }
+.rv-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.rv-col h3 { margin-bottom: calc(var(--u) * 1.2); color: var(--dim); }
+.rv-col ul { display: grid; gap: calc(var(--u) * 0.5); font-size: var(--t-1); font-weight: 600; letter-spacing: -0.024em; line-height: 1.12; }
+.rv-col[data-side="r"] h3 { color: var(--orange); }
+.rv-src { text-align: center; }
+
+/* Split screen: two languages, then one family */
+.duo { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.duo-l, .duo-r { position: relative; display: grid; place-items: center; min-width: 0; padding-bottom: 12svh; }
+.duo-l { background: var(--white); color: var(--black); }
+.duo-r { background: var(--black); color: var(--white); }
+.duo .pix { height: min(46svh, 34vw); width: auto; }
+.duo-old { width: min(46svh, 32vw); }
+.duo .fam-m { width: min(58svh, 36vw); }
+.duo h2 { position: absolute; left: var(--gut); right: var(--gut); bottom: calc(var(--u) * 4); }
+.duo .m { position: absolute; left: var(--gut); top: calc(var(--u) * 3.2); color: inherit; opacity: 0.62; }
+.fam-sq { position: absolute; left: 0; top: 0; z-index: 3; background: var(--orange); }
+
+/* The square alone */
+.tk { position: absolute; inset: 0; --cy: 40svh; --W: min(58svh, 62vw); --F: min(15vw, 26svh); --B: min(30svh, 34vw); }
+.tk-mark { position: absolute; width: var(--W); max-width: none; height: auto; left: calc(50% - var(--W) * 0.75); top: calc(var(--cy) - var(--W) * 0.25); overflow: visible; }
+.tk-word { position: absolute; inset: 0; font-size: var(--F); line-height: 1; letter-spacing: -0.034em; white-space: nowrap; }
+.tk-word b, .tk-word span { position: absolute; top: calc(var(--cy) - var(--F) * 0.79); }
+.tk-word b { right: calc(50% + var(--F) * 0.125); font-weight: 700; }
+.tk-word span { left: calc(50% + var(--F) * 0.048); font-weight: 300; }
+.tk-sq { position: absolute; left: 50%; top: var(--cy); z-index: 2; width: var(--s, 40px); height: var(--s, 40px); margin: calc(var(--s, 40px) / -2) 0 0 calc(var(--s, 40px) / -2); background: var(--orange); transform: rotate(45deg); }
+.tk-bar { position: absolute; left: 14vw; right: 14vw; top: var(--cy); font-family: var(--mono); font-size: var(--t-3); color: var(--dim); font-variant-numeric: tabular-nums; }
+.tk-bar i { position: absolute; top: -3px; height: 6px; }
+.tk-bar i:first-child { left: 0; right: 50%; border-radius: 3px 0 0 3px; background: var(--white); }
+.tk-bar i:nth-child(2) { left: 50%; right: 0; border-radius: 0 3px 3px 0; background: rgba(255, 255, 255, 0.22); }
+.tk-bar span { position: absolute; top: calc(var(--u) * 1.8); }
+.tk-bar span:nth-of-type(1) { left: 0; }
+.tk-bar span:nth-of-type(2) { right: 0; }
+.tk-bell { position: absolute; width: var(--B); height: auto; max-width: none; left: calc(50% - var(--B) * 0.71); top: calc(var(--cy) - var(--B) * 0.21); fill: none; stroke: var(--white); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.tk-cap { position: absolute; left: var(--gut); right: var(--gut); bottom: calc(var(--u) * 5); height: calc(var(--t-1) * 1.2); text-align: center; }
+.tk-cap > * { position: absolute; inset: auto 0 0; }
+
+/* One phone */
+#onay .pin { padding-block: calc(var(--u) * 2); }
+.hero-ph { display: grid; flex: 1; min-height: 0; grid-template-columns: minmax(0, 1fr) auto; gap: calc(var(--u) * 5); align-items: center; width: min(100%, calc(var(--u) * 84)); margin-inline: auto; }
+.hero-copy { display: grid; }
+.hero-copy > * { grid-area: 1 / 1; align-self: center; display: flex; flex-direction: column; gap: calc(var(--u) * 1); }
+.hero-phone { --pw: min(42svh, calc(var(--u) * 30)); }
+.mosaic { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-phone .status, .hero-phone .island, .hero-phone .screen-mid, .hero-phone .screen-foot { z-index: 2; }
+
+/* Pixel from the video */
+.trip { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); background: var(--black); }
+.trip-p { position: relative; min-width: 0; overflow: hidden; }
+.trip-p img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.trip-p::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0.42), transparent 24%, transparent 60%, rgba(0, 0, 0, 0.74) 92%); }
+.trip-ring { position: absolute; z-index: 2; width: calc(var(--u) * 3); height: calc(var(--u) * 3); margin: calc(var(--u) * -1.5) 0 0 calc(var(--u) * -1.5); border-radius: 50%; border: 2px solid var(--white); background: var(--ac); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35); }
+.trip-card { position: absolute; z-index: 2; left: 0; right: 0; bottom: calc(var(--u) * 3); display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * 1.1); color: var(--white); text-align: center; }
+.trip-card .mark { width: 30%; }
+.trip-card .m { color: rgba(255, 255, 255, 0.86); }
+.trip-intro { position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; padding-inline: var(--gut); text-align: center; background: var(--black); }
+.trip-end { position: absolute; left: var(--gut); right: var(--gut); top: calc(var(--u) * 2.6); z-index: 3; display: flex; flex-direction: column; align-items: center; gap: calc(var(--u) * 0.5); text-align: center; color: var(--white); }
+.trip-end .t3 { color: rgba(255, 255, 255, 0.78); }
+
+/* Backgrounds matrix */
+.mx2 { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); background: var(--black); }
+.mx2-c { position: relative; z-index: 1; display: grid; place-items: center; min-width: 0; background: var(--c-bg); color: var(--c-fg); box-shadow: inset 0 0 0 0.5px rgba(128, 128, 128, 0.3); }
+.mx2-c img, .mx2-c .mark { width: 46%; }
+.mx2-c img.grey, .mx2-c .mark.grey { filter: grayscale(1); }
+.mx2-c .l { position: absolute; left: calc(var(--u) * 1.2); top: calc(var(--u) * 1.1); font-family: var(--mono); font-size: var(--t-m); opacity: 0.72; }
+.mx2-title { position: absolute; left: 0; right: 0; top: 50%; bottom: 0; z-index: 0; display: grid; place-items: center; text-align: center; }
+
+/* Home page zoom */
+.mac-zoom { transform-origin: 0 0; }
+.zoom-cap { position: absolute; left: var(--gut); bottom: calc(var(--u) * 4); z-index: 3; color: var(--white); text-shadow: 0 2px 30px rgba(0, 0, 0, 0.7); }
+.zoom-cap > * { position: absolute; left: 0; bottom: 0; white-space: nowrap; }
+
+/* Uses */
+.lock-veil { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, 0.3), transparent 30%, transparent 66%, rgba(0, 0, 0, 0.34)); }
+.use-phone .notice { top: auto; bottom: 7%; }
+.use-phone .screen { background-position: 42% center; }
+.avatars { display: flex; flex: 1; align-items: center; justify-content: center; gap: calc(var(--u) * 1); }
+.avatar { display: grid; place-items: center; width: calc(var(--u) * 7.8); aspect-ratio: 1; border-radius: 50%; color: var(--white); }
+.avatar .mark { width: 58%; }
+.avatar.k { background: var(--black); }
+.avatar.o { background: var(--orange); --ac: var(--black); }
+.endcard .wmk { font-size: var(--t-3); color: var(--snow); }
+
+/* Compare, decision, 16 pixels */
+.compare.tight { font-size: max(15px, calc(var(--u) * 1.6)); }
+.pick.three { gap: 0; }
+.pick.three .opt { border-radius: 0; box-shadow: none; background: transparent; }
+.pick.three .opt + .opt { border-left: 1px solid var(--hair); }
+.opt-foot { font-size: var(--t-s); line-height: 1.32; }
+.opt-foot span:first-child { color: var(--fg); }
+.pair figure { width: min(calc(var(--u) * 31), 54svh, 44vw); }
+
+@media (max-width: 760px) {
+  .pin { padding: 40px 20px 28px; }
+  .pb2 { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; }
+  .pb2-t { font-size: 44px; }
+  .pb2-logo { max-height: 30svh; }
+  .rv-col ul { font-size: 24px; }
+  .duo { grid-template-columns: minmax(0, 1fr); grid-template-rows: repeat(2, minmax(0, 1fr)); }
+  .duo-l, .duo-r { padding-bottom: 56px; }
+  .duo .pix { height: 22svh; }
+  .duo-old { width: 28svh; }
+  .duo .fam-m { width: 30svh; }
+  .duo h2 { bottom: 16px; font-size: 28px; }
+  .duo .m { top: 16px; }
+  .hero-ph { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); gap: 14px; justify-items: center; }
+  .hero-copy { min-height: 210px; width: 100%; }
+  .hero-copy > * { align-self: start; }
+  .hero-phone { --pw: min(56vw, 25svh); align-self: center; }
+  .trip { grid-template-columns: minmax(0, 1fr); grid-template-rows: repeat(3, minmax(0, 1fr)); }
+  .trip-card { bottom: 12px; }
+  .trip-card .mark { width: 72px; }
+  .trip-intro .tx { font-size: 40px; }
+  .trip-end { top: 40%; padding: 14px; border-radius: 14px; background: rgba(0, 0, 0, 0.62); }
+  .trip-end .t1 { font-size: 24px; }
+  .trip-end .t3 { font-size: 15px; }
+  .mx2 { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(5, minmax(0, 1fr)); grid-auto-flow: column; }
+  .mx2-c .l { font-size: 10px; left: 8px; top: 8px; }
+  .mx2-c img, .mx2-c .mark { width: 40%; }
+  .mx2-title { top: 0; left: 50%; }
+  .mx2-title .t1 { font-size: 26px; }
+  .st { grid-template-columns: minmax(0, 1fr); gap: 18px; align-content: center; }
+  .st-art { width: 52vw; }
+  .st-side { gap: 14px; }
+  .st-list { gap: 8px; }
+  .st-list li { padding-top: 8px; }
+  .st-list li .t2 { font-size: 20px; }
+  .st-tab { display: none; }
+  .sn-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto repeat(4, minmax(0, 1fr)); }
+  .sn-text { grid-column: 1 / -1; padding: 44px 20px 16px; }
+  .sn-t { font-size: 30px; }
+  .sn-tile .mark { width: 38%; }
+  .mac-wrap .mac { --mw: 88vw; }
+  .zoom-cap { bottom: 28px; }
+  .uses { grid-template-rows: repeat(3, minmax(0, 1fr)); }
+  .use-avatar, .use-end { display: none; }
+  .use-icon .icons .icon26 { --is: 58px; }
+  .compare.tight { font-size: 14px; }
+  .pick.three .opt + .opt { border-left: 0; border-top: 1px solid var(--hair); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .st-list li, .st-list li span, .nav { transition: none; }
+}
+
+/* Logotype: bold muvi, square dot, thin video. */
+.word { font-weight: 700; }
+.word i.thin { font-weight: 300; }
+
+/* Phone: the mark sits in the exact middle; the last beat is a video player. */
+.hero-phone .screen-mid { position: absolute; inset: 0; flex: none; }
+.hero-phone .screen-mid > * { grid-area: 1 / 1; }
+.hero-phone .screen-mark { width: 25%; position: relative; }
+.hero-phone .screen-foot { margin-top: auto; }
+.hero-phone .track { overflow: visible; }
+.player-veil { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.28) 30%, rgba(0, 0, 0, 0.28) 66%, rgba(0, 0, 0, 0.66)); }
+.play-disc { width: 40%; aspect-ratio: 1; border-radius: 50%; background: rgba(20, 20, 22, 0.42); -webkit-backdrop-filter: blur(calc(var(--pw) * 0.03)) saturate(1.4); backdrop-filter: blur(calc(var(--pw) * 0.03)) saturate(1.4); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22); }
+.player-top { position: absolute; z-index: 2; top: calc(var(--pw) * 0.17); left: calc(var(--pw) * 0.07); right: calc(var(--pw) * 0.07); display: flex; justify-content: space-between; }
+.player-top svg { width: calc(var(--pw) * 0.075); fill: none; stroke: var(--white); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.gen-head { position: absolute; left: 0; top: 50%; width: 0.75em; height: 0.75em; margin: -0.375em 0 0 -0.1em; background: var(--orange); transform: rotate(45deg); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="m" viewBox="0 0 1000 875"><path d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L500 625L875 250L1000 375L500 875L0 375Z"/><path style="fill:var(--ac,#FF4800);stroke:var(--ac,#FF4800);stroke-width:1" d="M750 125L875 250L750 375L625 250Z"/></symbol></svg>
+<nav class="nav" aria-label="Bölümler"><a class="brandmark" href="#giris" data-to="giris" aria-label="Başa dön"><svg class="mark prog" viewBox="0 0 1000 875" aria-hidden="true"><polygon points="500,125 625,0 750,125 625,250"/><polygon points="375,250 500,125 625,250 500,375"/><polygon points="250,125 375,0 500,125 375,250"/><polygon points="125,250 250,125 375,250 250,375"/><polygon points="0,375 125,250 250,375 125,500"/><polygon points="125,500 250,375 375,500 250,625"/><polygon points="250,625 375,500 500,625 375,750"/><polygon points="375,750 500,625 625,750 500,875"/><polygon points="500,625 625,500 750,625 625,750"/><polygon points="625,500 750,375 875,500 750,625"/><polygon points="750,375 875,250 1000,375 875,500"/><polygon class="ac" points="625,250 750,125 875,250 750,375"/></svg></a><a href="#pixelbyte" data-to="pixelbyte">PixelByte</a><a href="#kare" data-to="kare">Piksel</a><a href="#rakip" data-to="rakip">Rakip</a><a href="#sorun" data-to="sorun">Sorun</a><a href="#bayt" data-to="bayt">Cevap</a><a href="#fikir" data-to="fikir">Fikir</a><a href="#kurgu" data-to="kurgu">Kurgu</a><a href="#senaryo" data-to="senaryo">Renk</a><a href="#onay" data-to="onay">Üründe</a><a href="#karne" data-to="karne">Karar</a></nav>
+<main>
+<section class="scene dark " id="giris" style="--len:2" data-hook="giris" data-stops="0,1"><div class="pin"><canvas class="seq" data-seq="build" data-n="132" data-fit="0.76" data-shift="-0.065" role="img" aria-label="On bir metal parça sırayla yerine oturuyor, son olarak turuncu kare boşluğu kapatıyor"></canvas><img class="full solid" src="draft-assets/still/titanium.webp" alt="">
+    <div class="bc open-title"><p class="m">Muvi · Kasım 2026</p><h1 class="h t1">Yeni işaret.</h1><span class="scroll-cue"></span></div></div></section>
+<section class="scene light paper" id="pixelbyte" style="--len:1.35"  ><div class="pin"><div class="pb2">
+    <div class="pb2-head stack" data-in><h2 class="h pb2-t">Şirketimizin adı<br>PixelByte.</h2><p class="h t2 dim">Adı işimizi anlatıyor.</p></div>
+    <img class="pb2-logo" data-in src="draft-assets/pixelbyte.png" alt="PixelByte logosu, P harfi piksellerden çizilmiş">
+    <div class="pb2-foot" data-in><p class="quote">“Every pixel, every interaction matters.”</p><div class="stats s"><div><b>100M+</b>üretim</div><div><b>1M+</b>indirme</div><div><b>250K+</b>aktif kullanıcı</div></div></div>
+  </div></div></section>
+<section class="scene dark " id="kare" style="--len:4" data-hook="kare" data-stops="0,0.3,0.6,0.95"><div class="pin"><canvas class="zoomc" role="img" aria-label="Bir video karesine, tek bir piksel kalana kadar yaklaşma"></canvas><div class="kare-field"></div>
+    <div class="kare-read layer" data-tl="-1,-0.5,0.82,0.86" data-y="0"><b data-area>921.600</b><span>piksel ekranda</span></div>
+    <div class="kare-copy h t1">
+      <p class="layer" data-tl="-1,-0.5,0.16,0.21">muvi.video’da<br>üretilen bir kare.</p>
+      <p class="layer" data-tl="0.24,0.3,0.5,0.55">4K bir karede 8,3 milyon piksel var.<br><span class="dim">Saniyede 199 milyon.</span></p>
+      <p class="layer" data-tl="0.57,0.62,0.78,0.82">Metni yazan sensin.<br><span class="dim">Pikselleri model üretiyor.</span></p>
+    </div>
+    <div class="kare-end layer" data-tl="0.88,0.95"><h2 class="h tx">Bu işin en küçük<br>birimi piksel.</h2></div></div></section>
+<section class="scene dark " id="rakip" style="--len:3.6" data-hook="rakip" data-stops="0.1,0.4,0.66,0.96"><div class="pin"><div class="rv">
+    <div class="rv-head layer" data-tl="-1,-0.5,0.64,0.7" data-y="0"><p class="eye">Rakibimiz</p><h2 class="h t1">Higgsfield.</h2><p class="rv-stats t3"><span><b>35+</b> model</span><span><b>40M+</b> kullanıcı</span><span><b>5,4 milyar $</b> değerleme</span></p></div>
+    <div class="rv-cols layer" data-tl="0.2,0.28,0.78,0.82" data-y="0">
+      <div class="rv-col" data-side="l"><h3 class="t3 layer" data-tl="-1,-0.5,0.44,0.5" data-y="0">Higgsfield</h3><ul><li>Seedance 2.0</li><li>Kling 3.0</li><li>Veo 3.1</li></ul></div>
+      <div class="rv-col" data-side="r"><h3 class="t3 layer" data-tl="-1,-0.5,0.44,0.5" data-y="0">muvi.video</h3><ul><li>Seedance 2.0</li><li>Kling 3.0</li><li>Veo 3.1</li></ul></div>
+    </div>
+    <p class="m rv-src layer" data-tl="0.2,0.28,0.64,0.7" data-y="0">higgsfield.ai/create/video · muvi.video · Series B haberleri, Ağustos 2026</p>
+  </div>
+  <div class="rival-end layer" data-tl="0.8,0.88" data-y="0"><h2 class="h tx">Model herkeste var.<br><span class="dim">Marka yalnızca bizim.</span></h2></div></div></section>
+<section class="scene dark " id="sorun" style="--len:3" data-hook="kucuk" data-stops="0,0.45,0.82"><div class="pin"><div class="readout" data-tl="0.02,0.08" data-y="0"><span class="m">Görünen boyut</span><b data-px> 640 px</b></div>
+    <div class="shrink-stage"><div class="shrink-logo"><img src="draft-assets/old.webp" alt="Bugünkü Muvi logosu"></div><img class="shrink-fav" src="draft-assets/fav16.png" width="16" height="16" alt=""></div>
+    <div class="zoom"><div class="px"><img src="draft-assets/fav16.png" alt="Bugünkü favicon, her kare bir piksel"></div><span class="m"><span class="path">public/favicon-16x16.png</span> · her kare 1 piksel</span></div>
+    <div class="bl" style="width:min(calc(var(--u)*40),62vw)"><div class="layer" data-tl="-1,-0.5,0.14,0.22" data-y="0" style="position:absolute;bottom:0;left:0;width:90%"><h2 class="h t1">Bugünkü logomuz güzel.<br><span class="dim">Ama yalnızca büyükken.</span></h2></div>
+    <div class="layer" data-tl="0.64,0.74" style="position:absolute;bottom:0;left:0;width:100%"><h2 class="h t1">Piksel üreten şirketin logosu 16 pikselde dağılıyor.</h2></div></div></div></section>
+<section class="scene light " id="renk" style="--len:2.6"  data-stops="0.1,0.48,0.82"><div class="pin"><div class="colour-stage">
+      <img class="layer" data-tl="-1,-0.5,0.2,0.34" data-y="0" src="draft-assets/old.webp" alt="Orijinal renkli logo">
+      <img class="layer" style="filter:grayscale(1)" data-tl="0.2,0.34,0.56,0.68" data-y="0" src="draft-assets/old.webp" alt="Griye çevrilmiş logo">
+      <img class="layer" data-tl="0.56,0.68" data-y="0" src="draft-assets/old-thr.webp" alt="Yüzde elli eşikle siyaha çevrilmiş logo, sol yarısı kayboluyor">
+    </div>
+    <div class="side">
+      <div class="swap stack layer" data-tl="-1,-0.5,0.2,0.3"><p class="m">Renk %100</p><h2 class="h t1">Bu logo<br>renkle ayakta.</h2><p class="b">Şekli gradyan taşıyor: sol üst açık, sağ alt koyu.</p></div>
+      <div class="swap stack layer" data-tl="0.26,0.36,0.56,0.64"><p class="m">Renk %0</p><h2 class="h t1">Griye inince<br>marka gidiyor.</h2><p class="b">Orta tonda bir kütle kalıyor.</p></div>
+      <div class="swap stack layer" data-tl="0.62,0.72"><p class="m">%50 eşik · tek renk baskı, damga</p><h2 class="h t1">Siyah beyazda<br>yarısı kayboluyor.</h2><p class="b">Siyah beyaz sürümü yok. Elimizde 96 piksellik bir maske var.</p></div>
+    </div></div></section>
+<section class="scene dark " id="zemin" style="--len:2.6" data-hook="zemin" data-stops="0.08,0.46,0.86"><div class="pin"><div class="contrast-stage"><img src="draft-assets/old.webp" alt="Bugünkü Muvi logosu"></div>
+    <div class="side stack"><p class="m tone-dim tone" style="position:relative">3:1 kontrastın altında kalan alan</p><div class="big-num tone" data-val>%19,3</div>
+      <div style="position:relative;height:calc(var(--t-2)*3)"><p class="h t2 tone layer" style="position:absolute" data-tl="-1,-0.5,0.2,0.28" data-y="0">Siyahta bile logonun beşte biri kayboluyor.</p><p class="h t2 tone layer" style="position:absolute" data-tl="0.28,0.36,0.56,0.62" data-y="0">Beyazda ışık ve üçgen birbirine karışıyor.</p><p class="h t2 tone layer" style="position:absolute" data-tl="0.64,0.72" data-y="0">Kendi turuncumuzun üstünde logo eriyor.</p></div>
+      <p class="m tone-dim tone" style="position:relative">Her piksel tek tek ölçüldü</p></div></div></section>
+<section class="scene dark " id="dosya" style="--len:1.6" data-hook="dosya" ><div class="pin"><div class="file-page"><div class="stream" aria-hidden="true"><pre><b>&lt;svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+&lt;rect width="56" height="56" fill="url(#pattern0_104_1738)"/&gt;
+&lt;defs&gt;
+&lt;pattern id="pattern0_104_1738" patternContentUnits="objectBoundingBox" width="1" height="1"&gt;
+&lt;use xlink:href="#image0_104_1738" transform="scale(0.000488281)"/&gt;
+&lt;/pattern&gt;
+&lt;image id="image0_104_1738" width="2048" height="2048" preserveAspectRatio="none" xlink:href="data:image/png;base64,</b>iVBORw0KGgoAAAANSUhEUgAACAAAAAgACAYAAACyp9MwAAAACXBIWXMAAAPoAAAD6AG1e1JrAAEAAElEQVR4Xuz9abAk2XUfeP7Pue4e8ZbMrKzKQqGKALERIPYdJIW1FqCIhRQJYuMGUhR3ShRFqqW2MRsbm1F/mpHUmm5pZNPT3WpZt3UP1a2RxAUkUAWQAkkQAEFiEUgQ3AlUYa01t/deRPg9Zz5c9wj36/HC81VmZeXy/5lFvvTw7brHdv3c4/cCRERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERERJeY5E8QERHw6K+8QcQhgAMiCjjgHgBvFxEXCe3/AVE42uk0G4gAbLmMqALeTqcNuRva72IRbaYBgTi0BAwQLQAp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</pre></div>
+    <div class="stack" data-in><p class="m">public/index-icons/muvilogo.svg</p><div class="h tx metal">721 KB.</div><h2 class="h t2 dim">İçinde tek bir vektör yok.</h2><p class="b">SVG uzantılı dosyanın içinde 2048 piksellik bir PNG gömülü.</p></div></div></div></section>
+<section class="scene dark " id="iki-dil" style="--len:1.35"  ><div class="pin"><div class="duo">
+    <div class="duo-l"><span class="m">PixelByte</span><svg class="pix" viewBox="0 0 5 7" aria-label="PixelByte P harfi" role="img"><path d="M1 0h3v1h-3zM0 1h1v1h-1zM4 1h1v1h-1zM0 2h1v1h-1zM4 2h1v1h-1zM0 3h1v1h-1zM4 3h1v1h-1zM0 4h4v1h-4zM0 5h1v1h-1zM0 6h1v1h-1z"/></svg><h2 class="h t1" data-in>Şirket piksel konuşuyor.</h2></div>
+    <div class="duo-r"><span class="m">Muvi, bugün</span><img class="duo-old" src="draft-assets/old.webp" alt="Bugünkü Muvi logosu" loading="lazy"><h2 class="h t1" data-in>Ürün başka bir dil.</h2></div>
+  </div></div></section>
+<section class="scene dark " id="cevap" style="--len:1.25"  ><div class="pin"><div class="mid center stack" style="align-items:center" data-in><h2 class="h tx">Cevap adımızdaydı.</h2><p class="h t1 dim">Pixel. Byte.</p></div></div></section>
+<section class="scene dark " id="bayt" style="--len:4" data-hook="bayt" data-stops="0.02,0.68,0.94"><div class="pin"><div class="bayt">
+    <div class="bayt-stage"><svg class="bayt-grid" viewBox="0 0 16 16" role="img" aria-label="PixelByte P harfi, 16 kere 16 piksel ızgarada satır satır çiziliyor"><line x1="0" y1="0" x2="0" y2="16"/><line x1="0" y1="0" x2="16" y2="0"/><line x1="1" y1="0" x2="1" y2="16"/><line x1="0" y1="1" x2="16" y2="1"/><line x1="2" y1="0" x2="2" y2="16"/><line x1="0" y1="2" x2="16" y2="2"/><line x1="3" y1="0" x2="3" y2="16"/><line x1="0" y1="3" x2="16" y2="3"/><line x1="4" y1="0" x2="4" y2="16"/><line x1="0" y1="4" x2="16" y2="4"/><line x1="5" y1="0" x2="5" y2="16"/><line x1="0" y1="5" x2="16" y2="5"/><line x1="6" y1="0" x2="6" y2="16"/><line x1="0" y1="6" x2="16" y2="6"/><line x1="7" y1="0" x2="7" y2="16"/><line x1="0" y1="7" x2="16" y2="7"/><line x1="8" y1="0" x2="8" y2="16"/><line x1="0" y1="8" x2="16" y2="8"/><line x1="9" y1="0" x2="9" y2="16"/><line x1="0" y1="9" x2="16" y2="9"/><line x1="10" y1="0" x2="10" y2="16"/><line x1="0" y1="10" x2="16" y2="10"/><line x1="11" y1="0" x2="11" y2="16"/><line x1="0" y1="11" x2="16" y2="11"/><line x1="12" y1="0" x2="12" y2="16"/><line x1="0" y1="12" x2="16" y2="12"/><line x1="13" y1="0" x2="13" y2="16"/><line x1="0" y1="13" x2="16" y2="13"/><line x1="14" y1="0" x2="14" y2="16"/><line x1="0" y1="14" x2="16" y2="14"/><line x1="15" y1="0" x2="15" y2="16"/><line x1="0" y1="15" x2="16" y2="15"/><line x1="16" y1="0" x2="16" y2="16"/><line x1="0" y1="16" x2="16" y2="16"/><g class="layer" data-tl="-1,-0.5,0.74,0.8" data-y="0"><rect data-i="0" x="0.03" y="0.03" width="0.94" height="0.94"/><rect data-i="1" x="1.03" y="0.03" width="0.94" height="0.94"/><rect data-i="2" x="2.03" y="0.03" width="0.94" height="0.94"/><rect data-i="3" x="3.03" y="0.03" width="0.94" height="0.94"/><rect data-i="4" x="4.03" y="0.03" width="0.94" height="0.94"/><rect data-i="5" x="5.03" y="0.03" width="0.94" height="0.94"/><rect data-i="6" x="6.03" y="0.03" width="0.94" height="0.94"/><rect data-i="7" x="7.03" y="0.03" width="0.94" height="0.94"/><rect data-i="8" x="8.03" y="0.03" width="0.94" height="0.94"/><rect data-i="9" x="9.03" y="0.03" width="0.94" height="0.94"/><rect data-i="10" x="10.03" y="0.03" width="0.94" height="0.94"/><rect data-i="11" x="11.03" y="0.03" width="0.94" height="0.94"/><rect data-i="12" x="12.03" y="0.03" width="0.94" height="0.94"/><rect data-i="13" x="13.03" y="0.03" width="0.94" height="0.94"/><rect data-i="14" x="14.03" y="0.03" width="0.94" height="0.94"/><rect data-i="15" x="15.03" y="0.03" width="0.94" height="0.94"/><rect data-i="16" x="0.03" y="1.03" width="0.94" height="0.94"/><rect data-i="17" x="1.03" y="1.03" width="0.94" height="0.94"/><rect data-i="18" x="2.03" y="1.03" width="0.94" height="0.94"/><rect data-i="19" x="3.03" y="1.03" width="0.94" height="0.94"/><rect data-i="20" x="4.03" y="1.03" width="0.94" height="0.94"/><rect data-i="21" x="5.03" y="1.03" width="0.94" height="0.94"/><rect data-i="22" x="6.03" y="1.03" width="0.94" height="0.94"/><rect data-i="23" x="7.03" y="1.03" width="0.94" height="0.94"/><rect data-i="24" x="8.03" y="1.03" width="0.94" height="0.94"/><rect data-i="25" x="9.03" y="1.03" width="0.94" height="0.94"/><rect data-i="26" x="10.03" y="1.03" width="0.94" height="0.94"/><rect data-i="27" x="11.03" y="1.03" width="0.94" height="0.94"/><rect data-i="28" x="12.03" y="1.03" width="0.94" height="0.94"/><rect data-i="29" x="13.03" y="1.03" width="0.94" height="0.94"/><rect data-i="30" x="14.03" y="1.03" width="0.94" height="0.94"/><rect data-i="31" x="15.03" y="1.03" width="0.94" height="0.94"/><rect data-i="32" x="0.03" y="2.03" width="0.94" height="0.94"/><rect data-i="33" x="1.03" y="2.03" width="0.94" height="0.94"/><rect data-i="34" x="2.03" y="2.03" width="0.94" height="0.94"/><rect data-i="35" x="3.03" y="2.03" width="0.94" height="0.94"/><rect data-i="36" x="4.03" y="2.03" width="0.94" height="0.94"/><rect data-i="37" x="5.03" y="2.03" width="0.94" height="0.94"/><rect data-i="38" x="6.03" y="2.03" width="0.94" height="0.94"/><rect data-i="39" x="7.03" y="2.03" width="0.94" height="0.94"/><rect data-i="40" x="8.03" y="2.03" width="0.94" height="0.94"/><rect data-i="41" x="9.03" y="2.03" width="0.94" height="0.94"/><rect data-i="42" x="10.03" y="2.03" width="0.94" height="0.94"/><rect data-i="43" x="11.03" y="2.03" width="0.94" height="0.94"/><rect data-i="44" x="12.03" y="2.03" width="0.94" height="0.94"/><rect data-i="45" x="13.03" y="2.03" width="0.94" height="0.94"/><rect data-i="46" x="14.03" y="2.03" width="0.94" height="0.94"/><rect data-i="47" x="15.03" y="2.03" width="0.94" height="0.94"/><rect data-i="48" x="0.03" y="3.03" width="0.94" height="0.94"/><rect data-i="49" x="1.03" y="3.03" width="0.94" height="0.94"/><rect data-i="50" x="2.03" y="3.03" width="0.94" height="0.94"/><rect data-i="51" x="3.03" y="3.03" width="0.94" height="0.94"/><rect data-i="52" x="4.03" y="3.03" width="0.94" height="0.94"/><rect data-i="53" x="5.03" y="3.03" width="0.94" height="0.94"/><rect data-i="54" x="6.03" y="3.03" width="0.94" height="0.94"/><rect data-i="55" x="7.03" y="3.03" width="0.94" height="0.94"/><rect data-i="56" x="8.03" y="3.03" width="0.94" height="0.94"/><rect data-i="57" x="9.03" y="3.03" width="0.94" height="0.94"/><rect data-i="58" x="10.03" y="3.03" width="0.94" height="0.94"/><rect data-i="59" x="11.03" y="3.03" width="0.94" height="0.94"/><rect data-i="60" x="12.03" y="3.03" width="0.94" height="0.94"/><rect data-i="61" x="13.03" y="3.03" width="0.94" height="0.94"/><rect data-i="62" x="14.03" y="3.03" width="0.94" height="0.94"/><rect data-i="63" x="15.03" y="3.03" width="0.94" height="0.94"/><rect data-i="64" x="0.03" y="4.03" width="0.94" height="0.94"/><rect data-i="65" x="1.03" y="4.03" width="0.94" height="0.94"/><rect data-i="66" x="2.03" y="4.03" width="0.94" height="0.94"/><rect data-i="67" x="3.03" y="4.03" width="0.94" height="0.94"/><rect data-i="68" x="4.03" y="4.03" width="0.94" height="0.94"/><rect data-i="69" x="5.03" y="4.03" width="0.94" height="0.94"/><rect data-i="70" x="6.03" y="4.03" width="0.94" height="0.94"/><rect data-i="71" x="7.03" y="4.03" width="0.94" height="0.94"/><rect data-i="72" x="8.03" y="4.03" width="0.94" height="0.94"/><rect data-i="73" x="9.03" y="4.03" width="0.94" height="0.94"/><rect data-i="74" x="10.03" y="4.03" width="0.94" height="0.94"/><rect data-i="75" x="11.03" y="4.03" width="0.94" height="0.94"/><rect data-i="76" x="12.03" y="4.03" width="0.94" height="0.94"/><rect data-i="77" x="13.03" y="4.03" width="0.94" height="0.94"/><rect data-i="78" x="14.03" y="4.03" width="0.94" height="0.94"/><rect data-i="79" x="15.03" y="4.03" width="0.94" height="0.94"/><rect data-i="80" x="0.03" y="5.03" width="0.94" height="0.94"/><rect data-i="81" x="1.03" y="5.03" width="0.94" height="0.94"/><rect data-i="82" x="2.03" y="5.03" width="0.94" height="0.94"/><rect data-i="83" x="3.03" y="5.03" width="0.94" height="0.94"/><rect data-i="84" x="4.03" y="5.03" width="0.94" height="0.94"/><rect data-i="85" x="5.03" y="5.03" width="0.94" height="0.94"/><rect data-i="86" x="6.03" y="5.03" width="0.94" height="0.94"/><rect data-i="87" x="7.03" y="5.03" width="0.94" height="0.94"/><rect data-i="88" x="8.03" y="5.03" width="0.94" height="0.94"/><rect data-i="89" x="9.03" y="5.03" width="0.94" height="0.94"/><rect data-i="90" x="10.03" y="5.03" width="0.94" height="0.94"/><rect data-i="91" x="11.03" y="5.03" width="0.94" height="0.94"/><rect data-i="92" x="12.03" y="5.03" width="0.94" height="0.94"/><rect data-i="93" x="13.03" y="5.03" width="0.94" height="0.94"/><rect data-i="94" x="14.03" y="5.03" width="0.94" height="0.94"/><rect data-i="95" x="15.03" y="5.03" width="0.94" height="0.94"/><rect data-i="96" x="0.03" y="6.03" width="0.94" height="0.94"/><rect data-i="97" x="1.03" y="6.03" width="0.94" height="0.94"/><rect data-i="98" x="2.03" y="6.03" width="0.94" height="0.94"/><rect data-i="99" x="3.03" y="6.03" width="0.94" height="0.94"/><rect data-i="100" x="4.03" y="6.03" width="0.94" height="0.94"/><rect data-i="101" x="5.03" y="6.03" width="0.94" height="0.94"/><rect data-i="102" x="6.03" y="6.03" width="0.94" height="0.94"/><rect data-i="103" x="7.03" y="6.03" width="0.94" height="0.94"/><rect data-i="104" x="8.03" y="6.03" width="0.94" height="0.94"/><rect data-i="105" x="9.03" y="6.03" width="0.94" height="0.94"/><rect data-i="106" x="10.03" y="6.03" width="0.94" height="0.94"/><rect data-i="107" x="11.03" y="6.03" width="0.94" height="0.94"/><rect data-i="108" x="12.03" y="6.03" width="0.94" height="0.94"/><rect data-i="109" x="13.03" y="6.03" width="0.94" height="0.94"/><rect data-i="110" x="14.03" y="6.03" width="0.94" height="0.94"/><rect data-i="111" x="15.03" y="6.03" width="0.94" height="0.94"/><rect data-i="112" x="0.03" y="7.03" width="0.94" height="0.94"/><rect data-i="113" x="1.03" y="7.03" width="0.94" height="0.94"/><rect data-i="114" x="2.03" y="7.03" width="0.94" height="0.94"/><rect data-i="115" x="3.03" y="7.03" width="0.94" height="0.94"/><rect data-i="116" x="4.03" y="7.03" width="0.94" height="0.94"/><rect data-i="117" x="5.03" y="7.03" width="0.94" height="0.94"/><rect data-i="118" x="6.03" y="7.03" width="0.94" height="0.94"/><rect data-i="119" x="7.03" y="7.03" width="0.94" height="0.94"/><rect data-i="120" x="8.03" y="7.03" width="0.94" height="0.94"/><rect data-i="121" x="9.03" y="7.03" width="0.94" height="0.94"/><rect data-i="122" x="10.03" y="7.03" width="0.94" height="0.94"/><rect data-i="123" x="11.03" y="7.03" width="0.94" height="0.94"/><rect data-i="124" x="12.03" y="7.03" width="0.94" height="0.94"/><rect data-i="125" x="13.03" y="7.03" width="0.94" height="0.94"/><rect data-i="126" x="14.03" y="7.03" width="0.94" height="0.94"/><rect data-i="127" x="15.03" y="7.03" width="0.94" height="0.94"/><rect data-i="128" x="0.03" y="8.03" width="0.94" height="0.94"/><rect data-i="129" x="1.03" y="8.03" width="0.94" height="0.94"/><rect data-i="130" x="2.03" y="8.03" width="0.94" height="0.94"/><rect data-i="131" x="3.03" y="8.03" width="0.94" height="0.94"/><rect data-i="132" x="4.03" y="8.03" width="0.94" height="0.94"/><rect data-i="133" x="5.03" y="8.03" width="0.94" height="0.94"/><rect data-i="134" x="6.03" y="8.03" width="0.94" height="0.94"/><rect data-i="135" x="7.03" y="8.03" width="0.94" height="0.94"/><rect data-i="136" x="8.03" y="8.03" width="0.94" height="0.94"/><rect data-i="137" x="9.03" y="8.03" width="0.94" height="0.94"/><rect data-i="138" x="10.03" y="8.03" width="0.94" height="0.94"/><rect data-i="139" x="11.03" y="8.03" width="0.94" height="0.94"/><rect data-i="140" x="12.03" y="8.03" width="0.94" height="0.94"/><rect data-i="141" x="13.03" y="8.03" width="0.94" height="0.94"/><rect data-i="142" x="14.03" y="8.03" width="0.94" height="0.94"/><rect data-i="143" x="15.03" y="8.03" width="0.94" height="0.94"/><rect data-i="144" x="0.03" y="9.03" width="0.94" height="0.94"/><rect data-i="145" x="1.03" y="9.03" width="0.94" height="0.94"/><rect data-i="146" x="2.03" y="9.03" width="0.94" height="0.94"/><rect data-i="147" x="3.03" y="9.03" width="0.94" height="0.94"/><rect data-i="148" x="4.03" y="9.03" width="0.94" height="0.94"/><rect data-i="149" x="5.03" y="9.03" width="0.94" height="0.94"/><rect data-i="150" x="6.03" y="9.03" width="0.94" height="0.94"/><rect data-i="151" x="7.03" y="9.03" width="0.94" height="0.94"/><rect data-i="152" x="8.03" y="9.03" width="0.94" height="0.94"/><rect data-i="153" x="9.03" y="9.03" width="0.94" height="0.94"/><rect data-i="154" x="10.03" y="9.03" width="0.94" height="0.94"/><rect data-i="155" x="11.03" y="9.03" width="0.94" height="0.94"/><rect data-i="156" x="12.03" y="9.03" width="0.94" height="0.94"/><rect data-i="157" x="13.03" y="9.03" width="0.94" height="0.94"/><rect data-i="158" x="14.03" y="9.03" width="0.94" height="0.94"/><rect data-i="159" x="15.03" y="9.03" width="0.94" height="0.94"/><rect data-i="160" x="0.03" y="10.03" width="0.94" height="0.94"/><rect data-i="161" x="1.03" y="10.03" width="0.94" height="0.94"/><rect data-i="162" x="2.03" y="10.03" width="0.94" height="0.94"/><rect data-i="163" x="3.03" y="10.03" width="0.94" height="0.94"/><rect data-i="164" x="4.03" y="10.03" width="0.94" height="0.94"/><rect data-i="165" x="5.03" y="10.03" width="0.94" height="0.94"/><rect data-i="166" x="6.03" y="10.03" width="0.94" height="0.94"/><rect data-i="167" x="7.03" y="10.03" width="0.94" height="0.94"/><rect data-i="168" x="8.03" y="10.03" width="0.94" height="0.94"/><rect data-i="169" x="9.03" y="10.03" width="0.94" height="0.94"/><rect data-i="170" x="10.03" y="10.03" width="0.94" height="0.94"/><rect data-i="171" x="11.03" y="10.03" width="0.94" height="0.94"/><rect data-i="172" x="12.03" y="10.03" width="0.94" height="0.94"/><rect data-i="173" x="13.03" y="10.03" width="0.94" height="0.94"/><rect data-i="174" x="14.03" y="10.03" width="0.94" height="0.94"/><rect data-i="175" x="15.03" y="10.03" width="0.94" height="0.94"/><rect data-i="176" x="0.03" y="11.03" width="0.94" height="0.94"/><rect data-i="177" x="1.03" y="11.03" width="0.94" height="0.94"/><rect data-i="178" x="2.03" y="11.03" width="0.94" height="0.94"/><rect data-i="179" x="3.03" y="11.03" width="0.94" height="0.94"/><rect data-i="180" x="4.03" y="11.03" width="0.94" height="0.94"/><rect data-i="181" x="5.03" y="11.03" width="0.94" height="0.94"/><rect data-i="182" x="6.03" y="11.03" width="0.94" height="0.94"/><rect data-i="183" x="7.03" y="11.03" width="0.94" height="0.94"/><rect data-i="184" x="8.03" y="11.03" width="0.94" height="0.94"/><rect data-i="185" x="9.03" y="11.03" width="0.94" height="0.94"/><rect data-i="186" x="10.03" y="11.03" width="0.94" height="0.94"/><rect data-i="187" x="11.03" y="11.03" width="0.94" height="0.94"/><rect data-i="188" x="12.03" y="11.03" width="0.94" height="0.94"/><rect data-i="189" x="13.03" y="11.03" width="0.94" height="0.94"/><rect data-i="190" x="14.03" y="11.03" width="0.94" height="0.94"/><rect data-i="191" x="15.03" y="11.03" width="0.94" height="0.94"/><rect data-i="192" x="0.03" y="12.03" width="0.94" height="0.94"/><rect data-i="193" x="1.03" y="12.03" width="0.94" height="0.94"/><rect data-i="194" x="2.03" y="12.03" width="0.94" height="0.94"/><rect data-i="195" x="3.03" y="12.03" width="0.94" height="0.94"/><rect data-i="196" x="4.03" y="12.03" width="0.94" height="0.94"/><rect data-i="197" x="5.03" y="12.03" width="0.94" height="0.94"/><rect data-i="198" x="6.03" y="12.03" width="0.94" height="0.94"/><rect data-i="199" x="7.03" y="12.03" width="0.94" height="0.94"/><rect data-i="200" x="8.03" y="12.03" width="0.94" height="0.94"/><rect data-i="201" x="9.03" y="12.03" width="0.94" height="0.94"/><rect data-i="202" x="10.03" y="12.03" width="0.94" height="0.94"/><rect data-i="203" x="11.03" y="12.03" width="0.94" height="0.94"/><rect data-i="204" x="12.03" y="12.03" width="0.94" height="0.94"/><rect data-i="205" x="13.03" y="12.03" width="0.94" height="0.94"/><rect data-i="206" x="14.03" y="12.03" width="0.94" height="0.94"/><rect data-i="207" x="15.03" y="12.03" width="0.94" height="0.94"/><rect data-i="208" x="0.03" y="13.03" width="0.94" height="0.94"/><rect data-i="209" x="1.03" y="13.03" width="0.94" height="0.94"/><rect data-i="210" x="2.03" y="13.03" width="0.94" height="0.94"/><rect data-i="211" x="3.03" y="13.03" width="0.94" height="0.94"/><rect data-i="212" x="4.03" y="13.03" width="0.94" height="0.94"/><rect data-i="213" x="5.03" y="13.03" width="0.94" height="0.94"/><rect data-i="214" x="6.03" y="13.03" width="0.94" height="0.94"/><rect data-i="215" x="7.03" y="13.03" width="0.94" height="0.94"/><rect data-i="216" x="8.03" y="13.03" width="0.94" height="0.94"/><rect data-i="217" x="9.03" y="13.03" width="0.94" height="0.94"/><rect data-i="218" x="10.03" y="13.03" width="0.94" height="0.94"/><rect data-i="219" x="11.03" y="13.03" width="0.94" height="0.94"/><rect data-i="220" x="12.03" y="13.03" width="0.94" height="0.94"/><rect data-i="221" x="13.03" y="13.03" width="0.94" height="0.94"/><rect data-i="222" x="14.03" y="13.03" width="0.94" height="0.94"/><rect data-i="223" x="15.03" y="13.03" width="0.94" height="0.94"/><rect data-i="224" x="0.03" y="14.03" width="0.94" height="0.94"/><rect data-i="225" x="1.03" y="14.03" width="0.94" height="0.94"/><rect data-i="226" x="2.03" y="14.03" width="0.94" height="0.94"/><rect data-i="227" x="3.03" y="14.03" width="0.94" height="0.94"/><rect data-i="228" x="4.03" y="14.03" width="0.94" height="0.94"/><rect data-i="229" x="5.03" y="14.03" width="0.94" height="0.94"/><rect data-i="230" x="6.03" y="14.03" width="0.94" height="0.94"/><rect data-i="231" x="7.03" y="14.03" width="0.94" height="0.94"/><rect data-i="232" x="8.03" y="14.03" width="0.94" height="0.94"/><rect data-i="233" x="9.03" y="14.03" width="0.94" height="0.94"/><rect data-i="234" x="10.03" y="14.03" width="0.94" height="0.94"/><rect data-i="235" x="11.03" y="14.03" width="0.94" height="0.94"/><rect data-i="236" x="12.03" y="14.03" width="0.94" height="0.94"/><rect data-i="237" x="13.03" y="14.03" width="0.94" height="0.94"/><rect data-i="238" x="14.03" y="14.03" width="0.94" height="0.94"/><rect data-i="239" x="15.03" y="14.03" width="0.94" height="0.94"/><rect data-i="240" x="0.03" y="15.03" width="0.94" height="0.94"/><rect data-i="241" x="1.03" y="15.03" width="0.94" height="0.94"/><rect data-i="242" x="2.03" y="15.03" width="0.94" height="0.94"/><rect data-i="243" x="3.03" y="15.03" width="0.94" height="0.94"/><rect data-i="244" x="4.03" y="15.03" width="0.94" height="0.94"/><rect data-i="245" x="5.03" y="15.03" width="0.94" height="0.94"/><rect data-i="246" x="6.03" y="15.03" width="0.94" height="0.94"/><rect data-i="247" x="7.03" y="15.03" width="0.94" height="0.94"/><rect data-i="248" x="8.03" y="15.03" width="0.94" height="0.94"/><rect data-i="249" x="9.03" y="15.03" width="0.94" height="0.94"/><rect data-i="250" x="10.03" y="15.03" width="0.94" height="0.94"/><rect data-i="251" x="11.03" y="15.03" width="0.94" height="0.94"/><rect data-i="252" x="12.03" y="15.03" width="0.94" height="0.94"/><rect data-i="253" x="13.03" y="15.03" width="0.94" height="0.94"/><rect data-i="254" x="14.03" y="15.03" width="0.94" height="0.94"/><rect data-i="255" x="15.03" y="15.03" width="0.94" height="0.94"/></g></svg><img class="bayt-old layer" data-tl="0.76,0.84" data-y="0" src="draft-assets/old.webp" alt="Bugünkü Muvi logosu, ızgaranın üstünde"></div>
+    <div class="hex-col layer" data-tl="-1,-0.5,0.74,0.8" data-y="0" aria-hidden="true"><div class="hexes"><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span><span data-hex>0x····</span></div></div>
+    <div class="bayt-side">
+      <div class="bayt-cap">
+        <h2 class="h t1 layer" data-tl="-1,-0.5,0.6,0.64" data-y="0">PixelByte’ın P’si.<br><span class="dim">16 × 16, satır satır.</span></h2>
+        <h2 class="h t1 layer" data-tl="0.63,0.68,0.74,0.78" data-y="0">Her satır 2 bayt.<br><span class="dim">Toplam 32 bayt.</span></h2>
+        <h2 class="h t1 layer" data-tl="0.78,0.86" data-y="0">Peki Muvi logosu?<br><span class="dim">Bu ızgaraya oturmuyor.</span></h2>
+      </div>
+      <div class="tally-wrap"><div class="tally layer" data-tl="-1,-0.5,0.74,0.78" data-y="0"><div><b data-pixels>0</b><span class="m">piksel</span></div><div><b data-bytes>0</b><span class="m">bayt</span></div></div><p class="layer b" data-tl="0.8,0.88" data-y="0">Eğri, gradyan, ışık ve gölge. Satırı da baytı da yok.<br><span class="m">public/logo.png · 540.726 bayt</span></p></div>
+    </div></div></div></section>
+<section class="scene brand " id="isaret" style="--len:3.6" data-hook="isaret" data-stops="0.03,0.56,0.95"><div class="pin"><div class="answer">
+    <svg class="answer-art" viewBox="-4 -4 1008 883" role="img" aria-label="Muvi işareti, 8 sütun 7 satırlık ızgarada on bir beyaz kare ve bir turuncu kareden kuruluyor">
+      <g class="answer-grid layer" data-tl="-1,-0.5,0.5,0.58" data-y="0"><line x1="0" y1="0" x2="0" y2="875"/><line x1="125" y1="0" x2="125" y2="875"/><line x1="250" y1="0" x2="250" y2="875"/><line x1="375" y1="0" x2="375" y2="875"/><line x1="500" y1="0" x2="500" y2="875"/><line x1="625" y1="0" x2="625" y2="875"/><line x1="750" y1="0" x2="750" y2="875"/><line x1="875" y1="0" x2="875" y2="875"/><line x1="1000" y1="0" x2="1000" y2="875"/><line x1="0" y1="0" x2="1000" y2="0"/><line x1="0" y1="125" x2="1000" y2="125"/><line x1="0" y1="250" x2="1000" y2="250"/><line x1="0" y1="375" x2="1000" y2="375"/><line x1="0" y1="500" x2="1000" y2="500"/><line x1="0" y1="625" x2="1000" y2="625"/><line x1="0" y1="750" x2="1000" y2="750"/><line x1="0" y1="875" x2="1000" y2="875"/></g>
+      <g><polygon points="500,125 625,0 750,125 625,250"/><polygon points="375,250 500,125 625,250 500,375"/><polygon points="250,125 375,0 500,125 375,250"/><polygon points="125,250 250,125 375,250 250,375"/><polygon points="0,375 125,250 250,375 125,500"/><polygon points="125,500 250,375 375,500 250,625"/><polygon points="250,625 375,500 500,625 375,750"/><polygon points="375,750 500,625 625,750 500,875"/><polygon points="500,625 625,500 750,625 625,750"/><polygon points="625,500 750,375 875,500 750,625"/><polygon points="750,375 875,250 1000,375 875,500"/></g>
+      <path class="answer-solid" d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L500 625L875 250L1000 375L500 875L0 375Z"/><path class="answer-sq" d="M750 125L875 250L750 375L625 250Z"/>
+    </svg></div>
+    <div class="bl stack layer" style="width:auto" data-tl="0.48,0.54,0.62,0.66" data-y="0"><h2 class="h t2">Bu oturuyor.<br><span class="dim">8 × 7 ızgara, 11 kare.</span></h2></div>
+    <div class="bl stack layer on-black" style="width:auto" data-tl="0.76,0.84" data-y="0"><h2 class="h t2">On ikinci kare yanıyor.<br><span class="dim">O piksel, işaretin içinde.</span></h2></div></div></section>
+<section class="scene dark " id="fikir" style="--len:4.4" data-hook="fikir" data-stops="0.2,0.36,0.54,0.72,0.95"><div class="pin"><div class="name-stage">
+    <div class="name-mark"><svg viewBox="0 0 1000 875" aria-hidden="true"><path fill="rgba(255,255,255,.12)" d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L500 625L875 250L1000 375L500 875L0 375Z"/><path fill="rgba(255,72,0,.24)" d="M750 125L875 250L750 375L625 250Z"/>
+      <path class="layer" fill="#fff" d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L125 500L0 375ZM750 375L875 250L1000 375L875 500Z" data-tl="0.08,0.14,0.26,0.3" data-y="0"/><path class="layer" fill="#FF4800" d="M750 125L875 250L750 375L625 250Z" data-tl="0.08,0.14,0.26,0.3" data-y="0"/>
+      <path class="layer" fill="#fff" d="M125 500L250 375L500 625L750 375L875 500L500 875Z" data-tl="0.26,0.3,0.42,0.46" data-y="0"/>
+      <path class="layer" fill="#fff" d="M375 250L250 375L500 625L750 375L625 250L500 375Z" data-tl="0.44,0.48,0.6,0.64" data-y="0"/>
+      <path class="layer" fill="#FF4800" stroke="#FF4800" stroke-width="2" d="M500 375L750 125L875 250L500 625L250 375L375 250Z" data-tl="0.62,0.66,0.8,0.84" data-y="0"/>
+      <path class="layer" fill="#fff" d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L500 625L875 250L1000 375L500 875L0 375Z" data-tl="0.82,0.88" data-y="0"/><path class="layer" fill="#FF4800" stroke="#FF4800" stroke-width="1" d="M750 125L875 250L750 375L625 250Z" data-tl="0.82,0.88" data-y="0"/></svg></div>
+    <div class="word" role="img" aria-label="muvi.video"><i data-l="m" class=" ">m</i><i data-l="rest" class=" ">u</i><i data-l="v1" class=" ">v</i><i data-l="rest" class=" ">i</i><i data-l="rest" class="wdot"></i><i data-l="v2" class="thin acc">v</i><i data-l="rest" class="thin ">i</i><i data-l="rest" class="thin ">d</i><i data-l="rest" class="thin ">e</i><i data-l="rest" class="thin ">o</i></div>
+    <div class="name-cap t2 h"><p class="layer" data-tl="0.08,0.14,0.25,0.29" data-y="0">Üstte yedi kare: m. <span class="dim">Turuncu kare sağ bacağını tamamlıyor.</span></p><p class="layer" data-tl="0.27,0.31,0.42,0.46" data-y="0">Altında beş kare: daha küçük bir v.</p><p class="layer" data-tl="0.45,0.49,0.6,0.64" data-y="0">Ortada kalp.</p><p class="layer" data-tl="0.63,0.67,0.8,0.84" data-y="0">Kalp ve turuncu kare birlikte: ikinci v. <span class="dim">Aynı zamanda bir onay.</span></p><p class="layer" data-tl="0.84,0.9" data-y="0">Logo, adresimizi söylüyor.</p></div></div></div></section>
+<section class="scene dark " id="cumle" style="--len:2.8" data-hook="cumle" data-stops="0.1,0.36,0.62,0.94"><div class="pin"><div class="sent">
+    <div class="sent-mark"><svg viewBox="0 0 1000 875" aria-hidden="true"><path fill="rgba(255,255,255,.12)" d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L500 625L875 250L1000 375L500 875L0 375Z"/><path fill="rgba(255,72,0,.24)" d="M750 125L875 250L750 375L625 250Z"/>
+      <path class="layer" fill="#fff" d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L500 625L875 250L1000 375L500 875L0 375Z" data-tl="-1,-0.5,0.2,0.26" data-y="0"/><path class="layer" fill="#fff" d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L500 625L875 250L1000 375L500 875L0 375Z" data-tl="0.76,0.84" data-y="0"/>
+      <path class="layer" fill="#FF4800" d="M750 125L875 250L750 375L625 250Z" data-tl="-1,-0.5,0.46,0.52" data-y="0"/><path class="layer" fill="#FF4800" stroke="#FF4800" stroke-width="1" d="M750 125L875 250L750 375L625 250Z" data-tl="0.76,0.84" data-y="0"/>
+      <path class="layer" fill="#fff" d="M375 250L250 375L500 625L750 375L625 250L500 375Z" data-tl="0.5,0.56,0.74,0.8" data-y="0"/></svg></div>
+    <div class="sent-copy">
+      <p class="m">PixelByte · pixelbyte.app</p>
+      <p class="h t1 sent-q" lang="en"><span data-s="a">Every pixel,</span><br><span data-s="b">every interaction</span><br><span data-s="c">matters.</span></p>
+      <div class="sent-cap t2 h"><p class="layer dim" data-tl="-1,-0.5,0.18,0.24" data-y="0">Şirketin cümlesi.</p><p class="layer" data-tl="0.24,0.3,0.44,0.5" data-y="0">Turuncu kare: o piksel.</p><p class="layer" data-tl="0.5,0.56,0.72,0.78" data-y="0">Ortadaki kalp: önemsemek.</p><p class="layer" data-tl="0.8,0.86" data-y="0">Şirketin cümlesi, işaretin içinde.</p></div>
+    </div></div></div></section>
+<section class="scene dark " id="kurgu" style="--len:4.6" data-hook="kurgu" data-stops="0.02,0.36,0.44,0.57,0.7,0.92"><div class="pin"><div class="print">
+    <svg class="print-art" viewBox="-110 -165 1220 1090" role="img" aria-label="İşaretin kurgu çizimi: 45 derece çevrilmiş 4 kere 4 kareden 12 kare kalıyor, biri turuncu">
+      <g class="layer" data-tl="0,0.05" data-y="0"><line class="gl" x1="0" y1="-150" x2="0" y2="905"/><line class="gl" x1="125" y1="-150" x2="125" y2="905"/><line class="gl" x1="250" y1="-150" x2="250" y2="905"/><line class="gl" x1="375" y1="-150" x2="375" y2="905"/><line class="gl" x1="500" y1="-150" x2="500" y2="905"/><line class="gl" x1="625" y1="-150" x2="625" y2="905"/><line class="gl" x1="750" y1="-150" x2="750" y2="905"/><line class="gl" x1="875" y1="-150" x2="875" y2="905"/><line class="gl" x1="1000" y1="-150" x2="1000" y2="905"/><line class="gl" x1="-30" y1="-125" x2="1030" y2="-125"/><line class="gl" x1="-30" y1="0" x2="1030" y2="0"/><line class="gl" x1="-30" y1="125" x2="1030" y2="125"/><line class="gl" x1="-30" y1="250" x2="1030" y2="250"/><line class="gl" x1="-30" y1="375" x2="1030" y2="375"/><line class="gl" x1="-30" y1="500" x2="1030" y2="500"/><line class="gl" x1="-30" y1="625" x2="1030" y2="625"/><line class="gl" x1="-30" y1="750" x2="1030" y2="750"/><line class="gl" x1="-30" y1="875" x2="1030" y2="875"/></g><g><g class="cell hide" data-k="keep" data-c="5" data-o="6"><polygon points="0,375 125,250 250,375 125,500"/><text x="125" y="375">5</text></g><g class="cell hide" data-k="keep" data-c="4" data-o="3"><polygon points="125,250 250,125 375,250 250,375"/><text x="250" y="250">4</text></g><g class="cell hide" data-k="keep" data-c="3" data-o="1"><polygon points="250,125 375,0 500,125 375,250"/><text x="375" y="125">3</text></g><g class="cell hide" data-k="top" data-c="0" data-o="0"><polygon points="375,0 500,-125 625,0 500,125"/><text x="500" y="0"></text></g><g class="cell hide" data-k="keep" data-c="6" data-o="10"><polygon points="125,500 250,375 375,500 250,625"/><text x="250" y="500">6</text></g><g class="cell hide" data-k="in" data-c="0" data-o="7"><polygon points="250,375 375,250 500,375 375,500"/><text x="375" y="375"></text></g><g class="cell hide" data-k="keep" data-c="2" data-o="4"><polygon points="375,250 500,125 625,250 500,375"/><text x="500" y="250">2</text></g><g class="cell hide" data-k="keep" data-c="1" data-o="2"><polygon points="500,125 625,0 750,125 625,250"/><text x="625" y="125">1</text></g><g class="cell hide" data-k="keep" data-c="7" data-o="13"><polygon points="250,625 375,500 500,625 375,750"/><text x="375" y="625">7</text></g><g class="cell hide" data-k="in" data-c="0" data-o="11"><polygon points="375,500 500,375 625,500 500,625"/><text x="500" y="500"></text></g><g class="cell hide" data-k="in" data-c="0" data-o="8"><polygon points="500,375 625,250 750,375 625,500"/><text x="625" y="375"></text></g><g class="cell hide" data-k="last" data-c="12" data-o="5"><polygon points="625,250 750,125 875,250 750,375"/><text x="750" y="250">12</text></g><g class="cell hide" data-k="keep" data-c="8" data-o="15"><polygon points="375,750 500,625 625,750 500,875"/><text x="500" y="750">8</text></g><g class="cell hide" data-k="keep" data-c="9" data-o="14"><polygon points="500,625 625,500 750,625 625,750"/><text x="625" y="625">9</text></g><g class="cell hide" data-k="keep" data-c="10" data-o="12"><polygon points="625,500 750,375 875,500 750,625"/><text x="750" y="500">10</text></g><g class="cell hide" data-k="keep" data-c="11" data-o="9"><polygon points="750,375 875,250 1000,375 875,500"/><text x="875" y="375">11</text></g></g>
+      <g class="layer" data-tl="0.78,0.84" data-y="0"><path class="dim" d="M0 -148H1000M0 -158V-138M1000 -158V-138"/><text x="500" y="-158" text-anchor="middle">8 sütun</text><path class="dim" d="M-62 0V875M-72 0H-52M-72 875H-52"/><text transform="translate(-74 437) rotate(-90)" text-anchor="middle">7 satır</text><path class="dim" d="M1024 399L899 524"/><text x="967" y="493">1 kare</text></g>
+    </svg>
+    <div class="print-side">
+      <div class="counter"><b data-count>0</b><p class="m" style="padding-bottom:calc(var(--u)*0.8)">kare</p></div>
+      <div class="step-cap" style="position:relative">
+        <p class="h t2 layer" style="position:absolute" data-tl="0,0.05,0.34,0.38" data-y="0">Çizgi nereden geliyor? <span class="dim">45° çevrilmiş 4 × 4’ten.</span></p>
+        <p class="h t2 layer" style="position:absolute" data-tl="0.38,0.42,0.5,0.53" data-y="0">Tepedeki kare gidiyor. <span class="dim">Dışı kalp.</span></p>
+        <p class="h t2 layer" style="position:absolute" data-tl="0.51,0.55,0.63,0.66" data-y="0">Ortadaki üç kare gidiyor. <span class="dim">İçi de kalp.</span></p>
+        <p class="h t2 layer" style="position:absolute" data-tl="0.64,0.68,0.75,0.78" data-y="0">Bir kare yanıyor. <span class="dim">O piksel.</span></p>
+        <p class="h t2 layer" style="position:absolute" data-tl="0.76,0.8" data-y="0">On iki kare. <span class="dim">Kendi üstüne kapanan tek çizgi.</span></p>
+      </div>
+      <dl class="specs layer" data-tl="0.8,0.88" data-y="14"><div><dt>Açı</dt><dd>45,0° · köşeler 90,0°</dd></div><div><dt>Izgara</dt><dd>8 × 7</dd></div><div><dt>Çizgi kalınlığı</dt><dd>1 kare</dd></div><div><dt>16 piksele</dt><dd>sütun başına tam 2 piksel</dd></div><div><dt>4 × 4 bit</dt><dd>1110 1011 1001 1111</dd></div><div><dt>Kod</dt><dd>0xEB9F · 2 bayt</dd></div></dl>
+    </div></div></div></section>
+<section class="scene dark " id="senaryo" style="--len:5.6" data-hook="senaryo" data-stops="0.06,0.18,0.30,0.42,0.54,0.66,0.78,0.96"><div class="pin"><script type="application/json" data-sn>[{"bg":"#000","mk":"#fff","ac":"#FF4800"},{"bg":"#000","mk":"#FF4800","ac":"#fff"},{"bg":"#fff","mk":"#000","ac":"#FF4800"},{"bg":"#fff","mk":"#FF4800","ac":"#000"},{"bg":"#FF4800","mk":"#fff","ac":"#000"},{"bg":"#FF4800","mk":"#000","ac":"#fff"},{"bg":"#000","mk":"#fff","ac":"transparent"}]</script>
+    <div class="sn-stage"><svg class="sn-mark" viewBox="0 0 1000 875" role="img" aria-label="Muvi işareti, renk kuralına göre değişiyor"><path class="sn-b" d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L500 625L875 250L1000 375L500 875L0 375Z"/><path class="sn-s" d="M750 125L875 250L750 375L625 250Z"/></svg></div>
+    <div class="sn-caps"><div class="sn-cap layer" style="--sf:#fff;--sd:rgba(255,255,255,.62)" data-tl="-1,-0.5,0.108,0.124" data-y="0"><h2 class="h t1">Ana sürüm.</h2><p class="h t2 sn-d">Gövde beyaz, kare turuncu.</p></div><div class="sn-cap layer" style="--sf:#fff;--sd:rgba(255,255,255,.62)" data-tl="0.114,0.132,0.228,0.244" data-y="0"><h2 class="h t1">Turuncu lazım olduğunda yer değiştirirler.</h2><p class="h t2 sn-d">Gövde turuncu, kare beyaz.</p></div><div class="sn-cap layer" style="--sf:#000;--sd:rgba(0,0,0,.58)" data-tl="0.234,0.252,0.348,0.364" data-y="0"><h2 class="h t1">Açık zeminde gövde siyaha döner.</h2><p class="h t2 sn-d">Kare turuncu kalır.</p></div><div class="sn-cap layer" style="--sf:#000;--sd:rgba(0,0,0,.58)" data-tl="0.354,0.372,0.468,0.484" data-y="0"><h2 class="h t1">Açık zeminde turuncu sürüm.</h2><p class="h t2 sn-d">Gövde turuncu, kare siyah.</p></div><div class="sn-cap layer" style="--sf:#000;--sd:rgba(0,0,0,.68)" data-tl="0.474,0.492,0.588,0.604" data-y="0"><h2 class="h t1">Kendi turuncumuzun üstünde kare siyah olur.</h2><p class="h t2 sn-d">Turuncu kalsa zeminde kaybolurdu.</p></div><div class="sn-cap layer" style="--sf:#000;--sd:rgba(0,0,0,.68)" data-tl="0.594,0.612,0.708,0.724" data-y="0"><h2 class="h t1">Aynı zeminde ters sürüm.</h2><p class="h t2 sn-d">Gövde siyah, kare beyaz.</p></div><div class="sn-cap layer" style="--sf:#fff;--sd:rgba(255,255,255,.62)" data-tl="0.714,0.732,0.828,0.844" data-y="0"><h2 class="h t1">Tek mürekkep varsa kare boş kalır.</h2><p class="h t2 sn-d">Damga, gofre, lazer. Kesik çizim burada kullanılıyor.</p></div></div>
+    <div class="sn-end layer" data-tl="0.85,0.9" data-y="0"><div class="sn-grid">
+      <div class="sn-text"><h2 class="h sn-t">Tek işaret.<br>Altı renk çifti.</h2><p class="m">Her çiftte en düşük kontrast 3,40:1</p></div>
+      <div class="sn-tile" style="background:#fff;color:#000;--ac:#FF4800"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div><div class="sn-tile" style="background:#000;color:#FF4800;--ac:#fff"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div><div class="sn-tile" style="background:#FF4800;color:#fff;--ac:#000"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div><div class="sn-tile" style="background:#000;color:#fff;--ac:#FF4800"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div><div class="sn-tile" style="background:#fff;color:#FF4800;--ac:#000"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div><div class="sn-tile" style="background:#000;color:#fff;--ac:transparent"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div><div class="sn-tile" style="background:#fff;color:#000;--ac:transparent"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div><div class="sn-tile" style="background:#FF4800;color:#000;--ac:#fff"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div>
+    </div></div></div></section>
+<section class="scene dark " id="tek-kare" style="--len:4" data-hook="tekkare" data-stops="0.05,0.31,0.57,0.86"><div class="pin"><div class="tk">
+    <svg class="tk-mark layer" data-tl="-1,-0.5,0.12,0.2" data-y="0" viewBox="0 0 1000 875" aria-hidden="true"><path fill="#fff" d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L500 625L875 250L1000 375L500 875L0 375Z"/></svg>
+    <div class="tk-word layer" data-tl="0.2,0.26,0.4,0.46" data-y="0" role="img" aria-label="muvi.video"><b>muvi</b><span>video</span></div>
+    <div class="tk-bar layer" data-tl="0.46,0.52,0.66,0.72" data-y="0" aria-hidden="true"><i></i><i></i><span>0:09</span><span>0:18</span></div>
+    <svg class="tk-bell layer" data-tl="0.72,0.78" data-y="0" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+    <i class="tk-sq"></i>
+    <div class="tk-cap h t1"><p class="layer" data-tl="-1,-0.5,0.12,0.18" data-y="0">Kare tek başına da yetiyor.</p><p class="layer" data-tl="0.22,0.28,0.4,0.46" data-y="0">Adreste nokta.</p><p class="layer" data-tl="0.48,0.54,0.66,0.72" data-y="0">Videoda oynatma başı.</p><p class="layer" data-tl="0.74,0.8" data-y="0">Uygulamada bildirim.</p></div>
+  </div></div></section>
+<section class="scene light " id="onay" style="--len:4.2" data-hook="onay" data-stops="0.16,0.44,0.66,0.84,0.98"><div class="pin"><div class="hero-ph">
+    <div class="hero-copy">
+      <div class="layer" data-tl="-1,-0.5,0.46,0.5" data-y="0"><p class="m">Üretiliyor</p><h2 class="h t1">Pikseller<br>kare kare oturuyor.</h2><p class="b">İşaret yükleme halkasına dönüyor: beş kare, on iki karelik halkada ilerliyor.</p></div>
+      <div class="layer" data-tl="0.5,0.55,0.72,0.76" data-y="0"><p class="m">Bitti</p><h2 class="h t1">Halka duruyor.<br><span class="dim">Turuncu kare yanıyor.</span></h2></div>
+      <div class="layer" data-tl="0.76,0.82,0.88,0.91" data-y="0"><p class="m">Hazır</p><h2 class="h t1">Video hazır olduğunda<br><span class="dim">işaretin içi yanıyor.</span></h2></div>
+      <div class="layer" data-tl="0.91,0.95" data-y="0"><p class="m">İzle</p><h2 class="h t1">90° dönüyor.<br><span class="dim">Kalp, oynat tuşu oluyor.</span></h2></div>
+    </div>
+    <div class="iphone hero-phone"><div class="iphone-in"><div class="screen"><canvas class="mosaic" role="img" aria-label="Portre bloklardan netleşiyor"></canvas><div class="veil"></div><div class="player-veil layer" data-tl="0.88,0.93" data-y="0"></div><div class="status"><span>9:41</span><i></i></div><span class="island"></span>
+      <div class="player-top layer" data-tl="0.89,0.94" data-y="0" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg><svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4"/><path d="M12 2v13"/></svg></div>
+      <div class="screen-mid"><span class="play-disc layer" data-tl="0.88,0.93" data-y="0"></span><svg class="mark screen-mark chase" data-solo viewBox="0 0 1000 875" aria-hidden="true"><polygon points="500,125 625,0 750,125 625,250"/><polygon points="375,250 500,125 625,250 500,375"/><polygon points="250,125 375,0 500,125 375,250"/><polygon points="125,250 250,125 375,250 250,375"/><polygon points="0,375 125,250 250,375 125,500"/><polygon points="125,500 250,375 375,500 250,625"/><polygon points="250,625 375,500 500,625 375,750"/><polygon points="375,750 500,625 625,750 500,875"/><polygon points="500,625 625,500 750,625 625,750"/><polygon points="625,500 750,375 875,500 750,625"/><polygon points="750,375 875,250 1000,375 875,500"/><polygon class="ac" points="625,250 750,125 875,250 750,375"/><path class="layer" fill="#fff" fill-rule="evenodd" d="M375 0L500 125L625 0L1000 375L500 875L0 375ZM375 250L250 375L500 625L750 375L625 250L500 375Z" data-tl="0.5,0.54" data-y="0"/><path class="layer" fill="#FF4800" stroke="#FF4800" stroke-width="1" d="M375 250L250 375L500 625L750 375L625 250L500 375Z" data-tl="0.76,0.82" data-y="0"/><path class="layer" fill="#FF4800" stroke="#FF4800" stroke-width="1" d="M750 125L875 250L750 375L625 250Z" data-tl="0.5,0.54,0.87,0.91" data-y="0"/></svg></div>
+      <div class="screen-foot"><div class="screen-title layer" data-tl="0.76,0.82,0.87,0.9" data-y="0">Videon hazır</div><div class="track"><i data-gen-bar></i><span class="gen-head layer" data-tl="0.9,0.94" data-y="0"></span></div><div class="times"><span data-gen-status>Üretiliyor</span><span data-gen-pct>%0</span></div></div></div></div></div>
+  </div></div></section>
+<section class="scene dark " id="piksel" style="--len:3.4" data-hook="piksel" data-stops="0.06,0.3,0.5,0.7,0.95"><div class="pin"><div class="trip"><figure class="trip-p layer" data-tl="0.16,0.23" data-y="0" data-fx="0.5685" data-fy="0.3193" data-ar="0.6665" style="--ac:rgb(0, 133, 134)"><img src="draft-assets/hazir.jpg" alt="Portre, yanağından seçilen camgöbeği piksel" loading="lazy"><span class="trip-ring"></span><div class="trip-card"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg><figcaption class="m">x 776, y 654<br>rgb(0, 133, 134)</figcaption></div></figure><figure class="trip-p layer" data-tl="0.36,0.43" data-y="0" data-fx="0.5885" data-fy="0.6943" data-ar="0.7998" style="--ac:rgb(212, 47, 63)"><img src="draft-assets/kilit.jpg" alt="Portre, dudağından seçilen kırmızı piksel" loading="lazy"><span class="trip-ring"></span><div class="trip-card"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg><figcaption class="m">x 482, y 711<br>rgb(212, 47, 63)</figcaption></div></figure><figure class="trip-p layer" data-tl="0.56,0.63" data-y="0" data-fx="0.6023" data-fy="0.7528" data-ar="1.7778" style="--ac:rgb(199, 108, 17)"><img src="draft-assets/flower.jpg" alt="Çiçekli sahne, seçilen kehribar piksel" loading="lazy"><span class="trip-ring"></span><div class="trip-card"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg><figcaption class="m">x 771, y 542<br>rgb(199, 108, 17)</figcaption></div></figure></div>
+    <div class="trip-intro layer" data-tl="-1,-0.5,0.12,0.2" data-y="0"><h2 class="h tx">Jenerikte kare<br><span class="dim">videodan renk alır.</span></h2></div>
+    <div class="trip-end layer" data-tl="0.74,0.82" data-y="0"><h2 class="h t1">Her videonun imzası, kendi pikseli.</h2><p class="h t3">Ana sürümde kare turuncu kalır.</p></div></div></section>
+<section class="scene dark " id="durum" style="--len:4.2" data-hook="durum" data-stops="0.08,0.25,0.42,0.59,0.78,0.92"><div class="pin"><div class="st">
+    <div class="st-art"><svg class="mark layer  " data-tl="-1,-0.5,0.157,0.177" data-y="0" viewBox="0 0 1000 875" aria-hidden="true"><path d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L500 625L875 250L1000 375L500 875L0 375Z"/><path fill="rgba(255,72,0,.28)" d="M750 125L875 250L750 375L625 250Z"/></svg><svg class="mark layer chase " data-tl="0.157,0.187,0.323,0.343" data-y="0" viewBox="0 0 1000 875" aria-hidden="true"><polygon points="500,125 625,0 750,125 625,250"/><polygon points="375,250 500,125 625,250 500,375"/><polygon points="250,125 375,0 500,125 375,250"/><polygon points="125,250 250,125 375,250 250,375"/><polygon points="0,375 125,250 250,375 125,500"/><polygon points="125,500 250,375 375,500 250,625"/><polygon points="250,625 375,500 500,625 375,750"/><polygon points="375,750 500,625 625,750 500,875"/><polygon points="500,625 625,500 750,625 625,750"/><polygon points="625,500 750,375 875,500 750,625"/><polygon points="750,375 875,250 1000,375 875,500"/><polygon class="ac" points="625,250 750,125 875,250 750,375"/></svg><svg class="mark layer  st-turn" data-tl="0.323,0.353,0.823,0.843" data-y="0" viewBox="0 0 1000 875" aria-hidden="true"><path fill-rule="evenodd" d="M375 0L500 125L625 0L1000 375L500 875L0 375ZM375 250L250 375L500 625L750 375L625 250L500 375Z"/><path fill="#FF4800" stroke="#FF4800" stroke-width="1" d="M375 250L250 375L500 625L750 375L625 250L500 375Z"/><path class="layer" fill="#FF4800" stroke="#FF4800" stroke-width="1" d="M750 125L875 250L750 375L625 250Z" data-tl="-1,-0.5,0.495,0.535" data-y="0"/></svg><svg class="mark layer  " data-tl="0.823,0.853" data-y="0" viewBox="0 0 1000 875" aria-hidden="true"><path d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L500 625L875 250L1000 375L500 875L0 375Z"/><path fill="none" stroke="#FF4800" stroke-width="12" stroke-dasharray="39 31.7" d="M750 125L875 250L750 375L625 250Z"/></svg></div>
+    <div class="st-side"><h2 class="h t2">Düz bir logo tek şey söyler.<br><span class="dim">Bu işaret durumu da söyler.</span></h2>
+      <ol class="st-list"><li><b class="h t2">Sırada</b><span>Kare sönük.</span></li><li><b class="h t2">Üretiliyor</b><span>Beş kare halkada dönüyor.</span></li><li><b class="h t2">Hazır</b><span>Kalp ve kare yanıyor: onay.</span></li><li><b class="h t2">Favori</b><span>Kare beyaza dönüyor, yalnız kalp yanıyor. Üründe henüz yok, öneri.</span></li><li><b class="h t2">İzle</b><span>İşaret 90° çevriliyor. Kalp oynat üçgeni oluyor.</span></li><li><b class="h t2">Hata</b><span>Kare boş kalıyor.</span></li></ol>
+      <div class="st-tab"><span class="m">Sekmede, gerçek boyut</span><span class="tab"><img data-st-ico src="draft-assets/new16-wait.png" width="16" height="16" alt=""><span class="tab-t" data-st-tab>Sırada · muvi.video</span></span></div></div>
+    <script type="application/json" data-st>[{"ico":"draft-assets/new16-wait.png","tab":"Sırada · muvi.video"},{"ico":"draft-assets/new16-wait.png","tab":"Üretiliyor · muvi.video"},{"ico":"draft-assets/new16-hazir.png","tab":"Videon hazır · muvi.video"},{"ico":"draft-assets/new16-fav.png","tab":"Favorilerde · muvi.video"},{"ico":"draft-assets/new16-izle.png","tab":"İzle · muvi.video"},{"ico":"draft-assets/new16-hata.png","tab":"Üretilemedi · muvi.video"}]</script>
+  </div></div></section>
+<section class="scene dark " id="sinav" style="--len:1.3"  ><div class="pin"><div class="split"><div class="stack" data-in><h2 class="h t1">Aynı<br>16 piksel.<br><span class="dim">İki farklı<br>sonuç.</span></h2></div>
+    <div class="pair" data-in>
+      <figure><div class="px"><img src="draft-assets/fav16.png" alt="Bugünkü logo, 16 piksel"></div><span class="tab" style="width:100%"><img src="draft-assets/fav16.png" width="16" height="16" alt=""><span class="tab-t">Bugün</span></span></figure>
+      <figure><div class="px"><img src="draft-assets/new16.png" alt="Yeni işaret, 16 piksel"></div><span class="tab" style="width:100%"><img src="draft-assets/new16.png" width="16" height="16" alt=""><span class="tab-t">Yeni</span></span></figure>
+    </div></div></div></section>
+<section class="scene dark " id="zeminler" style="--len:2.6"  data-stops="0.08,0.95"><div class="pin"><div class="mx2">
+    <div class="mx2-c" style="--c-bg:#000;--c-fg:#fff"><span class="l">Bugün · Siyah</span><img class="" src="draft-assets/old.webp" alt="" loading="lazy"></div><div class="mx2-c" style="--c-bg:#fff;--c-fg:#000"><span class="l">Bugün · Beyaz</span><img class="" src="draft-assets/old.webp" alt="" loading="lazy"></div><div class="mx2-c" style="--c-bg:#FF4800;--c-fg:#fff"><span class="l">Bugün · Turuncu</span><img class="" src="draft-assets/old.webp" alt="" loading="lazy"></div><div class="mx2-c" style="--c-bg:#fff;--c-fg:#000"><span class="l">Bugün · Gri</span><img class="grey" src="draft-assets/old.webp" alt="" loading="lazy"></div><div class="mx2-c" style="--c-bg:#fff;--c-fg:#000"><span class="l">Bugün · %50 eşik</span><img class="" src="draft-assets/old-thr.webp" alt="" loading="lazy"></div>
+    <div class="mx2-c layer" data-tl="0.22,0.27" data-y="0" style="--c-bg:#000;--c-fg:#fff;--ac:#FF4800"><span class="l">Yeni · Siyah</span><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div><div class="mx2-c layer" data-tl="0.33,0.38" data-y="0" style="--c-bg:#fff;--c-fg:#000;--ac:#FF4800"><span class="l">Yeni · Beyaz</span><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div><div class="mx2-c layer" data-tl="0.44,0.49" data-y="0" style="--c-bg:#FF4800;--c-fg:#fff;--ac:#000"><span class="l">Yeni · Turuncu</span><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div><div class="mx2-c layer" data-tl="0.55,0.60" data-y="0" style="--c-bg:#fff;--c-fg:#000;--ac:#FF4800"><span class="l">Yeni · Gri</span><svg class="mark grey" viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div><div class="mx2-c layer" data-tl="0.66,0.71" data-y="0" style="--c-bg:#fff;--c-fg:#000;--ac:#000"><span class="l">Yeni · %50 eşik</span><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></div>
+    <div class="mx2-title layer" data-tl="-1,-0.5,0.2,0.28" data-y="0"><h2 class="h t1">Her zeminde.<br><span class="dim">Aynı işaret.</span></h2></div>
+  </div></div></section>
+<section class="scene dark " id="urunde" style="--len:3.2" data-hook="urunde" data-stops="0.04,0.46,0.92"><div class="pin"><div class="mid over layer" style="width:30%" data-tl="-1,-0.5,0.1,0.16" data-y="0"><h2 class="h t1">Ana<br>sayfada.<br><span class="dim">Gerçek<br>ekranda.</span></h2><p class="m" style="margin-top:calc(var(--u)*1)">muvi.video</p></div>
+    <div class="mac-wrap"><div class="mac-zoom"><div class="mac" data-in><div class="mac-lid"><div class="mac-screen"><div class="mac-bar"><span class="lights"><i style="--l:#FF5F57"></i><i style="--l:#FEBC2E"></i><i style="--l:#28C840"></i></span><span class="mac-url"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg>muvi.video</span></div><img class="mac-shot" src="draft-assets/site.webp" alt="Muvi ana sayfası, üst menüde ve model listesinde yeni işaretle" loading="lazy"></div></div><div class="mac-base"></div></div></div></div>
+    <div class="zoom-cap h t1"><p class="layer" data-tl="0.36,0.42,0.54,0.6" data-y="0">Üst menüde.</p><p class="layer" data-tl="0.82,0.88" data-y="0">Model listesinde.</p></div></div></section>
+<section class="scene dark " id="heryerde" style="--len:1.25"  ><div class="pin"><div class="bento uses" data-in>
+    <div class="tile use-phone"><div class="cap">Kilit ekranı</div><div class="iphone"><div class="iphone-in"><div class="screen" style="background-image:var(--kilit)"><div class="lock-veil"></div><span class="island"></span><div class="lock-time"><span>Perşembe 5 Kasım</span><b>9:41</b></div><div class="notice"><span class="icon26" style="--is:2.6em"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></span><span><b>Muvi</b>Videon hazır. İzlemek için dokun.</span></div></div></div></div></div>
+    <div class="tile use-icon"><div class="cap">Uygulama ikonu</div><div class="icons"><span class="icon26"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></span><span class="icon26 k"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></span></div></div>
+    <div class="tile use-video"><div class="cap">Videonun üstünde</div><span class="wm"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg>Muvi ile yapıldı</span></div>
+    <div class="tile use-avatar"><div class="cap">Profil fotoğrafı</div><div class="avatars"><span class="avatar k"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></span><span class="avatar o"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg></span></div></div>
+    <div class="tile use-end"><div class="cap">Jenerik sonu</div><div class="endcard"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg><div class="s"><span class="wmk " role="img" aria-label="muvi.video"><b>muvi</b><i class="wd"></i><span>video</span></span></div></div></div>
+    <div class="tile use-poster"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg><div class="cap" style="color:#000">Poster</div></div>
+  </div></div></section>
+<section class="scene dark " id="aile" style="--len:3" data-hook="aile" data-stops="0.08,0.68,0.95"><div class="pin"><div class="duo">
+    <div class="duo-l"><span class="m">PixelByte · 0°</span><svg class="pix" viewBox="0 0 5 7" aria-label="PixelByte P harfi" role="img"><path d="M1 0h3v1h-3zM0 1h1v1h-1zM4 1h1v1h-1zM0 2h1v1h-1zM4 2h1v1h-1zM0 3h1v1h-1zM4 3h1v1h-1zM0 4h4v1h-4zM0 5h1v1h-1zM0 6h1v1h-1z"/><rect class="fam-px" x="4" y="1" width="1" height="1" fill="none"/></svg><h2 class="h t1 layer" data-tl="0.04,0.12" data-y="0">Aynı kare.</h2></div>
+    <div class="duo-r"><span class="m">Muvi · 45°</span><svg class="mark fam-m" viewBox="0 0 1000 875" aria-label="Muvi işareti" role="img"><path d="M375 0L500 125L625 0L750 125L500 375L375 250L250 375L500 625L875 250L1000 375L500 875L0 375Z"/><path class="fam-l" fill="none" d="M750 125L875 250L750 375L625 250Z"/></svg><h2 class="h t1 layer" data-tl="0.62,0.7" data-y="0">45° döndü.</h2></div>
+    <i class="fam-sq"></i>
+  </div></div></section>
+<section class="scene dark " id="karne" style="--len:2.2"  data-stops="0.92"><div class="pin"><h2 class="h t1 center">Yan yana.</h2><table class="compare tight"><thead><tr><th></th><th><span class="ic"><img src="draft-assets/old.webp" alt="" loading="lazy">Bugün</span></th><th><span class="ic"><svg class="mark " viewBox="0 0 1000 875" aria-hidden="true"><use href="#m"/></svg>Yeni</span></th></tr></thead><tbody>
+    <tr class="layer" data-tl="0.06,0.12" data-y="0"><td>16 pikselde iç şekil</td><td class="no">Dağılıyor</td><td class="yes">Net</td></tr><tr class="layer" data-tl="0.17,0.23" data-y="0"><td>Kendi ızgarası</td><td class="no">Yok</td><td class="yes">8 × 7, 12 kare</td></tr><tr class="layer" data-tl="0.28,0.34" data-y="0"><td>Renk sistemi</td><td class="no">Tek gradyan</td><td class="yes">6 renk çifti, en az 3,40:1</td></tr><tr class="layer" data-tl="0.39,0.45" data-y="0"><td>Tek renk sürümü</td><td class="no">M’in yarısı gidiyor</td><td class="yes">Kare boş kalıyor, şekil tam</td></tr><tr class="layer" data-tl="0.50,0.56" data-y="0"><td>#FF4800 üstünde 3:1 altı alan</td><td class="no">%91,4</td><td class="yes">%0</td></tr><tr class="layer" data-tl="0.61,0.67" data-y="0"><td>Logo dosyası</td><td class="no">721.484 bayt</td><td class="yes">233 bayt</td></tr><tr class="layer" data-tl="0.72,0.78" data-y="0"><td>İlk bakışta M okunuyor</td><td class="yes">Evet</td><td class="warn">Daha net, kalple yarışıyor</td></tr>
+  </tbody></table></div></section>
+<section class="scene dark " id="karar" style="--len:1.2"  ><div class="pin"><div class="pick three" data-in>
+    <div class="opt"><img src="draft-assets/still/titanium.webp" alt="Turuncu kareli sürüm" loading="lazy"><div class="opt-copy"><h2 class="h t2">Turuncu kare</h2><span class="pill">Önerimiz</span></div><div class="opt-foot s"><span>m tam, kalp ortada, ana rengimiz işaretin içinde, ürün durumunu gösteriyor.</span><span>İki renk ister. Tek renkte kare boş kalır.</span></div></div>
+    <div class="opt"><img src="draft-assets/still/cut.webp" alt="Kesik sürüm" loading="lazy"><div class="opt-copy"><h2 class="h t2">Kesik</h2></div><div class="opt-foot s"><span>Tek renk, onay okunuyor.</span><span>m’in sağ bacağı eksik, turuncu yok.</span></div></div>
+    <div class="opt"><img src="draft-assets/still/closed.webp" alt="Birleşik sürüm" loading="lazy"><div class="opt-copy"><h2 class="h t2">Birleşik</h2></div><div class="opt-foot s"><span>En sade, m net.</span><span>Onay ve ikinci v yok, turuncu yok.</span></div></div>
+  </div></div></section>
+<section class="scene light " id="sirada" style="--len:1.15"  ><div class="pin"><div class="plan"><h2 class="h t1" data-in>Karar verilirse<br><span class="dim">sırada bunlar var.</span></h2><ol data-in>
+    <li><span>1</span><span>16, 32, 180 ve 512 piksel ikonlar</span></li><li><span>2</span><span>Üst menü, footer ve model listesi</span></li><li><span>3</span><span>iOS ve Android uygulama ikonları</span></li><li><span>4</span><span>Sırada, üretiliyor, hazır ve hata durumları</span></li><li><span>5</span><span>Vidi ve Wizard için aynı dil denemesi</span></li></ol></div></div></section>
+<section class="scene dark " id="son" style="--len:1.15"  ><div class="pin"><img class="full fit-phone" src="draft-assets/still/black.webp" alt="Siyah titanyum Muvi işareti, turuncu kareyle" data-zoom="0.84,0.78" style="transform-origin:50% 40%"><div class="bc son-c" data-in><span class="wmk son-wm" role="img" aria-label="muvi.video"><b>muvi</b><i class="wd"></i><span>video</span></span><p class="m">PixelByte</p></div></div></section>
+</main>
+<script>window.MUVI = {"p":["................",".....######.....",".....######.....","...##......##...","...##......##...","...##......##...","...##......##...","...##......##...","...##......##...","...########.....","...########.....","...##...........","...##...........","...##...........","...##...........","................"],"pHex":["0000","07e0","07e0","1818","1818","1818","1818","1818","1818","1fe0","1fe0","1800","1800","1800","1800","0000"]};</script>
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const scenes = [...document.querySelectorAll('.scene')];
+  const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+  const seg = (v, a, b) => clamp((v - a) / (b - a));
+  const mix = (a, b, t) => a + (b - a) * t;
+  const ease = (t) => t * t * (3 - 2 * t);
+  const nf = new Intl.NumberFormat('tr-TR');
+  const DATA = window.MUVI;
+
+  // ---------- Image sequence, loaded coarse to fine so scrubbing works from the start.
+  const makeSeq = (canvas) => {
+    const n = Number(canvas.dataset.n); const dir = canvas.dataset.seq;
+    const frames = new Array(n); const state = { canvas, n, frames, last: -1, ctx: canvas.getContext('2d'), t: 0 };
+    const src = (i) => `draft-assets/seq/${dir}/${String(i).padStart(4, '0')}.webp`;
+    const load = (i) => new Promise((res) => { if (frames[i]) return res(); const img = new Image(); img.onload = () => { frames[i] = img; res(); if (state.pending === i || state.last < 0) state.redraw(); }; img.onerror = res; img.src = src(i); });
+    state.draw = (t) => {
+      const want = clamp(Math.round(t * (n - 1)), 0, n - 1); state.pending = want;
+      let i = want; if (!frames[i]) { for (let d = 1; d < n; d++) { if (frames[want - d]) { i = want - d; break; } if (frames[want + d]) { i = want + d; break; } } }
+      const img = frames[i]; if (!img) return;
+      const dpr = Math.min(devicePixelRatio || 1, 2); const w = canvas.clientWidth * dpr, h = canvas.clientHeight * dpr;
+      if (canvas.width !== Math.round(w) || canvas.height !== Math.round(h)) { canvas.width = Math.round(w); canvas.height = Math.round(h); state.last = -1; }
+      if (i === state.last) return; state.last = i;
+      const ir = img.width / img.height, cr = w / h; let dw, dh; const fit = Number(canvas.dataset.fit || 1), shift = Number(canvas.dataset.shift || 0);
+      if (cr >= 1.05) { dw = Math.max(w, h * ir) * fit; dh = dw / ir; } else { dw = w * 1.72; dh = dw / ir; }
+      state.ctx.fillStyle = '#000'; state.ctx.fillRect(0, 0, w, h); state.ctx.imageSmoothingQuality = 'high';
+      state.ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2 + shift * h, dw, dh);
+    };
+    state.redraw = () => { state.last = -1; state.draw(state.t); };
+    (async () => { await load(0); await load(n - 1); state.redraw(); for (const step of [16, 8, 4, 2, 1]) { const batch = []; for (let i = 0; i < n; i += step) if (!frames[i]) batch.push(i); for (let k = 0; k < batch.length; k += 6) await Promise.all(batch.slice(k, k + 6).map(load)); } })();
+    return state;
+  };
+  const seqs = new Map(); document.querySelectorAll('canvas[data-seq]').forEach((c) => seqs.set(c.dataset.seq, makeSeq(c)));
+
+  // ---------- Zoom: from a whole frame down to one pixel of it, with no smoothing once pixels show.
+  const zoomC = document.querySelector('.zoomc');
+  const zoomImg = new Image(); let zoomReady = false; zoomImg.onload = () => { zoomReady = true; kick(); }; zoomImg.src = 'draft-assets/eye.jpg';
+  const drawZoom = (t) => {
+    if (!zoomReady || !zoomC) return 1;
+    const dpr = Math.min(devicePixelRatio || 1, 2); const w = Math.round(zoomC.clientWidth * dpr), h = Math.round(zoomC.clientHeight * dpr);
+    if (zoomC.width !== w || zoomC.height !== h) { zoomC.width = w; zoomC.height = h; }
+    const ctx = zoomC.getContext('2d'); const IW = zoomImg.width, IH = zoomImg.height; const asp = w / h;
+    const W0 = Math.min(IW, IH * asp); const sw = Math.exp(mix(Math.log(W0), Math.log(1), t)); const sh = sw / asp;
+    const k = 1 - (sw - 1) / (W0 - 1); const fx = 541.5, fy = 63.5;
+    const cx = clamp(mix(IW / 2, fx, Math.min(1, k * 6)), sw / 2, IW - sw / 2), cy = clamp(mix(IH / 2, fy, Math.min(1, k * 6)), sh / 2, IH - sh / 2);
+    ctx.imageSmoothingEnabled = sw > 200; ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(zoomImg, cx - sw / 2, cy - sh / 2, sw, sh, 0, 0, w, h);
+    if (sw < 40) {
+      const scale = w / sw; ctx.strokeStyle = `rgba(0,0,0,${(0.34 * seg(40 - sw, 0, 16)).toFixed(3)})`; ctx.lineWidth = Math.max(1, dpr); ctx.beginPath();
+      const x0 = Math.floor(cx - sw / 2), y0 = Math.floor(cy - sh / 2);
+      for (let x = x0; x <= cx + sw / 2 + 1; x++) { const X = (x - (cx - sw / 2)) * scale; ctx.moveTo(X, 0); ctx.lineTo(X, h); }
+      for (let y = y0; y <= cy + sh / 2 + 1; y++) { const Y = (y - (cy - sh / 2)) * scale; ctx.moveTo(0, Y); ctx.lineTo(w, Y); }
+      ctx.stroke();
+    }
+    return sw * sh;
+  };
+
+  // ---------- Timelines.
+  scenes.forEach((scene) => {
+    scene._tl = [...scene.querySelectorAll('[data-tl]')].map((el) => ({ el, tl: el.dataset.tl.split(',').map(Number), y: Number(el.dataset.y ?? 22) }));
+    scene._in = [...scene.querySelectorAll('[data-in]')].map((el, k) => ({ el, k }));
+    scene._zoom = [...scene.querySelectorAll('[data-zoom]')].map((el) => ({ el, z: el.dataset.zoom.split(',').map(Number) }));
+  });
+  const applyTl = ({ el, tl, y }, p) => {
+    const [a, b, c, d] = tl; const on = seg(p, a, b); const off = c === undefined ? 0 : seg(p, c, d); const o = on * (1 - off);
+    el.style.opacity = o.toFixed(3); el.style.visibility = o < 0.002 ? 'hidden' : 'visible';
+    if (y) el.style.transform = `translate3d(0, ${((1 - ease(on)) * y - ease(off) * y).toFixed(1)}px, 0)`;
+  };
+
+  const heroImg = new Image(); let heroReady = false; heroImg.onload = () => { heroReady = true; kick(); }; heroImg.src = 'draft-assets/hazir.jpg';
+
+  // ---------- Scene hooks.
+  let autoT = reduce ? 1 : 0;
+  const hooks = {
+    giris(p) {
+      const s = seqs.get('build'); if (s) { s.t = Math.max(autoT, seg(p, 0, 0.3)); s.draw(s.t); }
+      const solid = document.querySelector('.solid'); if (solid) solid.style.opacity = seg(Math.max(autoT, seg(p, 0, 0.3)), 0.95, 1).toFixed(3);
+      const t = document.querySelector('.open-title');
+      if (t) { const on = seg(autoT, 0.9, 1); const off = seg(p, 0.42, 0.72); t.style.opacity = (on * (1 - off)).toFixed(3); t.style.transform = `translate3d(0, ${(1 - ease(on)) * 18 - ease(off) * 22}px, 0)`; }
+    },
+    kare(p, scene) {
+      // Quick through the wide shots, slow where the mosaic of pixels reads.
+      const q = p < 0.3 ? mix(0, 0.46, seg(p, 0.03, 0.3)) : p < 0.62 ? mix(0.46, 0.78, seg(p, 0.3, 0.62)) : mix(0.78, 1, seg(p, 0.62, 0.84));
+      const area = drawZoom(q);
+      const r = scene.querySelector('[data-area]'); if (r) r.textContent = nf.format(Math.max(1, Math.round(area)));
+      scene.querySelector('.kare-field').style.opacity = seg(p, 0.84, 0.92).toFixed(3);
+    },
+    kucuk(p, scene) {
+      const logo = scene.querySelector('.shrink-logo'); const fav = scene.querySelector('.shrink-fav'); const px = scene.querySelector('[data-px]'); const zoom = scene.querySelector('.zoom');
+      const t = ease(seg(p, 0.08, 0.62));
+      const start = Math.min(640, innerWidth * 0.8); const size = Math.exp(mix(Math.log(start), Math.log(16), t));
+      const small = t > 0.995; const x = innerWidth > 760 ? mix(64, 30, ease(seg(p, 0.3, 0.62))) : 50;
+      logo.style.left = `${x}%`; logo.style.transform = `translate(-50%, -50%) scale(${(size / 640).toFixed(4)})`;
+      logo.style.opacity = small ? 0 : 1; fav.style.opacity = small ? 1 : 0; fav.style.left = `${x}%`;
+      px.textContent = `${String(Math.round(size)).padStart(3, ' ')} px`;
+      zoom.style.opacity = seg(p, 0.62, 0.76).toFixed(3); zoom.style.visibility = p < 0.62 ? 'hidden' : 'visible';
+    },
+    zemin(p, scene) {
+      const stops = [[0, 0, 0], [255, 255, 255], [255, 72, 0]]; const a = ease(seg(p, 0.2, 0.34)), b = ease(seg(p, 0.56, 0.7));
+      const c = stops[0].map((v, k) => mix(mix(v, stops[1][k], a), stops[2][k], b));
+      scene.querySelector('.pin').style.background = `rgb(${c.map(Math.round).join(',')})`;
+      scene.querySelector('[data-val]').textContent = `%${mix(mix(19.3, 18.5, a), 91.4, b).toFixed(1).replace('.', ',')}`;
+      const light = a > 0.5;
+      scene.querySelectorAll('.tone').forEach((el) => { el.style.color = light ? '#000' : '#F5F5F7'; });
+      scene.querySelectorAll('.tone-dim').forEach((el) => { el.style.color = light ? 'rgba(0,0,0,.62)' : '#86868B'; });
+    },
+    dosya(p, scene) { const pre = scene.querySelector('.stream pre'); if (pre) pre.style.transform = `translate3d(0, ${(-p * 42).toFixed(1)}%, 0)`; },
+    bayt(p, scene) {
+      const S = scene._b || (scene._b = { rects: [...scene.querySelectorAll('rect[data-i]')], hex: [...scene.querySelectorAll('[data-hex]')], st: new Int8Array(256).fill(-1), hs: new Array(16).fill(''), pixels: scene.querySelector('[data-pixels]'), bytes: scene.querySelector('[data-bytes]') });
+      const f = seg(p, 0.03, 0.62); const head = Math.floor(f * 256); let count = 0;
+      for (let i = 0; i < 256; i++) {
+        const on = DATA.p[Math.floor(i / 16)][i % 16] === '#'; const state = i < head ? (on ? 1 : 0) : i === head && f < 1 ? 2 : 0;
+        if (state === 1) count++;
+        if (S.st[i] !== state) { S.st[i] = state; S.rects[i].setAttribute('class', state ? `s${state}` : ''); }
+      }
+      for (let r = 0; r < 16; r++) {
+        const done = head >= (r + 1) * 16; const cur = Math.floor(head / 16) === r && f < 1; const value = DATA.pHex[r];
+        const text = done ? `0x${value}` : '0x····'; const cls = cur ? 'cur' : done ? (value === '0000' ? 'zero' : 'done') : '';
+        const key = text + cls; if (S.hs[r] !== key) { S.hs[r] = key; S.hex[r].textContent = text; S.hex[r].className = cls; }
+      }
+      S.pixels.textContent = String(count); S.bytes.textContent = String(Math.floor(head / 8));
+    },
+    isaret(p, scene) {
+      const S = scene._r || (scene._r = { cells: [...scene.querySelectorAll('.answer-art polygon')], solid: scene.querySelector('.answer-solid'), sq: scene.querySelector('.answer-sq'), pin: scene.querySelector('.pin'), last: -2 });
+      // One square per step in stroke order; the newest is black; the seams close; then the field goes black and the gap keeps the orange.
+      const n = p >= 0.46 ? 12 : Math.floor(seg(p, 0.04, 0.42) * 11 + 0.0001);
+      if (n !== S.last) {
+        S.last = n;
+        S.cells.forEach((c, i) => c.setAttribute('class', n < 12 && i < n ? (i === n - 1 && n < 11 ? 'new' : 'on') : ''));
+        S.solid.classList.toggle('on', n === 12); S.sq.classList.toggle('on', n === 12);
+      }
+      const k = 1 - ease(seg(p, 0.64, 0.78));
+      S.pin.style.background = `rgb(${Math.round(255 * k)},${Math.round(72 * k)},0)`;
+    },
+    fikir(p, scene) {
+      const lit = (name, on) => scene.querySelectorAll(`[data-l="${name}"]`).forEach((el) => el.classList.toggle('lit', on));
+      lit('m', p >= 0.1); lit('v1', p >= 0.28); lit('v2', p >= 0.64); lit('rest', p >= 0.86);
+      scene.querySelector('[data-l="v2"]').classList.toggle('acc', p < 0.86);
+    },
+    cumle(p, scene) {
+      const set = (k, cls) => { const el = scene.querySelector(`[data-s="${k}"]`); el.className = cls; };
+      set('a', (p >= 0.24 && p < 0.5) || p >= 0.8 ? 'acc' : '');
+      set('b', p >= 0.8 ? 'lit' : '');
+      set('c', p >= 0.5 ? 'lit' : '');
+    },
+    senaryo(p, scene) {
+      const S = scene._s || (scene._s = { list: JSON.parse(scene.querySelector('[data-sn]').textContent), pin: scene.querySelector('.pin'), mark: scene.querySelector('.sn-mark'), stage: scene.querySelector('.sn-stage'), last: -1 });
+      const i = Math.min(S.list.length - 1, Math.floor(p / 0.12));
+      if (i !== S.last) { S.last = i; const c = S.list[i]; S.pin.style.backgroundColor = c.bg; S.mark.style.setProperty('--mk', c.mk); S.mark.style.setProperty('--sq', c.ac); }
+      S.stage.style.opacity = (1 - seg(p, 0.85, 0.89)).toFixed(3);
+    },
+    rakip(p, scene) {
+      const k = ease(seg(p, 0.46, 0.64));
+      scene.querySelectorAll('.rv-col').forEach((c) => { c.style.transform = `translate3d(${(c.dataset.side === 'l' ? 50 : -50) * k}%, 0, 0)`; });
+      // Alone, the headline sits in the middle; it moves up when the model lists arrive.
+      const head = scene.querySelector('.rv-head'); const cols = scene.querySelector('.rv-cols'); const drop = (cols.offsetHeight + parseFloat(getComputedStyle(cols.parentElement).rowGap || 0)) / 2;
+      const up = ease(seg(p, 0.12, 0.26)); head.style.transform = `translate3d(0, ${((1 - up) * drop).toFixed(1)}px, 0) scale(${(1 + (1 - up) * 0.55).toFixed(3)})`;
+    },
+    tekkare(p, scene) {
+      const S = scene._t || (scene._t = { sq: scene.querySelector('.tk-sq'), mark: scene.querySelector('.tk-mark'), word: scene.querySelector('.tk-word') });
+      const W = S.mark.getBoundingClientRect().width; const F = parseFloat(getComputedStyle(S.word).fontSize);
+      const k1 = ease(seg(p, 0.12, 0.24)), k2 = ease(seg(p, 0.4, 0.5)), k3 = ease(seg(p, 0.66, 0.76));
+      const size = mix(mix(mix(W * 0.1768, F * 0.15, k1), Math.max(18, W * 0.05), k2), Math.max(20, W * 0.062), k3);
+      S.sq.style.setProperty('--s', `${size.toFixed(2)}px`);
+    },
+    onay(p, scene) {
+      const S = scene._o || (scene._o = { c: scene.querySelector('.mosaic'), chase: scene.querySelector('.chase'), bar: scene.querySelector('[data-gen-bar]'), st: scene.querySelector('[data-gen-status]'), pct: scene.querySelector('[data-gen-pct]'), step: -2, off: document.createElement('canvas') });
+      const q = seg(p, 0.04, 0.46); const levels = [5, 7, 10, 14, 20, 28, 40, 56, 80, 112, 160]; const i = q >= 1 ? levels.length : Math.floor(q * levels.length);
+      S.chase.style.transform = `rotate(${(-90 * ease(seg(p, 0.87, 0.95))).toFixed(2)}deg)`;
+      S.chase.dataset.done = p >= 0.5 ? '1' : ''; if (p >= 0.5) S.chase.querySelectorAll('polygon').forEach((e) => e.classList.add('on'));
+      S.bar.style.width = `${(q * 100 * (1 - ease(seg(p, 0.88, 0.93)))).toFixed(1)}%`; S.pct.textContent = p >= 0.5 ? '0:14' : `%${Math.round(q * 100)}`; S.st.textContent = p >= 0.9 ? '0:00' : p >= 0.5 ? 'Az önce' : 'Üretiliyor';
+      const dpr = Math.min(devicePixelRatio || 1, 2); const w = Math.max(1, Math.round(S.c.clientWidth * dpr)), h = Math.max(1, Math.round(S.c.clientHeight * dpr));
+      if (S.c.width !== w || S.c.height !== h) { S.c.width = w; S.c.height = h; S.step = -2; }
+      if (!heroReady || S.step === i) return; S.step = i;
+      const ctx = S.c.getContext('2d'); const IW = heroImg.width, IH = heroImg.height; const r = Math.max(w / IW, h / IH); const sw = w / r, sh = h / r, sx = (IW - sw) / 2, sy = (IH - sh) / 2;
+      if (i >= levels.length) { ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(heroImg, sx, sy, sw, sh, 0, 0, w, h); return; }
+      const cols = levels[i], rows = Math.max(1, Math.round((cols * h) / w)); S.off.width = cols; S.off.height = rows; const o = S.off.getContext('2d'); o.imageSmoothingQuality = 'high'; o.drawImage(heroImg, sx, sy, sw, sh, 0, 0, cols, rows);
+      ctx.imageSmoothingEnabled = false; ctx.drawImage(S.off, 0, 0, w, h);
+    },
+    piksel(p, scene) {
+      scene.querySelectorAll('.trip-p').forEach((f) => { const r = f.getBoundingClientRect(); const ar = Number(f.dataset.ar); const s = Math.max(r.width / ar, r.height); const x = (r.width - ar * s) / 2 + Number(f.dataset.fx) * ar * s; const y = (r.height - s) / 2 + Number(f.dataset.fy) * s; const ring = f.querySelector('.trip-ring'); ring.style.left = `${x.toFixed(1)}px`; ring.style.top = `${y.toFixed(1)}px`; ring.style.opacity = x < 0 || y < 0 || x > r.width || y > r.height ? 0 : 1; });
+    },
+    durum(p, scene) {
+      const S = scene._d || (scene._d = { items: [...scene.querySelectorAll('.st-list li')], list: JSON.parse(scene.querySelector('[data-st]').textContent), ico: scene.querySelector('[data-st-ico]'), tab: scene.querySelector('[data-st-tab]'), last: -1 });
+      const N = S.items.length; scene.querySelector('.st-turn').style.transform = `rotate(${(-90 * ease(seg(p, 4 / N - 0.005, 4 / N + 0.075))).toFixed(2)}deg)`;
+      const i = Math.min(N - 1, Math.floor(p * N)); if (i === S.last) return; S.last = i;
+      S.items.forEach((li, k) => li.classList.toggle('on', k === i)); S.ico.src = S.list[i].ico; S.tab.textContent = S.list[i].tab;
+    },
+    urunde(p, scene) {
+      const S = scene._u || (scene._u = { z: scene.querySelector('.mac-zoom'), shot: scene.querySelector('.mac-shot'), pin: scene.querySelector('.pin') });
+      S.z.style.transform = 'none';
+      const pr = S.pin.getBoundingClientRect(), zr = S.z.getBoundingClientRect(), sr = S.shot.getBoundingClientRect();
+      const narrow = innerWidth <= 760; const stop = (fx, fy, s, tx, ty) => { const lx = sr.left - zr.left + fx * sr.width, ly = sr.top - zr.top + fy * sr.height; return { s, x: tx * pr.width - (zr.left - pr.left) - s * lx, y: ty * pr.height - (zr.top - pr.top) - s * ly }; };
+      const A = { s: 1, x: 0, y: 0 }; const B = stop(0.075, 0.0378, narrow ? 4 : 3.6, narrow ? 0.5 : 0.62, 0.42); const C = stop(0.66, 0.923, narrow ? 4.6 : 3.2, 0.5, 0.46);
+      const k1 = ease(seg(p, 0.1, 0.38)), k2 = ease(seg(p, 0.56, 0.84));
+      const s = mix(mix(A.s, B.s, k1), C.s, k2), x = mix(mix(A.x, B.x, k1), C.x, k2), y = mix(mix(A.y, B.y, k1), C.y, k2);
+      S.z.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) scale(${s.toFixed(4)})`;
+    },
+    aile(p, scene) {
+      const S = scene._a || (scene._a = { sq: scene.querySelector('.fam-sq'), a: scene.querySelector('.fam-px'), b: scene.querySelector('.fam-l'), st: scene.querySelector('.duo') });
+      const st = S.st.getBoundingClientRect(), A = S.a.getBoundingClientRect(), B = S.b.getBoundingClientRect();
+      const t = seg(p, 0.16, 0.6); const k = t * t * t * (t * (6 * t - 15) + 10);
+      const size = mix(A.width, B.width / Math.SQRT2, k);
+      const cx = mix(A.left + A.width / 2, B.left + B.width / 2, k) - st.left; const cy = mix(A.top + A.height / 2, B.top + B.height / 2, k) - st.top - Math.sin(Math.PI * k) * st.height * 0.08;
+      S.sq.style.width = S.sq.style.height = `${size.toFixed(2)}px`;
+      S.sq.style.transform = `translate3d(${(cx - size / 2).toFixed(1)}px, ${(cy - size / 2).toFixed(1)}px, 0) rotate(${(45 * k).toFixed(2)}deg)`;
+    },
+    kurgu(p, scene) {
+      const cells = scene._cells || (scene._cells = [...scene.querySelectorAll('.cell')]);
+      const byFill = scene._fill || (scene._fill = cells.slice().sort((a, b) => Number(a.dataset.o) - Number(b.dataset.o)));
+      const filled = Math.floor(seg(p, 0.06, 0.34) * 16 + 0.0001); const numbered = Math.floor(seg(p, 0.76, 0.9) * 12 + 0.0001);
+      byFill.forEach((c, k) => {
+        const kind = c.dataset.k; let cls = k < filled ? '' : 'hide';
+        if (kind === 'top') { if (p >= 0.46) cls = 'ghost'; else if (p >= 0.4) cls = 'hot'; }
+        if (kind === 'in') { if (p >= 0.59) cls = 'ghost'; else if (p >= 0.53) cls = 'hot'; }
+        if (kind === 'last' && p >= 0.66) cls = 'hot';
+        const chain = Number(c.dataset.c); c.setAttribute('class', `cell ${cls} ${chain && chain <= numbered ? 'num' : ''}`);
+      });
+      scene.querySelector('[data-count]').textContent = String(p >= 0.59 ? 12 : p >= 0.46 ? 15 : filled);
+    },
+  };
+
+  // ---------- Frame loop.
+  const metrics = new Map();
+  const measure = () => { scenes.forEach((s) => { const r = s.getBoundingClientRect(); metrics.set(s, { top: r.top + scrollY, h: r.height }); }); };
+  const smooth = new Map(); let dirty = true; let running = false;
+  const links = [...document.querySelectorAll('.nav a[data-to]')]; const progCells = [...document.querySelectorAll('.nav .prog polygon')]; let progLast = -1;
+  const updateNav = () => { const y = scrollY + innerHeight * 0.4; let active = null; for (const a of links) { const t = document.getElementById(a.dataset.to); const m = t && metrics.get(t); if (m && m.top <= y) active = a; } links.forEach((a) => a.classList.toggle('on', a === active)); const lit = Math.ceil((scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight)) * progCells.length); if (lit !== progLast) { progLast = lit; progCells.forEach((c, i) => c.classList.toggle('on', i < lit)); } };
+  const tick = () => {
+    const y = scrollY, vh = innerHeight; let moving = false;
+    for (const s of scenes) {
+      const m = metrics.get(s); if (!m) continue;
+      if (m.top > y + vh * 1.2 || m.top + m.h < y - vh * 0.2) continue;
+      const travel = Math.max(1, m.h - vh); const target = clamp((y - m.top) / travel);
+      const cur = smooth.has(s) ? smooth.get(s) : target; const next = reduce ? target : cur + (target - cur) * 0.2;
+      const settled = Math.abs(next - target) < 0.0005; smooth.set(s, settled ? target : next); if (!settled) moving = true;
+      const p = smooth.get(s); const e = clamp((y + vh - m.top) / vh);
+      const over = reduce ? 0 : clamp((y - (m.top + travel)) / vh); const pinEl = s._pin || (s._pin = s.querySelector('.pin'));
+      if (over > 0) { pinEl.style.transform = `translate3d(0, ${(over * vh * 0.3).toFixed(1)}px, 0)`; pinEl.style.opacity = (1 - over * 0.34).toFixed(3); s._over = true; } else if (s._over) { pinEl.style.transform = ''; pinEl.style.opacity = ''; s._over = false; }
+      for (const t of s._tl) applyTl(t, p);
+      for (const { el, k } of s._in) { const on = ease(seg(e, 0.5 + k * 0.03, 0.92 + k * 0.03)); el.style.opacity = on.toFixed(3); el.style.transform = `translate3d(0, ${((1 - on) * 26).toFixed(1)}px, 0)`; }
+      for (const { el, z } of s._zoom) el.style.transform = `scale(${mix(z[0], z[1], ease(clamp((y + vh - m.top) / (m.h + vh)))).toFixed(4)})`;
+      hooks[s.dataset.hook]?.(p, s);
+    }
+    updateNav();
+    if (moving || dirty) { dirty = false; requestAnimationFrame(tick); } else running = false;
+  };
+  function kick() { dirty = true; if (!running) { running = true; requestAnimationFrame(tick); } }
+  measure(); addEventListener('resize', () => { measure(); kick(); seqs.forEach((s) => s.redraw()); });
+  addEventListener('scroll', kick, { passive: true });
+
+  // Opening: the parts assemble on their own, once.
+  if (!reduce) { const t0 = performance.now() + 450; const run = (now) => { const u = clamp((now - t0) / 6600); autoT = u < 0.6 ? mix(0, 0.76, u / 0.6) : mix(0.76, 1, 1 - (1 - (u - 0.6) / 0.4) ** 2); kick(); if (autoT < 1) requestAnimationFrame(run); }; requestAnimationFrame(run); }
+
+  // ---------- The menu and the cursor stay out of the slides until the pointer moves.
+  const navEl = document.querySelector('.nav'); let navTimer = 0;
+  const wake = () => { navEl.classList.add('show'); document.body.classList.remove('idle'); clearTimeout(navTimer); navTimer = setTimeout(() => { if (navEl.matches(':hover') || navEl.contains(document.activeElement)) { wake(); return; } navEl.classList.remove('show'); document.body.classList.add('idle'); }, 1800); };
+  addEventListener('mousemove', wake, { passive: true }); addEventListener('touchstart', wake, { passive: true }); navEl.addEventListener('focusin', wake);
+
+  // ---------- Navigation and presenter beats.
+  let anim = 0;
+  const scrollToY = (to, ms = 950) => {
+    cancelAnimationFrame(anim); if (reduce) { scrollTo(0, to); return; }
+    const from = scrollY, t0 = performance.now();
+    const step = (now) => { const t = clamp((now - t0) / ms); const k = t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2; scrollTo(0, from + (to - from) * k); if (t < 1) anim = requestAnimationFrame(step); };
+    anim = requestAnimationFrame(step);
+  };
+  addEventListener('wheel', () => cancelAnimationFrame(anim), { passive: true });
+  addEventListener('touchstart', () => cancelAnimationFrame(anim), { passive: true });
+  links.forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); measure(); scrollToY(metrics.get(document.getElementById(a.dataset.to)).top, 1200); }));
+  const stops = () => { measure(); const list = []; for (const s of scenes) { const m = metrics.get(s); const travel = Math.max(0, m.h - innerHeight); for (const f of (s.dataset.stops || '0.5').split(',').map(Number)) list.push(Math.round(m.top + travel * f)); } return list; };
+  let cursor = null;
+  const go = (dir) => {
+    const list = stops(); const y = cursor ?? scrollY; let target = null;
+    if (dir > 0) target = list.find((v) => v > y + 4); else for (let i = list.length - 1; i >= 0; i--) if (list[i] < y - 4) { target = list[i]; break; }
+    if (target === null || target === undefined) return;
+    cursor = target; scrollToY(target); clearTimeout(go.t); go.t = setTimeout(() => { cursor = null; }, 1100);
+  };
+  addEventListener('keydown', (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(1); }
+    if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(-1); }
+    if (e.key === 'Home') { e.preventDefault(); scrollToY(0, 1400); }
+    if (e.key === 'End') { e.preventDefault(); scrollToY(document.documentElement.scrollHeight, 1400); }
+    if (e.key.toLowerCase() === 'f' && document.documentElement.requestFullscreen) { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); }
+  });
+
+  // ---------- Generating state: five squares travel around the closed ring of twelve.
+  document.querySelectorAll('.chase').forEach((chase) => {
+    const cells = [...chase.querySelectorAll('polygon')]; const n = cells.length; let timer = 0;
+    const paint = (head) => { if (chase.dataset.done === '1') return; cells.forEach((c, i) => c.classList.toggle('on', (head - i + n) % n < 5)); };
+    paint(6);
+    new IntersectionObserver(([en]) => { clearInterval(timer); timer = 0; if (en.isIntersecting && !reduce) { let h = 6; timer = setInterval(() => { h = (h + 1) % n; paint(h); }, 1000 / 12); } }).observe(chase);
+  });
+
+  addEventListener('load', () => { measure(); kick(); });
+  kick();
+})();
+</script>
+</body>
+</html>
