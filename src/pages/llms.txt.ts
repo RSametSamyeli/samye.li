@@ -74,6 +74,12 @@ export async function GET() {
     ),
     entry('Notes', '/shorts/', '/shorts.md', 'short notes and quick thoughts.'),
     entry(
+      'Security by construction',
+      '/security-by-construction/',
+      '/security-by-construction.md',
+      'his essay series on building software where the unsafe thing cannot happen, with summaries and links.'
+    ),
+    entry(
       'Now',
       '/now/',
       '/now.md',
@@ -116,6 +122,12 @@ export async function GET() {
       '/tr/blog/',
       '/tr/blog.md',
       'yazıları; çoğu lodos.md blogunda Türkçe olarak yayında.'
+    ),
+    entry(
+      'Yapısal güvenlik',
+      '/tr/security-by-construction/',
+      '/tr/security-by-construction.md',
+      'güvensiz şeyin hiç olamadığı yazılımlar üzerine yazı dizisi.'
     ),
     entry('Şu an', '/tr/now/', '/tr/now.md', 'şu sıralar neye odaklandığı.'),
     entry(

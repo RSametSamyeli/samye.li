@@ -19,6 +19,10 @@ import ListView from '~/components/views/ListView.astro'
     title={frontmatter.title}
     subtitle={frontmatter.subtitle}
   >
+    <p class="mt-0! mb-8! muted">
+      New here? Start with the series on{' '}
+      <a href="/security-by-construction/">security by construction</a>.
+    </p>
     <ListView collectionType="blog" />
   </StandardLayout>
 </BaseLayout>

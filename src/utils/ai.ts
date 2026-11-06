@@ -28,7 +28,13 @@ export const abs = (path: string) => `${ORIGIN}${path}`
  *   /tr/lodos/   -> /tr/lodos.md
  */
 /** Pages of plain text (src/content/home/<name>.md), in both languages. */
-export const TEXT_PAGES = ['now', 'uses', 'beliefs', 'colophon'] as const
+export const TEXT_PAGES = [
+  'now',
+  'uses',
+  'beliefs',
+  'colophon',
+  'security-by-construction',
+] as const
 export type TextPage = (typeof TEXT_PAGES)[number]
 
 const PAGES = ['lodos', 'projects', ...TEXT_PAGES].join('|')

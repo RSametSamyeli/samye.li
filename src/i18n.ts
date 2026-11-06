@@ -38,6 +38,7 @@ export const TRANSLATED_PAGES = [
   '/beliefs/',
   '/colophon/',
   '/blog/',
+  '/security-by-construction/',
 ] as const
 
 const withSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`)

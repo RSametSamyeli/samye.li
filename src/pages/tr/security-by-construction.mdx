@@ -1,0 +1,30 @@
+---
+title: 'Yapısal güvenlik'
+subtitle: 'Güvensiz şeyin hiç olamadığı yazılımlar kurmak'
+description: "Samet Samyeli'nin yapısal güvenlik üzerine yazıları: ifade değerlendiricisi olmayan bir workflow motoru, yapay zekânın okuyamadığı bir kasa ve bunu koruyan build denetimleri."
+updated: 2026-11-07
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+  lastModDate={new Date(frontmatter.updated).toISOString()}
+>
+  <StandardLayout
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    updated={new Date(frontmatter.updated).toISOString()}
+  >
+    <RenderPage
+      slot="article"
+      collectionType="home"
+      id="tr/security-by-construction"
+    />
+  </StandardLayout>
+</BaseLayout>

@@ -2,6 +2,8 @@ Bunlar, yazılım ve şirket kurarken dayandığım fikirler. Her biri yaptığ�
 
 ## Mimari ve güvenlik
 
+Bu dördünün arkasındaki yazılar [yapısal güvenlik](/tr/security-by-construction/) sayfasında bir arada.
+
 1. **Kuralı bir politikaya değil, sisteme koyun.** Bir belgede duran kural baskı altında unutulur. Bir şey asla olmamalıysa, sistemi onu reddedecek şekilde kurun. ([Savunma Hattınızı Yazılı Kurallara Emanet Etmeyin](https://lodos.md/tr/blog/savunma-hattinizi-yazili-kurallara-emanet-etmeyin))
 2. **"Yapamayız", "söz veriyoruz"dan güçlüdür.** Sıfır bilgi (zero-knowledge) bir gizlilik politikası değil, mimaridir: operatöre bakmama sözü verdirmek yerine şemayı, göremeyeceği şeyi göremeyeceği şekilde tasarlayın. ([Mimari Körlük Olarak Zero-Knowledge](https://lodos.md/tr/blog/mimari-korluk-olarak-sifir-bilgi))
 3. **En güvenli açık, hiç olmayandır.** Tehlikeli bir yeteneği daha iyi kilitlemek, o yeteneğe hiç sahip olmamaktan zayıftır. ([n8n'in CVE'sine Sahip Olamayan Bir Workflow Motoru](https://lodos.md/tr/blog/n8n-cve-alamayan-workflow-motoru))

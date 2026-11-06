@@ -47,7 +47,7 @@ Küçük bir şirketin büyümesi, kurucusunun daha çok saat çalışmasına ba
 
 gazla.co'yu 50.000'den fazla kişilik bir topluluğa büyütürken hep aynı duvara çarptım: mesajlar, etkinlikler, içerik ve iş ortakları ayrı sistemlerdeydi ve bağlamı bir arada tutan tek kişi bendim. Şubat 2026'da ABD'deki işimden ayrıldım, gazla.co'ya ara verdim ve dış yatırım almadan tüm zamanımı bu probleme ayırdım.
 
-Arkasındaki mimariyi yazdım: [n8n'in CVE'sine Sahip Olamayan Bir Workflow Motoru](https://lodos.md/tr/blog/n8n-cve-alamayan-workflow-motoru), [Mimari Körlük Olarak Zero-Knowledge](https://lodos.md/tr/blog/mimari-korluk-olarak-sifir-bilgi) ve [Savunma Hattınızı Yazılı Kurallara Emanet Etmeyin](https://lodos.md/tr/blog/savunma-hattinizi-yazili-kurallara-emanet-etmeyin).
+Arkasındaki mimariyi [yapısal güvenlik](/tr/security-by-construction/) üzerine bir yazı dizisinde anlattım: [n8n'in CVE'sine Sahip Olamayan Bir Workflow Motoru](https://lodos.md/tr/blog/n8n-cve-alamayan-workflow-motoru), [Mimari Körlük Olarak Zero-Knowledge](https://lodos.md/tr/blog/mimari-korluk-olarak-sifir-bilgi) ve [Savunma Hattınızı Yazılı Kurallara Emanet Etmeyin](https://lodos.md/tr/blog/savunma-hattinizi-yazili-kurallara-emanet-etmeyin).
 
 ## Şu an nerede
 
