@@ -22,9 +22,9 @@ jobs:
     env:
       SKIP_SIMPLE_GIT_HOOKS: 1
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4 # the version is package.json's packageManager
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: pnpm
