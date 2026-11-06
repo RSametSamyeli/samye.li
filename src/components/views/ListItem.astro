@@ -1,8 +1,8 @@
 ---
 import Link from '~/components/base/Link.astro'
+import { LOCALES, localeOf, STRINGS } from '~/i18n'
 
 import { withBasePath } from '~/utils/path'
-import { formatDate } from '~/utils/datetime'
 
 interface Props {
   collectionType: string
@@ -16,6 +16,8 @@ interface Props {
   video?: boolean
   platform?: string
   redirect?: string
+  /** the post's language, when it differs from the page's (an English post on /tr/blog/) */
+  lang?: string
 }
 
 const {
@@ -30,7 +32,17 @@ const {
   radio,
   platform,
   redirect,
+  lang,
 } = Astro.props
+
+// dates in the page's language (2 Kas, Nov 2)
+const locale = localeOf(Astro.url.pathname)
+const intl = LOCALES[locale].intl
+const shortDate = new Intl.DateTimeFormat(intl, {
+  month: 'short',
+  day: 'numeric',
+  timeZone: 'UTC',
+}).format(new Date(date))
 ---
 
 <div class="slide-enter" style={{ '--enter-stage': idx }} data-tags={tags}>
@@ -43,7 +55,13 @@ const {
     external={redirect ? true : false}
     enableNewTabWarning={redirect ? true : false}
   >
-    <Fragment slot="title">{title}</Fragment>
+    <Fragment slot="title"
+      ><span {lang}>{title}</span>{
+        lang && (
+          <span class="muted text-xs ml-2 font-mono">{lang.toUpperCase()}</span>
+        )
+      }</Fragment
+    >
     <span slot="end" u-flex="~ gap-2 items-center" class="max-w-full">
       {
         video && (
@@ -69,11 +87,13 @@ const {
         class="muted text-sm ws-nowrap"
         datetime={new Date(date).toISOString()}
       >
-        {formatDate(date, false)}
+        {shortDate}
       </time>
       {
         !!minutesRead && (
-          <span class="muted text-sm ws-nowrap">· {minutesRead} min</span>
+          <span class="muted text-sm ws-nowrap">
+            · {minutesRead} {STRINGS[locale].minutes}
+          </span>
         )
       }
       {platform && <span class="muted text-sm ws-nowrap">· {platform}</span>}

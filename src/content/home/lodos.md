@@ -47,7 +47,7 @@ A small company's growth shouldn't depend on its founder working more hours. AI 
 
 While growing gazla.co into a community of 50,000+ people, I kept hitting the same wall: messages, events, content and partners all lived in separate systems, and I was the only one holding the context together. In February 2026 I left my job in the US, paused gazla.co, and put all my time into this problem, without outside investment.
 
-I wrote about the architecture behind it: [Workflow Engine Without n8n's CVE](https://medium.com/@sametsamyeli/we-built-a-workflow-engine-that-cant-have-n8n-s-cve-4fc3c33dde6b), [Zero-Knowledge as Architectural Blindness](https://medium.com/@sametsamyeli/zero-knowledge-as-architectural-blindness-2-5-23581de51e25) and [Stop Defending Your Moat with Policy](https://medium.com/@sametsamyeli/stop-defending-your-moat-with-policy-3-5-dc288b4b61d4).
+I wrote about the architecture behind it: [Workflow Engine Without n8n's CVE](https://lodos.md/en/blog/workflow-engine-cant-have-n8n-cve), [Zero-Knowledge as Architectural Blindness](https://lodos.md/en/blog/zero-knowledge-architectural-blindness) and [Stop Defending Your Moat with Policy](https://lodos.md/en/blog/make-your-moat-a-ratchet).
 
 ## Where it is now
 

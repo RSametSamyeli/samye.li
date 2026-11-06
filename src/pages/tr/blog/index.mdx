@@ -1,0 +1,24 @@
+---
+title: Blog
+description: "Samet Samyeli'nin yazılım mimarisi, uygulama güvenliği ve yapay zekâ ürünleri geliştirmek üzerine yazıları; çoğu lodos.md blogunda Türkçe olarak yayında."
+subtitle: Yazılım mimarisi, güvenlik ve yapay zekâ üzerine yazılar
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import ListView from '~/components/views/ListView.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout
+    class="prose"
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+  >
+    <ListView collectionType="blog" locale="tr" />
+  </StandardLayout>
+</BaseLayout>

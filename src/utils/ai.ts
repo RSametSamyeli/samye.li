@@ -37,7 +37,7 @@ export function markdownMirrorPath(pathname: string): string | null {
   const p = pathname.replace(/\/+$/, '') || '/'
   if (p === '/') return '/index.md'
   if (p === '/tr') return '/tr/index.md'
-  if (new RegExp(`^/tr/(${PAGES})$`).test(p)) return `${p}.md`
+  if (new RegExp(`^/tr/(${PAGES}|blog)$`).test(p)) return `${p}.md`
   if (new RegExp(`^/(${PAGES}|blog|shorts)$`).test(p)) return `${p}.md`
   if (/^\/(blog|shorts)\/[^/.]+$/.test(p)) return `${p}.md`
   return null
@@ -217,16 +217,26 @@ export function postUrl(
   return post.data.redirect || abs(`/${collection}/${post.id}/`)
 }
 
-export async function listDoc(collection: Collection) {
-  const meta = await pageMeta(`${collection}/index.mdx`)
+export async function listDoc(collection: Collection, locale: Locale = 'en') {
+  const meta = await pageMeta(`${prefix(locale)}${collection}/index.mdx`)
   const posts = await postsOf(collection)
   const items = posts.map((p) => {
-    const where = p.data.platform ? ` (on ${p.data.platform})` : ''
-    const desc = p.data.description ? `: ${p.data.description}` : ''
-    return `- ${isoDate(p.data.pubDate)} · [${p.data.title}](${postUrl(collection, p)})${where}${desc}`
+    // a post's translation where it has one (/tr/blog/), else the original
+    const t = locale === 'en' ? undefined : p.data.translations?.[locale]
+    const title = t?.title ?? p.data.title
+    const url = t?.redirect ?? postUrl(collection, p)
+    const where = p.data.platform ? ` (${p.data.platform})` : ''
+    const lang = locale !== 'en' && !t ? ' [English]' : ''
+    const description = t ? t.description : p.data.description
+    const desc = description ? `: ${description}` : ''
+    return `- ${isoDate(p.data.pubDate)} · [${title}](${url})${where}${lang}${desc}`
   })
   return [
-    docHeader(meta.title, abs(`/${collection}/`), meta.subtitle),
+    docHeader(
+      meta.title,
+      abs(localized(`/${collection}/`, locale)),
+      meta.subtitle
+    ),
     items.join('\n') || '_Nothing published yet._',
     '',
   ].join('\n')

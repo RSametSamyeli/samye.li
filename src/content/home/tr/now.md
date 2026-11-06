@@ -12,7 +12,7 @@ Bu bir ["şu an" sayfası](https://nownownow.com/about): şu dönemde neye odakl
 
 ## Yazı
 
-- Bu site Kasım 2026'da İngilizce ve Türkçe olarak yayına girdi. Yazılım mimarisi, güvenlik ve yapay zekâ üzerine [blogda](/blog/) İngilizce yazıyorum.
+- Bu site Kasım 2026'da İngilizce ve Türkçe olarak yayına girdi. Yazılım mimarisi, güvenlik ve yapay zekâ üzerine [blogda](/tr/blog/) yazıyorum; yazıların çoğu lodos.md blogunda Türkçe olarak da yayında.
 
 ## Nerede
 

@@ -26,6 +26,7 @@ export async function GET() {
     await homeDoc('tr'),
     await lodosDoc('tr'),
     await projectsDoc('tr'),
+    await listDoc('blog', 'tr'),
     ...(await Promise.all(TEXT_PAGES.map((name) => textPageDoc(name, 'tr')))),
   ]
   return new Response(docs.join('\n---\n\n'), {

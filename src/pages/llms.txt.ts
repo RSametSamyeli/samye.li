@@ -111,6 +111,12 @@ export async function GET() {
       '/tr/projects.md',
       'geliştirdiği ve katkıda bulunduğu projeler.'
     ),
+    entry(
+      'Blog',
+      '/tr/blog/',
+      '/tr/blog.md',
+      'yazıları; çoğu lodos.md blogunda Türkçe olarak yayında.'
+    ),
     entry('Şu an', '/tr/now/', '/tr/now.md', 'şu sıralar neye odaklandığı.'),
     entry(
       'İnandıklarım',

@@ -23,7 +23,7 @@ const NAV_NAMES: Record<string, string> = {
   '/projects': S.projects,
   '/shorts': S.notes,
 }
-const TRANSLATED = new Set(['/projects'])
+const TRANSLATED = new Set(['/projects', '/blog'])
 const internalNavs = UI.internalNavs.map((item) => {
   const name = NAV_NAMES[item.path] ?? item.title
   return {

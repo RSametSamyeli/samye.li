@@ -99,7 +99,7 @@ Dockerfile               # build with pnpm, serve with nginx (with a healthcheck
 | To add | Create |
 |---|---|
 | A blog post | `src/content/blog/<slug>.md` |
-| A Medium post | the same, with `redirect:` and `platform: Medium` in the frontmatter |
+| A post published elsewhere (lodos.md's blog) | the same, with `redirect:`, `platform:` and `translations.tr` (title, description, Turkish URL) in the frontmatter |
 | A short note | `src/content/shorts/<slug>.md` |
 | A project | an entry in `src/content/projects/data.json` |
 | A change to /now or /uses | edit `src/content/home/now.md` (and `tr/now.md`), then `updated:` in `src/pages/now.mdx` |

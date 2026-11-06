@@ -8,17 +8,27 @@ import MobileControl from '~/components/base/MobileControl.astro'
 
 import { FEATURES } from '~/config'
 import { getYear } from '~/utils/datetime'
+import { LOCALES } from '~/i18n'
+
+import type { Locale } from '~/i18n'
 import { getFilteredPosts, getSortedPosts, getMinutesRead } from '~/utils/data'
 
 import type { CollectionEntry } from 'astro:content'
 
 interface Props {
   collectionType: 'blog'
+  /** list in this language: a post's translation where it has one */
+  locale?: Locale
   pageToc?: boolean
   pageTag?: boolean
 }
 
-const { collectionType, pageToc = false, pageTag = false } = Astro.props
+const {
+  collectionType,
+  pageToc = false,
+  pageTag = false,
+  locale = 'en',
+} = Astro.props
 
 /* Toc */
 const { toc } = FEATURES
@@ -120,14 +130,26 @@ const groupedBlogItems: {
                   {idx}
                   {collectionType}
                   postSlug={id}
-                  title={data.title}
+                  title={
+                    (locale !== 'en' && data.translations?.[locale]?.title) ||
+                    data.title
+                  }
+                  lang={
+                    locale !== 'en' && !data.translations?.[locale]
+                      ? LOCALES.en.lang
+                      : undefined
+                  }
                   tags={data.tags}
                   date={data.pubDate}
                   minutesRead={minutesRead}
                   radio={data.radio}
                   video={data.video}
                   platform={data.platform}
-                  redirect={data.redirect}
+                  redirect={
+                    (locale !== 'en' &&
+                      data.translations?.[locale]?.redirect) ||
+                    data.redirect
+                  }
                 />
               ))}
             </section>

@@ -45,9 +45,9 @@ export const postSchema = ({ image }: SchemaContext) =>
       .string()
       .trim()
       .min(1)
-      .max(60)
+      .max(90)
       .describe(
-        "**Required**. Sets the post title, limited to **60 characters**. This follows [Moz's recommendation](https://moz.com/learn/seo/title-tag), ensuring approximately 90% of titles display correctly in SERPs and preventing truncation on smaller screens or social platforms. Page-specific OG images also require a title different from `FEATURES.ogImage[1].authorOrBrand`; otherwise the fallback OG image is used."
+        "**Required**. Sets the post title (up to 90 characters, for posts published elsewhere and only listed here; the built page's full <title> is held to 70 by scripts/verify-build.mjs). Page-specific OG images also require a title different from `FEATURES.ogImage[1].authorOrBrand`; otherwise the fallback OG image is used."
       ),
     subtitle: z
       .string()
@@ -145,6 +145,19 @@ export const postSchema = ({ image }: SchemaContext) =>
       .default('')
       .describe(
         'Defines a URL to redirect the post. If not needed, leave the field as an empty string or delete it.'
+      ),
+    translations: z
+      .object({
+        tr: z.object({
+          title: z.string(),
+          description: z.string().default(''),
+          redirect: z.url(),
+        }),
+      })
+      .partial()
+      .optional()
+      .describe(
+        "The post in other languages, published elsewhere (lodos.md's Turkish blog): listed on /tr/blog/ with its own title and link."
       ),
     draft: z
       .boolean()

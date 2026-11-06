@@ -1,10 +1,10 @@
-Bunlar, yazılım ve şirket kurarken dayandığım fikirler. Her biri yaptığım bir işten geliyor ve hakkında yazdığım yere bağlanıyor. Yazıların çoğu İngilizce.
+Bunlar, yazılım ve şirket kurarken dayandığım fikirler. Her biri yaptığım bir işten geliyor ve hakkında yazdığım yere bağlanıyor.
 
 ## Mimari ve güvenlik
 
-1. **Kuralı bir politikaya değil, sisteme koyun.** Bir belgede duran kural baskı altında unutulur. Bir şey asla olmamalıysa, sistemi onu reddedecek şekilde kurun. ([Stop Defending Your Moat with Policy](https://medium.com/@sametsamyeli/stop-defending-your-moat-with-policy-3-5-dc288b4b61d4))
-2. **"Yapamayız", "söz veriyoruz"dan güçlüdür.** Sıfır bilgi (zero-knowledge) bir gizlilik politikası değil, mimaridir: operatöre bakmama sözü verdirmek yerine şemayı, göremeyeceği şeyi göremeyeceği şekilde tasarlayın. ([Zero-Knowledge as Architectural Blindness](https://medium.com/@sametsamyeli/zero-knowledge-as-architectural-blindness-2-5-23581de51e25))
-3. **En güvenli açık, hiç olmayandır.** Tehlikeli bir yeteneği daha iyi kilitlemek, o yeteneğe hiç sahip olmamaktan zayıftır. ([We Built a Workflow Engine That Can't Have n8n's CVE](https://medium.com/@sametsamyeli/we-built-a-workflow-engine-that-cant-have-n8n-s-cve-4fc3c33dde6b))
+1. **Kuralı bir politikaya değil, sisteme koyun.** Bir belgede duran kural baskı altında unutulur. Bir şey asla olmamalıysa, sistemi onu reddedecek şekilde kurun. ([Savunma Hattınızı Yazılı Kurallara Emanet Etmeyin](https://lodos.md/tr/blog/savunma-hattinizi-yazili-kurallara-emanet-etmeyin))
+2. **"Yapamayız", "söz veriyoruz"dan güçlüdür.** Sıfır bilgi (zero-knowledge) bir gizlilik politikası değil, mimaridir: operatöre bakmama sözü verdirmek yerine şemayı, göremeyeceği şeyi göremeyeceği şekilde tasarlayın. ([Mimari Körlük Olarak Zero-Knowledge](https://lodos.md/tr/blog/mimari-korluk-olarak-sifir-bilgi))
+3. **En güvenli açık, hiç olmayandır.** Tehlikeli bir yeteneği daha iyi kilitlemek, o yeteneğe hiç sahip olmamaktan zayıftır. ([n8n'in CVE'sine Sahip Olamayan Bir Workflow Motoru](https://lodos.md/tr/blog/n8n-cve-alamayan-workflow-motoru))
 4. **Güvenlik bir build adımıdır.** lodos.md'de her build'de 175 güvenlik kuralı çalışır; biri bozulursa sürüm yayınlanmaz. ([lodos.md](/tr/lodos/))
 
 ## Performans

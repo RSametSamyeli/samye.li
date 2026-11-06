@@ -2,9 +2,9 @@ These are the ideas I build by. Each one comes from something I shipped, and lin
 
 ## Architecture and security
 
-1. **Enforce it in the system, not in a policy.** A rule that lives in a document gets forgotten under pressure. If something must never happen, build the system so it refuses. ([Stop Defending Your Moat with Policy](https://medium.com/@sametsamyeli/stop-defending-your-moat-with-policy-3-5-dc288b4b61d4))
-2. **"We cannot" beats "we promise".** Zero-knowledge is architecture, not a privacy policy: design the schema so the operator cannot see what it should not, instead of promising not to look. ([Zero-Knowledge as Architectural Blindness](https://medium.com/@sametsamyeli/zero-knowledge-as-architectural-blindness-2-5-23581de51e25))
-3. **The safest hole is the one that isn't there.** Locking a dangerous capability better is weaker than not having it at all. ([We Built a Workflow Engine That Can't Have n8n's CVE](https://medium.com/@sametsamyeli/we-built-a-workflow-engine-that-cant-have-n8n-s-cve-4fc3c33dde6b))
+1. **Enforce it in the system, not in a policy.** A rule that lives in a document gets forgotten under pressure. If something must never happen, build the system so it refuses. ([Stop Defending Your Moat with Policy](https://lodos.md/en/blog/make-your-moat-a-ratchet))
+2. **"We cannot" beats "we promise".** Zero-knowledge is architecture, not a privacy policy: design the schema so the operator cannot see what it should not, instead of promising not to look. ([Zero-Knowledge as Architectural Blindness](https://lodos.md/en/blog/zero-knowledge-architectural-blindness))
+3. **The safest hole is the one that isn't there.** Locking a dangerous capability better is weaker than not having it at all. ([We Built a Workflow Engine That Can't Have n8n's CVE](https://lodos.md/en/blog/workflow-engine-cant-have-n8n-cve))
 4. **Security is a build step.** In lodos.md, 175 security rules run on every build; if one breaks, the release does not ship. ([lodos.md](/lodos/))
 
 ## Performance
