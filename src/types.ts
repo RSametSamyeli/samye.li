@@ -6,6 +6,13 @@ type Path = `/${string}`
 
 export interface Site {
   /**
+   * The author's handle on X, for `twitter:site` and `twitter:creator`.
+   *
+   * @example '@SametSamyeli2'
+   */
+  xHandle: `@${string}`
+
+  /**
    * Specifies the final deployed URL, which must start with `http://` or `https://`.
    *
    * It will be passed to the
@@ -94,7 +101,6 @@ export interface Site {
 
 /* UI */
 export type Icon = `i-${string}-${string}` | `i-${string}:${string}`
-export type RepoWithOwner = `${string}/${string}`
 
 interface BaseNavItem {
   /**
@@ -219,7 +225,7 @@ interface BaseSocialItem {
   /**
    * Set the URL to the social platform.
    */
-  link: Url
+  link: Url | `mailto:${string}`
 
   /**
    * Sets the content displayed on hover for accessibility.
@@ -375,22 +381,6 @@ export interface NavBarLayout {
   mergeOnMobile: boolean
 }
 
-interface Tab {
-  /**
-   * Sets the navigation path associated with the tab, which must start with `/`.
-   *
-   * @example
-   * '/blog'、'/blog/'
-   */
-  path: Path
-
-  /**
-   * Sets the content displayed on hover for accessibility.
-   */
-  title: string
-}
-export type Tabs = [Tab, Tab, ...Tab[]]
-
 interface PostView {
   /**
    * Controls the display style of post metadata (publication date, read time, modified date, and tags):
@@ -422,31 +412,6 @@ interface GroupView {
    * If `true`, the icon for the group item will display in its original colors on hover.
    */
   showGroupItemColorOnHover: boolean
-}
-
-export interface GitHubView {
-  /**
-   * Defines monorepo repositories using `<owner>/<repo>` format.
-   *
-   * For monorepos, the tag name is used as the primary text for `/releases` page.
-   */
-  monorepos: RepoWithOwner[]
-
-  /**
-   * Configures main logos for repositories or packages (for monorepos).
-   *
-   * Matching supports regex or `<owner>/<repo>` format, prioritized by order,
-   * and defaults to the owner's avatar if no custom logo is specified.
-   */
-  mainLogoOverrides: [RepoWithOwner | RegExp, Url | Icon][]
-
-  /**
-   * Configures auxiliary logos for repositories or packages (for monorepos).
-   *
-   * Matching supports regex or `<owner>/<repo>` format, prioritized by order,
-   * with no logo displayed for unmatched cases.
-   */
-  subLogoMatches: [RepoWithOwner | RegExp, Url | Icon][]
 }
 
 interface ExternalLink {
@@ -499,16 +464,6 @@ export interface Ui {
   navBarLayout: NavBarLayout
 
   /**
-   * Enables and configures for tabs within a tabbed layout.
-   *
-   * If your website does not use the `TabbedLayout`, you can set it to `false`.
-   * Otherwise, required before using this layout.
-   *
-   * Used in `src/layouts/TabbedLayout.astro`.
-   */
-  tabbedLayoutTabs: false | Tabs
-
-  /**
    * Configures the post UIs.
    *
    * Used in `src/components/base/PostMeta.astro`and `src/components/base/PostCover.astro`.
@@ -523,13 +478,6 @@ export interface Ui {
   groupView: GroupView
 
   /**
-   * Configures the `/releases` and `/prs` UIs.
-   *
-   * Used in `src/components/views/GithubView.astro`.
-   */
-  githubView: GitHubView
-
-  /**
    * Configures external links' behavior and appearance.
    *
    * Used in `plugins.ts`, `src/components/base/Link.astro` and `src/layouts/BaseLayout.astro`.
@@ -538,7 +486,6 @@ export interface Ui {
 }
 
 /* FEATURES */
-export type BgType = 'plum' | 'dot' | 'rose' | 'particle'
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
 type Mentioned = `@${string}` | `@${string}@${string}` | ''
 type FeatureConfig<T> = false | [boolean, T]
@@ -567,6 +514,13 @@ export interface OgImageCollectionConfig {
    * // maps the `articles` entry `hello` to `/writing/hello/`
    */
   pathnamePrefix: Path
+
+  /**
+   * Names the collection on its OG images, before the date.
+   *
+   * @example 'Blog'
+   */
+  label: string
 }
 
 interface OgImageConfig {
@@ -576,21 +530,15 @@ interface OgImageConfig {
   authorOrBrand: string
 
   /**
-   * Sets the title used to generate the fallback OG image.
-   *
-   * Used by the fallback image endpoint, and when a page-specific image is not
-   * generated because the frontmatter title is missing, empty, or matches
-   * `authorOrBrand`.
+   * Sets the line above the name on the fallback OG image (the home page's).
    */
-  fallbackTitle: string
+  fallbackKicker: string
 
   /**
-   * Sets the background used to generate the fallback OG image.
-   *
-   * Used by the fallback image endpoint, and when a page-specific image is
-   * generated without a valid frontmatter `bgType`.
+   * Sets the line under the name on the fallback OG image (the home page's,
+   * and any page without one of its own).
    */
-  fallbackBgType: BgType
+  fallbackTitle: string
 
   /**
    * Sets the content collections collected by the OG image endpoint.
@@ -684,68 +632,6 @@ export interface ShareConfig {
    * Controls whether to include Email for sharing.
    */
   email: boolean
-}
-
-interface GiscusConfig {
-  /**
-   * GitHub repository in the format `owner/repo`.
-   *
-   * @example 'lin-stephanie/astro-antfustyle-theme'
-   */
-  'data-repo': RepoWithOwner
-
-  /**
-   * Unique ID of the GitHub repository.
-   *
-   * @example "R_kgDOLylKbA"
-   */
-  'data-repo-id': string
-
-  /**
-   * Discussion category name.
-   *
-   * @example "Giscus"
-   */
-  'data-category': string
-
-  /**
-   * Unique ID of the discussion category.
-   *
-   * @example "DIC_kwDOLylKbM4Cpugn"
-   */
-  'data-category-id': string
-
-  /**
-   * Mapping between pages and discussions.
-   *
-   * @example 'title'
-   */
-  'data-mapping': string
-
-  /**
-   * Enable strict mapping (1 = true, 0 = false).
-   */
-  'data-strict': '0' | '1'
-
-  /**
-   * Enable reactions (1 = true, 0 = false).
-   */
-  'data-reactions-enabled': '0' | '1'
-
-  /**
-   * Emit discussion metadata (1 = true, 0 = false).
-   */
-  'data-emit-metadata': '0' | '1'
-
-  /**
-   * Position of the comment input box.
-   */
-  'data-input-position': 'top' | 'bottom'
-
-  /**
-   * Language for the Giscus widget UI.
-   */
-  'data-lang': string
 }
 
 interface SearchConfig {
@@ -856,16 +742,6 @@ export interface Features {
    * To disable for a specific post, set the `share` field in the frontmatter to `false`.
    */
   share: FeatureConfig<ShareConfig>
-
-  /**
-   * Whether to enable Giscus comment feature.
-   *
-   * To disable for a specific post, set the `giscus` field in the frontmatter to `false`.
-   *
-   * Generate your configuration: https://giscus.app/
-   * More details: https://astro-antfustyle-theme.vercel.app/blog/advanced-configuration/#configure-giscus-comments
-   */
-  giscus: FeatureConfig<GiscusConfig>
 
   /**
    * Whether to enable Pagefind search feature.

@@ -18,12 +18,7 @@ export const GET: APIRoute = async ({ props, url, logger = silentLogger }) => {
     )
   )
 
-  const pngBuffer = await generateOgImageBuffer(
-    target.authorOrBrand,
-    target.title,
-    target.bgType,
-    url
-  )
+  const pngBuffer = await generateOgImageBuffer(target, url)
 
   return new Response(new Uint8Array(pngBuffer), {
     headers: {

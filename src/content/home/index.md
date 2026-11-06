@@ -1,16 +1,16 @@
-**Currently building**
+## Currently building
 
 - :link[lodos.md]{id=https://lodos.md/ img=/icons/lodos.svg}: **the company that runs itself**: an AI team that learns your company and works across every department, while you make the decisions and nobody else can see your data. In closed beta. [Read more](./lodos/).
-- :link[gazla.co]{id=https://gazla.co}: a startup community of 50,000+ people and 280+ startups, bootstrapped with zero funding.
+- :link[gazla.co]{id=https://gazla.co img=/icons/gazla.svg}: a startup community of 50,000+ people and 280+ startups, bootstrapped with zero funding.
 
-**Previously**
+## Previously
 
 - **ACANIO**: Led development of a clinical-grade, HIPAA-compliant brain and orthopedic MRI visualization platform used by physicians in active patient care. Built custom Cornerstone3D tools with WebGL and contributed a grayscale tool to the [OHIF](https://ohif.org/) open-source viewer.
 - **NUEVO**: Financial and enterprise platforms for Avivasa/Agesa and OTOKOÇ/OYAK.
 - **Akinon**: E-commerce for Vakko, Koton, LC Waikiki and US Polo; core contributor to Akinext, a Next.js commerce framework with 70% faster performance than the legacy stack.
 - **T-Soft** and **Winnice**: E-commerce storefronts and a full ERP system built from scratch.
 
-**Beyond code**
+## Beyond code
 
 - Co-founded the **Open Software Network (AYA)** during the 2023 Türkiye earthquakes: 25,000+ volunteer developers, building [AfetHarita](https://afetharita.com) (used by AFAD) and [deprem.io](https://deprem.io). Covered by [TIME](https://time.com/6254500/turkey-earthquake-twitter-musk-rescue/).
 - Mediterranean **ILCA sailing champion**: 13 medals, 2 cups, racing since age six.

@@ -35,7 +35,11 @@ async function pageMeta(file: string) {
   const pages = await getCollection('pages')
   const entry = pages.find((p) => p.filePath?.endsWith(`src/pages/${file}`))
   if (!entry) throw new Error(`Page not found: ${file}`)
-  return entry.data as { title: string; subtitle?: string; description?: string }
+  return entry.data as {
+    title: string
+    subtitle?: string
+    description?: string
+  }
 }
 
 /**
@@ -112,7 +116,11 @@ export async function homeDoc() {
 export async function lodosDoc() {
   const meta = await pageMeta('lodos.mdx')
   return [
-    docHeader(`${meta.title}: ${meta.subtitle}`, abs('/lodos/'), meta.description),
+    docHeader(
+      `${meta.title}: ${meta.subtitle}`,
+      abs('/lodos/'),
+      meta.description
+    ),
     await homeBody('lodos'),
     '',
   ].join('\n')
@@ -148,7 +156,10 @@ export async function postsOf(collection: Collection) {
 const isoDate = (d: Date) => d.toISOString().slice(0, 10)
 
 /** Canonical URL of a post. Redirect posts (Medium) point at the real article. */
-export function postUrl(collection: Collection, post: { id: string; data: { redirect?: string } }) {
+export function postUrl(
+  collection: Collection,
+  post: { id: string; data: { redirect?: string } }
+) {
   return post.data.redirect || abs(`/${collection}/${post.id}/`)
 }
 
@@ -193,7 +204,7 @@ export function markdownResponse(doc: string, canonicalPath: string) {
   return new Response(doc, {
     headers: {
       'content-type': 'text/markdown; charset=utf-8',
-      link: `<${abs(canonicalPath)}>; rel="canonical"`,
+      'link': `<${abs(canonicalPath)}>; rel="canonical"`,
     },
   })
 }

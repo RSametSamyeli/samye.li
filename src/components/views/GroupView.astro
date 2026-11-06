@@ -7,7 +7,7 @@ import MobileControl from '~/components/base/MobileControl.astro'
 import Categorizer from '~/components/base/Categorizer.astro'
 import GroupItem from '~/components/views/GroupItem.astro'
 import projectsData from '~/content/projects/data.json'
-import { FEATURES } from '~/config'
+import { FEATURES, UI } from '~/config'
 
 import type { CollectionKey } from 'astro:content'
 import type { GroupItemData } from '~/components/views/GroupItem.astro'
@@ -71,10 +71,16 @@ const tocEnabled = Array.isArray(toc) && toc[0] && pageToc
         </>
       )}
       {Object.keys(data).map((key, idx) => (
-        <div class="slide-enter" style={{ '--enter-stage': idx }}>
+        <section
+          class="slide-enter mx-auto text-left lt-lgp:max-w-[712px] lt-md:max-w-[350px]"
+          style={{
+            '--enter-stage': idx,
+            'max-width': `calc(350px * ${UI.groupView.maxGroupColumns} + ${UI.groupView.maxGroupColumns - 1} * 0.75rem)`,
+          }}
+        >
           <Categorizer text={key} needId={tocEnabled} wide={true} />
           <GroupItem items={data[key]} />
-        </div>
+        </section>
       ))}
     </>
   )

@@ -8,6 +8,8 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths
 
 export const GET: APIRoute = async ({ props }) => {
-  const { post } = props as { post: Awaited<ReturnType<typeof postsOf>>[number] }
+  const { post } = props as {
+    post: Awaited<ReturnType<typeof postsOf>>[number]
+  }
   return markdownResponse(await postDoc('blog', post), `/blog/${post.id}/`)
 }

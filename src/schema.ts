@@ -24,12 +24,6 @@ export const pageSchema = z.object({
     .describe(
       'Provides a brief description, used in meta tags for SEO and sharing purposes. If not needed, leave the field as an empty string or delete it, and the `SITE.description` will be used directly.'
     ),
-  bgType: z
-    .union([z.literal(false), z.enum(['plum', 'dot', 'rose', 'particle'])])
-    .default(false)
-    .describe(
-      'Specifies whether to apply a background on this page and select its type. It is also used as the page-specific OG image background; if not needed, delete the field or set to `false`.'
-    ),
   ogImage: z
     .union([z.literal('fallback'), z.string(), z.boolean()])
     .default(true)
@@ -118,12 +112,6 @@ export const postSchema = ({ image }: SchemaContext) =>
       .describe(
         'Specifies the platform where the audio or video content is published. If provided, the platform name will be displayed. If not needed, leave the field as an empty string or delete it.'
       ),
-    bgType: z
-      .union([z.literal(false), z.enum(['plum', 'dot', 'rose', 'particle'])])
-      .default(false)
-      .describe(
-        'Specifies whether to apply a background on this post and select its type. It is also used as the page-specific OG image background; if not needed, delete the field or set to `false`.'
-      ),
     ogImage: z
       .union([z.literal('fallback'), z.string(), z.boolean()])
       .default(true)
@@ -140,10 +128,6 @@ export const postSchema = ({ image }: SchemaContext) =>
       .boolean()
       .default(true)
       .describe('Controls whether social sharing is available for the post.'),
-    giscus: z
-      .boolean()
-      .default(true)
-      .describe('Controls whether Giscus comments are available for the post.'),
     search: z
       .boolean()
       .default(true)
@@ -168,63 +152,21 @@ export const postSchema = ({ image }: SchemaContext) =>
 export const projectSchema = z.object({
   id: z.string().describe('**Required**. Name of the project to be displayed.'),
   link: z
-    .url()
-    .describe('**Required**. URL linking to the project page or repository.'),
+    .union([z.url(), z.string().regex(/^\/[^/]/, 'A path on this site')])
+    .describe(
+      '**Required**. URL linking to the project page or repository, or a path on this site (`/lodos/`).'
+    ),
   desc: z
     .string()
     .describe('**Required**. A brief description summarizing the project.'),
   icon: z
     .string()
     .regex(
-      /^i-[\w-]+(:[\w-]+)?$/,
-      'Icon must be in the format `i-<collection>-<icon>` or `i-<collection>:<icon>` as per [UnoCSS](https://unocss.dev/presets/icons) specs.'
+      /^(i-[\w-]+(:[\w-]+)?|\/[\w./-]+\.(svg|png|webp))$/,
+      'Icon must be a UnoCSS icon (`i-<collection>-<icon>`) or an image in `public/` (`/icons/x.svg`).'
     )
     .describe(
-      '**Required**. Icon representing the project. It must be in the format `i-<collection>-<icon>` or `i-<collection>:<icon>` as per [UnoCSS](https://unocss.dev/presets/icons) specs. [Check all available icons here](https://icones.js.org/).'
+      "**Required**. Icon representing the project: a [UnoCSS icon](https://icones.js.org/) as `i-<collection>-<icon>` or `i-<collection>:<icon>`, or the path of an image in `public/` such as `/icons/lodos.svg` for the project's own logo."
     ),
   category: z.string().describe('**Required**. Category of the project.'),
-})
-
-/* Photos */
-export const photoSchema = z.object({
-  id: z
-    .string()
-    .describe(
-      '**Required**. File (name/path) of the image in the `src/content/photos/` directory or a remote image URL.'
-    ),
-  desc: z
-    .string()
-    .default('')
-    .describe(
-      'Optional description for the image. If not needed, leave the field as an empty string or delete it.'
-    ),
-})
-
-/* Streams */
-export const streamSchema = z.object({
-  id: z.string().describe('**Required**. Sets the stream title.'),
-  pubDate: z.coerce
-    .date()
-    .describe(
-      '**Required**. Specifies the publication date. See supported formats [here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse#examples).'
-    ),
-  link: z.url().describe('**Required**. Specifies the URL link to the stream.'),
-  radio: z
-    .boolean()
-    .default(false)
-    .describe(
-      'Indicates whether the stream is a radio broadcast. If `true`, an icon will be added to the stream item in the list.'
-    ),
-  video: z
-    .boolean()
-    .default(false)
-    .describe(
-      'Indicates whether the stream is a video broadcast. If `true`, an icon will be added to the stream item in the list.'
-    ),
-  platform: z
-    .string()
-    .default('')
-    .describe(
-      'Specifies the platform where the stream is published. If not needed, leave the field as an empty string or delete it.'
-    ),
 })

@@ -6,6 +6,8 @@ interface Props {
   isSearchable?: boolean
   searchFilter?: string
   class?: string
+  /** extra classes on the article (the page's prose) */
+  articleClass?: string
 }
 
 const {
@@ -15,6 +17,7 @@ const {
   isSearchable,
   searchFilter,
   class: className,
+  articleClass,
 } = Astro.props
 ---
 
@@ -31,7 +34,7 @@ const {
 {
   Astro.slots.has('article') && (
     <article
-      class="slide-enter-content prose mx-auto"
+      class:list={['slide-enter-content prose mx-auto', articleClass]}
       data-pagefind-body={isSearchable ? '' : undefined}
       data-pagefind-filter={
         isSearchable && searchFilter ? searchFilter : undefined

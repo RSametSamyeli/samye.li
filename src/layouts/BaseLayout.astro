@@ -4,7 +4,6 @@ import '~/styles/prose.css'
 import '~/styles/markdown.css'
 
 import Head from '~/components/base/Head.astro'
-import Background from '~/components/backgrounds/Background.astro'
 import Link from '~/components/base/Link.astro'
 import NavBar from '~/components/nav/NavBar.astro'
 import BackLink from '~/components/widgets/BackLink.astro'
@@ -15,19 +14,16 @@ import Backdrop from '~/components/base/Backdrop.astro'
 import { SITE, UI, FEATURES } from '~/config'
 import { withBasePath } from '~/utils/path'
 
-import type { BgType } from '~/types'
-
 interface Props {
   title?: string
   description?: string
   ogImage?: string | boolean
-  bgType?: BgType | false
   pubDate?: string
   lastModDate?: string
+  tags?: string[]
 }
 
-const { title, description, ogImage, bgType, pubDate, lastModDate } =
-  Astro.props
+const { title, description, ogImage, pubDate, lastModDate, tags } = Astro.props
 
 let style: Record<string, string> = {}
 
@@ -47,7 +43,7 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
 <!doctype html>
 <html lang={SITE.lang}>
   <head>
-    <Head {title} {description} {ogImage} {pubDate} {lastModDate} />
+    <Head {title} {description} {ogImage} {pubDate} {lastModDate} {tags} />
   </head>
 
   <body
@@ -58,8 +54,6 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
   >
     <!-- Cloudflare email obfuscation breaks on client-side navigation, so opt out. -->
     <!--email_off-->
-    <!-- Background -->
-    {bgType && <Background type={bgType} />}
 
     <!-- Skip Link -->
     <Link
@@ -86,8 +80,6 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
           </footer>
         )
       }
-      <!-- Comments -->
-      <slot name="giscus" />
     </main>
 
     <!-- Footer -->

@@ -14,20 +14,24 @@ import {
 } from '~/utils/og-image/routing'
 
 import type { CollectionEntry } from 'astro:content'
-import type { BgType, OgImageCollectionConfig } from '~/types'
+import type { OgImageCollectionConfig } from '~/types'
 
 export interface OgImageManifestItem {
   slug: string
   authorOrBrand: string
   title: string
-  bgType: BgType
+  /** what the page is, and for posts when it was published: "Blog · Nov 2, 2026" */
+  kicker: string
+  /** a line under the title, if the page has one */
+  description: string
 }
 
 export interface PostEntry {
   id: string
   data: object & {
     title?: unknown
-    bgType?: unknown
+    description?: unknown
+    pubDate?: unknown
     ogImage?: unknown
     draft?: unknown
     redirect?: unknown
@@ -37,7 +41,6 @@ export interface PostEntry {
 const ANSI_YELLOW = '\x1b[33m' // Yellow color for warnings
 const ANSI_BOLD = '\x1b[1m' // Bold text
 const ANSI_RESET = '\x1b[0m' // Reset color
-const BG_TYPES = ['plum', 'dot', 'rose', 'particle'] as const
 
 /**
  * Returns a formatted timestamp in HH:MM:SS format.
@@ -54,9 +57,6 @@ function timestamp() {
 /**
  * Checks if a value is a valid background type.
  */
-function isBgType(value: unknown): value is BgType {
-  return typeof value === 'string' && BG_TYPES.includes(value as BgType)
-}
 
 /**
  * Checks whether a content entry should get a generated OG image manifest item.
@@ -69,14 +69,24 @@ function isBgType(value: unknown): value is BgType {
  * title = authorOrBrand + ogImage true -> false
  * missing title + ogImage true -> false
  */
-function shouldGenerateOgImage(
+const textOf = (value: unknown) =>
+  typeof value === 'string' ? value.trim() : ''
+
+/** "Nov 2, 2026": the date as the site shows it, in UTC as it is stored. */
+const formatCardDate = (date: Date) =>
+  new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(date)
+
+function shouldGenerateOgImage<
+  T extends { title?: unknown; ogImage?: unknown },
+>(
   authorOrBrand: string,
-  data: {
-    title?: unknown
-    bgType?: unknown
-    ogImage?: unknown
-  }
-): data is { title: string; bgType?: unknown; ogImage: true } {
+  data: T
+): data is T & { title: string; ogImage: true } {
   return (
     typeof data.title === 'string' &&
     !!data.title?.trim() &&
@@ -99,8 +109,7 @@ function addManifestItem(
   manifest: Map<string, OgImageManifestItem>,
   pathname: string,
   authorOrBrand: string,
-  title: string,
-  bgType: BgType,
+  card: Pick<OgImageManifestItem, 'title' | 'kicker' | 'description'>,
   context: 'fallback' | 'page' = 'page'
 ) {
   const slug =
@@ -137,8 +146,7 @@ function addManifestItem(
   manifest.set(slug, {
     slug,
     authorOrBrand,
-    title,
-    bgType,
+    ...card,
   })
 }
 
@@ -160,20 +168,19 @@ function addPostManifestItem(
   manifest: Map<string, OgImageManifestItem>,
   collection: OgImageCollectionConfig,
   post: PostEntry,
-  authorOrBrand: string,
-  fallbackBgType: BgType
+  authorOrBrand: string
 ) {
   if (post.data.draft || post.data.redirect) return
   if (!shouldGenerateOgImage(authorOrBrand, post.data)) return
 
   const pathname = getPostPathname(collection.pathnamePrefix, post.id)
-  addManifestItem(
-    manifest,
-    pathname,
-    authorOrBrand,
-    post.data.title,
-    isBgType(post.data.bgType) ? post.data.bgType : fallbackBgType
-  )
+  const date =
+    post.data.pubDate instanceof Date ? formatCardDate(post.data.pubDate) : ''
+  addManifestItem(manifest, pathname, authorOrBrand, {
+    title: post.data.title,
+    kicker: [collection.label, date].filter(Boolean).join(' · '),
+    description: textOf(post.data.description),
+  })
 }
 
 /**
@@ -188,19 +195,16 @@ function addPostManifestItem(
 function addPageManifestItem(
   manifest: Map<string, OgImageManifestItem>,
   page: CollectionEntry<'pages'>,
-  authorOrBrand: string,
-  fallbackBgType: BgType
+  authorOrBrand: string
 ) {
   if (!shouldGenerateOgImage(authorOrBrand, page.data)) return
 
   const pathname = getPagePathname(page.id)
-  addManifestItem(
-    manifest,
-    pathname,
-    authorOrBrand,
-    page.data.title,
-    page.data.bgType || fallbackBgType
-  )
+  addManifestItem(manifest, pathname, authorOrBrand, {
+    title: page.data.title,
+    kicker: authorOrBrand,
+    description: textOf(page.data.subtitle || page.data.description),
+  })
 }
 
 /**
@@ -216,32 +220,28 @@ export async function getOgImageManifest() {
   const config = getOgImageConfig()
   if (!config) return []
 
-  const { authorOrBrand, fallbackTitle, fallbackBgType, collections } = config
+  const { authorOrBrand, fallbackKicker, fallbackTitle, collections } = config
   const manifest = new Map<string, OgImageManifestItem>()
 
   addManifestItem(
     manifest,
     '/',
     authorOrBrand,
-    fallbackTitle,
-    fallbackBgType,
+    {
+      title: authorOrBrand,
+      kicker: fallbackKicker,
+      description: fallbackTitle,
+    },
     'fallback'
   )
 
   const pages = await getCollection('pages')
-  for (const page of pages)
-    addPageManifestItem(manifest, page, authorOrBrand, fallbackBgType)
+  for (const page of pages) addPageManifestItem(manifest, page, authorOrBrand)
 
   for (const collection of collections) {
     const posts = await getCollection(collection.collection)
     for (const post of posts)
-      addPostManifestItem(
-        manifest,
-        collection,
-        post,
-        authorOrBrand,
-        fallbackBgType
-      )
+      addPostManifestItem(manifest, collection, post, authorOrBrand)
   }
 
   return Array.from(manifest.values())

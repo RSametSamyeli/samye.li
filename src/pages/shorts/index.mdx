@@ -2,7 +2,6 @@
 title: Notes
 subtitle: Short notes and quick thoughts
 description: Short notes and quick thoughts
-bgType: particle
 ogImage: true
 ---
 
@@ -13,7 +12,6 @@ import CardView from '~/components/views/CardView.astro'
 <BaseLayout
   title={frontmatter.title}
   description={frontmatter.description}
-  bgType={frontmatter.bgType}
   ogImage={frontmatter.ogImage}
 >
   <StandardLayout
@@ -21,6 +19,6 @@ import CardView from '~/components/views/CardView.astro'
     subtitle={frontmatter.subtitle}
     isCentered={true}
   >
-    <CardView collectionType="shorts" mode="grid" pageTag={true} />
+    <CardView collectionType="shorts" pageTag={true} />
   </StandardLayout>
 </BaseLayout>

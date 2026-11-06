@@ -9,7 +9,6 @@ import DesktopAside from '~/components/base/DesktopAside.astro'
 import MobileControl from '~/components/base/MobileControl.astro'
 import PostCover from '~/components/base/PostCover.astro'
 import ShareLink from '~/components/widgets/ShareLink.astro'
-import Giscus from '~/components/widgets/Giscus.astro'
 import ImageViewer from '~/components/widgets/ImageViewer.astro'
 
 import { getMinutesRead } from '~/utils/data'
@@ -18,13 +17,12 @@ import { FEATURES } from '~/config'
 import type { CollectionEntry } from 'astro:content'
 
 interface Props {
-  post: CollectionEntry<'blog' | 'changelog' | 'shorts'>
-  isCommentable?: boolean
+  post: CollectionEntry<'blog' | 'shorts'>
   pageToc?: boolean
 }
 
-const { post, isCommentable = false, pageToc = true } = Astro.props
-const { toc, share, giscus, search } = FEATURES
+const { post, pageToc = true } = Astro.props
+const { toc, share, search } = FEATURES
 
 const { data: frontmatter } = post
 const { Content, headings, remarkPluginFrontmatter } = await render(post)
@@ -35,7 +33,6 @@ const ogImage = frontmatter.ogImage
 const pubDate = frontmatter.pubDate.toISOString()
 const lastModDate =
   frontmatter.lastModDate && frontmatter.lastModDate.toISOString()
-const bgType = frontmatter.bgType
 const subtitle = frontmatter.subtitle
 const minutesRead = getMinutesRead(
   frontmatter.minutesRead,
@@ -50,8 +47,6 @@ const coverAlt = frontmatter.coverAlt
 const tocEnabled = Array.isArray(toc) && toc[0] && frontmatter.toc && pageToc
 const haveHeadings = tocEnabled && headings.length > 0
 const shareEnabled = Array.isArray(share) && share[0] && frontmatter.share
-const giscusEnabled =
-  isCommentable && Array.isArray(giscus) && giscus[0] && frontmatter.giscus
 
 const collectionType = post.collection
 const isSearchable =
@@ -67,7 +62,7 @@ in production. Set the post's <code>draft</code> property in
 frontmatter to <code>false</code> or remove it to publish the post.`
 ---
 
-<BaseLayout {title} {description} {ogImage} {pubDate} {lastModDate} {bgType}>
+<BaseLayout {title} {description} {ogImage} {pubDate} {lastModDate} {tags}>
   <StandardLayout {title} {subtitle} {isSearchable} {searchFilter}>
     <Fragment slot="head">
       <PostMeta {pubDate} {lastModDate} {minutesRead} {tags} />
@@ -89,13 +84,5 @@ frontmatter to <code>false</code> or remove it to publish the post.`
   <Fragment slot="share">
     {shareEnabled && <ShareLink config={share[1]} />}
   </Fragment>
-  {
-    giscusEnabled && (
-      <div slot="giscus" class="prose mx-auto mt-8">
-        <hr />
-        <Giscus />
-      </div>
-    )
-  }
   <ImageViewer selector="article" options={{ title: 0, navbar: 0 }} />
 </BaseLayout>

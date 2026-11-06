@@ -8,9 +8,11 @@ interface Day {
 }
 
 const x = stats.x as { handle: string; followers: number } | null
-const github = stats.github as
-  | { user: string; total: number; days: Day[] }
-  | null
+const github = stats.github as {
+  user: string
+  total: number
+  days: Day[]
+} | null
 
 const fmt = new Intl.NumberFormat('en-US')
 
@@ -18,7 +20,9 @@ const fmt = new Intl.NumberFormat('en-US')
 const CELL = 11
 const GAP = 3
 const days: Day[] = github?.days ?? []
-const offset = days.length ? new Date(days[0].date + 'T00:00:00Z').getUTCDay() : 0
+const offset = days.length
+  ? new Date(days[0].date + 'T00:00:00Z').getUTCDay()
+  : 0
 const cells = days.map((d, i) => ({
   ...d,
   col: Math.floor((i + offset) / 7),
@@ -49,11 +53,7 @@ if (months.length > 1 && months[1].col - months[0].col < 3) months.shift()
 if (months.length && cols - months[months.length - 1].col < 3) months.pop()
 ---
 
-{
-  (x || github) && (
-    <p><strong>Activity</strong></p>
-  )
-}
+{(x || github) && <h2 id="activity">Activity</h2>}
 {
   (x || github) && (
     <div class="not-prose flex flex-wrap gap-x-8 gap-y-3">
@@ -151,14 +151,28 @@ if (months.length && cols - months[months.length - 1].col < 3) months.pop()
   .heatmap rect {
     fill: #d90e47;
   }
-  .heatmap .lvl-0 { fill: #a3a3a3; fill-opacity: 0.15; }
-  .heatmap .lvl-1 { fill-opacity: 0.3; }
-  .heatmap .lvl-2 { fill-opacity: 0.55; }
-  .heatmap .lvl-3 { fill-opacity: 0.8; }
-  .heatmap .lvl-4 { fill-opacity: 1; }
+  .heatmap .lvl-0 {
+    fill: #a3a3a3;
+    fill-opacity: 0.15;
+  }
+  .heatmap .lvl-1 {
+    fill-opacity: 0.3;
+  }
+  .heatmap .lvl-2 {
+    fill-opacity: 0.55;
+  }
+  .heatmap .lvl-3 {
+    fill-opacity: 0.8;
+  }
+  .heatmap .lvl-4 {
+    fill-opacity: 1;
+  }
 
   :global(html.dark) .heatmap rect {
     fill: #ff2d6a;
   }
-  :global(html.dark) .heatmap .lvl-0 { fill: #d4d4d4; fill-opacity: 0.08; }
+  :global(html.dark) .heatmap .lvl-0 {
+    fill: #d4d4d4;
+    fill-opacity: 0.08;
+  }
 </style>

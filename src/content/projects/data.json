@@ -1,16 +1,16 @@
 [
   {
     "id": "lodos.md",
-    "link": "https://samye.li/lodos/",
+    "link": "/lodos/",
     "desc": "The company that runs itself: an AI team across every department; you decide, nobody else sees your data",
-    "icon": "i-ph-wind-duotone",
+    "icon": "/icons/lodos.svg",
     "category": "Building Now"
   },
   {
     "id": "gazla.co",
     "link": "https://gazla.co",
     "desc": "Startup community of 50,000+ people and 280+ startups",
-    "icon": "i-ph-rocket-launch-duotone",
+    "icon": "/icons/gazla.svg",
     "category": "Building Now"
   },
   {

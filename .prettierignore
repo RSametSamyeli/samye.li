@@ -2,6 +2,10 @@
 pnpm-lock.yaml
 *.md
 
+# Writing and client work are kept exactly as authored
+src/content/**/*.mdx
+public/branding/
+
 # Avoid incorrect processing
 SearchSwitch.astro
 

@@ -1,27 +1,35 @@
 ---
 import Link from '~/components/base/Link.astro'
 import { SITE } from '~/config'
+import { withBasePath } from '~/utils/path'
 
-const currentYear = new Date().getFullYear()
-const copyrightText = `© ${currentYear} ${SITE.author}`
+const year = new Date().getFullYear()
+
+/** Where the site can be read other than as pages: its feed, its source, and its summary for LLMs. */
+const links = [
+  { href: withBasePath('/rss.xml'), text: 'RSS' },
+  { href: withBasePath('/llms.txt'), text: 'llms.txt' },
+  { href: 'https://github.com/RSametSamyeli/samye.li', text: 'Source' },
+]
 ---
 
 <footer class="slide-enter animate-delay-1600! px-7 mt-auto mb-8">
-  <div class="prose mx-auto op-50">
-    <div class="flex lt-sm:flex-col items-center text-sm whitespace-nowrap">
-      <span>{copyrightText}</span>
-      <span class="lt-sm:hidden">&nbsp;|&nbsp;</span>
-      <span>
-        Powered by
-        {' '}
-        <Link
-          class="op-100! color-[--fg]!"
-          href="https://github.com/lin-stephanie/astro-antfustyle-theme"
-          external={true}
-        >
-          Astro AntfuStyle Theme
-        </Link>
-      </span>
-    </div>
+  <div
+    class="prose mx-auto flex lt-sm:flex-col items-center justify-between gap-2 text-sm op-50"
+  >
+    <span>© {year} {SITE.author}</span>
+    <nav aria-label="Elsewhere" class="flex items-center gap-4">
+      {
+        links.map(({ href, text }) => (
+          <Link
+            class="op-100! no-underline! hover:underline!"
+            href={href}
+            external={href.startsWith('http')}
+          >
+            {text}
+          </Link>
+        ))
+      }
+    </nav>
   </div>
 </footer>

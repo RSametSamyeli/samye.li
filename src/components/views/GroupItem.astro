@@ -14,13 +14,11 @@ interface Props {
 }
 
 const { items } = Astro.props
-const { maxGroupColumns, showGroupItemColorOnHover } = UI.groupView
+const { showGroupItemColorOnHover } = UI.groupView
 ---
 
 <div
-  class={`grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3
-    py-8 mx-auto lt-lgp:max-w-[712px]! lt-md:max-w-[350px]!`}
-  style={`max-width: calc(350px * ${maxGroupColumns} + ${maxGroupColumns - 1} * 0.75rem);`}
+  class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3 pt-3 pb-10"
 >
   {
     items.map((item) => (
@@ -30,14 +28,24 @@ const { maxGroupColumns, showGroupItemColorOnHover } = UI.groupView
           bg-transparent hover:bg-[#88888811]
           text-4.4 transition-all duration-300`}
         href={item.link}
-        aria-hidden={true}
-        external={true}
+        external={/^https?:/.test(item.link)}
       >
-        <div class="pt-2 pr-5">
-          <div
-            class={`group-hover:data-[show-color]:saturate-100 op-50 saturate-0 leading-9 text-7.5 ${item.icon}`}
-            data-show-color={showGroupItemColorOnHover ? '' : undefined}
-          />
+        <div class="flex-none pt-2 pr-5" aria-hidden="true">
+          {item.icon.startsWith('i-') ? (
+            <div
+              class={`group-hover:data-[show-color]:saturate-100 op-50 saturate-0 leading-9 text-7.5 ${item.icon}`}
+              data-show-color={showGroupItemColorOnHover ? '' : undefined}
+            />
+          ) : (
+            <img
+              class="block flex-none w-7.5 h-7.5 rounded-md ring-1 ring-[#8883] op-80 group-hover:op-100 transition-opacity"
+              src={item.icon}
+              alt=""
+              width="30"
+              height="30"
+              decoding="async"
+            />
+          )}
         </div>
         <div class="flex-auto">
           <div>{item.id}</div>

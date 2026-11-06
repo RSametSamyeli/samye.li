@@ -7,10 +7,17 @@ export const SITE: Site = {
   description:
     'Senior full-stack engineer and founder of gazla.co and lodos.md. Writing about software architecture, security and AI.',
   author: 'Samet Samyeli',
+  xHandle: '@SametSamyeli2',
   lang: 'en',
   ogLocale: 'en_US',
   imageDomains: [],
 }
+
+/** How each post collection is named to readers: in search, on OG images. */
+export const COLLECTION_LABELS = {
+  blog: 'Blog',
+  shorts: 'Notes',
+} as const satisfies Record<'blog' | 'shorts', string>
 
 export const UI: Ui = {
   internalNavs: [
@@ -29,9 +36,8 @@ export const UI: Ui = {
     {
       path: '/shorts',
       title: 'Notes',
-      displayMode: 'iconToTextOnMobile',
+      displayMode: 'alwaysText',
       text: 'Notes',
-      icon: 'i-meteor-icons-grid',
     },
   ],
   socialLinks: [
@@ -79,7 +85,6 @@ export const UI: Ui = {
     ],
     mergeOnMobile: true,
   },
-  tabbedLayoutTabs: false,
   postView: {
     postMetaStyle: 'minimal',
     useCoverAltAsCaption: true,
@@ -87,17 +92,6 @@ export const UI: Ui = {
   groupView: {
     maxGroupColumns: 3,
     showGroupItemColorOnHover: true,
-  },
-  githubView: {
-    monorepos: [],
-    mainLogoOverrides: [],
-    subLogoMatches: [
-      [/theme/, 'i-unjs-theme-colors'],
-      [/github/, 'https://github.githubassets.com/favicons/favicon.svg'],
-      [/tweet/, 'i-prime-twitter'],
-      [/ins/, 'i-skill-icons-instagram'],
-      [/bluesky/, 'i-logos-bluesky'],
-    ],
   },
   externalLink: {
     newTab: false,
@@ -116,12 +110,21 @@ export const FEATURES: Features = {
   ogImage: [
     true,
     {
-      authorOrBrand: `${SITE.title}`,
-      fallbackTitle: `${SITE.description}`,
-      fallbackBgType: 'plum',
+      authorOrBrand: SITE.title,
+      fallbackKicker: 'Senior Full-Stack Engineer · Tech Founder',
+      fallbackTitle:
+        'Building lodos.md and gazla.co. Writing about software architecture, security and AI.',
       collections: [
-        { collection: 'blog', pathnamePrefix: '/blog' },
-        { collection: 'shorts', pathnamePrefix: '/shorts' },
+        {
+          collection: 'blog',
+          pathnamePrefix: '/blog',
+          label: COLLECTION_LABELS.blog,
+        },
+        {
+          collection: 'shorts',
+          pathnamePrefix: '/shorts',
+          label: COLLECTION_LABELS.shorts,
+        },
       ],
     },
   ],
@@ -148,7 +151,6 @@ export const FEATURES: Features = {
       email: false,
     },
   ],
-  giscus: false,
   search: [
     true,
     {

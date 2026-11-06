@@ -319,3 +319,16 @@
 .prose em {
   color: inherit;
 }
+
+/* The home page's sections: real headings for structure (and for the markdown
+   mirror), set as small labels like the rest of the page. */
+.prose.home h2 {
+  font-size: 1em;
+  font-weight: 600;
+  margin-top: 1.75em;
+  margin-bottom: 0.75em;
+  line-height: 1.5;
+}
+.prose.home h2 .header-anchor {
+  display: none;
+}

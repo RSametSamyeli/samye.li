@@ -84,7 +84,7 @@ export default defineConfig({
       provider: fontProviders.google(),
       name: 'Inter',
       cssVariable: '--font-og-sans',
-      weights: [400],
+      weights: [400, 700],
       styles: ['normal'],
       subsets: ['latin'],
       formats: ['woff'],
@@ -106,25 +106,9 @@ export default defineConfig({
     responsiveStyles: true,
     domains: SITE.imageDomains,
   },
-  security: {
-    // Allow Giscus iframe to load local styles
-    // 1. Allow Giscus through Astro's dev request filter without warning
-    allowedDomains: [
-      {
-        hostname: 'giscus.app',
-        protocol: 'https',
-      },
-    ],
-  },
   vite: {
     logLevel: 'warn',
     build: { chunkSizeWarningLimit: 1200 },
-    server: {
-      headers: {
-        // 2. Satisfy the browser's CORS check for Giscus theme CSS and fonts
-        'Access-Control-Allow-Origin': 'https://giscus.app',
-      },
-    },
   },
   logger: logHandlers.node({ level: 'info' }),
   experimental: {

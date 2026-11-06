@@ -1,0 +1,39 @@
+name: CI
+
+# Every push and pull request is checked the way a deploy builds it: formatting,
+# lint, types and content schemas, then the full static build. The deploy itself
+# runs on Coolify from the GitHub webhook; this catches what would break it.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SKIP_SIMPLE_GIT_HOOKS: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4 # the version is package.json's packageManager
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Format
+        run: pnpm format
+      - name: Lint
+        run: pnpm lint
+      - name: Types and content
+        run: pnpm check
+      - name: Build
+        run: pnpm build

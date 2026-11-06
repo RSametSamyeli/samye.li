@@ -17,12 +17,14 @@ interface Props {
   ogImage?: string | boolean
   pubDate?: string
   lastModDate?: string
+  tags?: string[]
 }
 
-const { title, description, ogImage, pubDate, lastModDate } = Astro.props
+const { title, description, ogImage, pubDate, lastModDate, tags } = Astro.props
 
+const X_HANDLE = SITE.xHandle
 const pageTitle =
-  title && title !== SITE.title ? `${title} - ${SITE.title}` : SITE.title
+  title && title !== SITE.title ? `${title} · ${SITE.title}` : SITE.title
 const pageDescription = description || SITE.description
 
 const siteName = new URL(SITE.website).hostname
@@ -44,63 +46,94 @@ const ogImageURL = ogImagePathname
 const markdownMirror = markdownMirrorPath(Astro.url.pathname)
 const isHome = (Astro.url.pathname.replace(/\/+$/, '') || '/') === '/'
 
-// Who this site is about, for search engines and answer engines.
-const personData = {
-  '@context': 'https://schema.org',
+// Structured data for search and answer engines: one linked graph per page.
+// The person and the website are the same nodes everywhere (by @id); the home
+// page is a ProfilePage about the person, a post a BlogPosting by them.
+// https://developers.google.com/search/docs/appearance/structured-data/profile-page
+const PERSON_ID = new URL('/#person', SITE.website).href
+const WEBSITE_ID = new URL('/#website', SITE.website).href
+const pageId = `${canonicalURL.href}#webpage`
+
+const person = {
   '@type': 'Person',
+  '@id': PERSON_ID,
   'name': SITE.author,
   'alternateName': 'Rüzgar Samet Samyeli',
   'url': SITE.website,
   'jobTitle': 'Senior Full-Stack Engineer',
   'description': SITE.description,
+  'email': 'mailto:sam@samye.li',
   'homeLocation': { '@type': 'Place', 'name': 'Istanbul, Türkiye' },
   'founder': [
     { '@type': 'Organization', 'name': 'lodos.md', 'url': 'https://lodos.md/' },
-    { '@type': 'Organization', 'name': 'gazla.co', 'url': 'https://gazla.co' },
+    { '@type': 'Organization', 'name': 'gazla.co', 'url': 'https://gazla.co/' },
   ],
   'alumniOf': {
     '@type': 'CollegeOrUniversity',
     'name': 'Süleyman Demirel University',
   },
-  'email': 'mailto:sam@samye.li',
+  'knowsAbout': [
+    'Software architecture',
+    'Application security',
+    'Artificial intelligence',
+    'TypeScript',
+    'Python',
+    'PostgreSQL',
+  ],
   'sameAs': UI.socialLinks
     .map((l) => l.link)
     .filter((link) => link.startsWith('http')),
 }
 
-// https://jsonld.com/blog-post/
-const blogPostingData = {
-  '@context': 'https://schema.org',
-  '@type': 'BlogPosting',
-  'headline': pageTitle,
-  ...(ogImageURL && { image: ogImageURL }),
-  'url': canonicalURL,
-  'datePublished': pubDate,
-  ...(lastModDate && { dateModified: lastModDate }),
-  ...(description && { description: description }),
-  'author': {
-    '@type': 'Person',
-    'name': SITE.author,
-    'url': SITE.website,
-  },
+const website = {
+  '@type': 'WebSite',
+  '@id': WEBSITE_ID,
+  'url': SITE.website,
+  'name': siteName,
+  'description': SITE.description,
+  'inLanguage': SITE.lang,
+  'publisher': { '@id': PERSON_ID },
 }
 
-// https://jsonld.com/web-page/
-const webPageData = {
+const page = pubDate
+  ? {
+      '@type': 'BlogPosting',
+      '@id': pageId,
+      'url': canonicalURL.href,
+      'mainEntityOfPage': canonicalURL.href,
+      'headline': title || SITE.title,
+      ...(description && { description }),
+      ...(ogImageURL && { image: ogImageURL }),
+      'datePublished': pubDate,
+      'dateModified': lastModDate || pubDate,
+      ...(tags?.length && { keywords: tags }),
+      'inLanguage': SITE.lang,
+      'author': { '@id': PERSON_ID },
+      'publisher': { '@id': PERSON_ID },
+      'isPartOf': { '@id': WEBSITE_ID },
+    }
+  : {
+      '@type': isHome ? 'ProfilePage' : 'WebPage',
+      '@id': pageId,
+      'url': canonicalURL.href,
+      'name': pageTitle,
+      'description': pageDescription,
+      ...(ogImageURL && { image: ogImageURL }),
+      'inLanguage': SITE.lang,
+      'isPartOf': { '@id': WEBSITE_ID },
+      ...(isHome
+        ? { mainEntity: { '@id': PERSON_ID } }
+        : { about: { '@id': PERSON_ID } }),
+    }
+
+const structuredData = {
   '@context': 'https://schema.org',
-  '@type': 'webPage',
-  'name': `${title || SITE.title}`,
-  ...(description && { description: description }),
-  'publisher': {
-    '@type': 'ProfilePage',
-    'name': `${SITE.author}'s Personal Website`,
-  },
+  '@graph': [person, website, page],
 }
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="generator" content={Astro.generator} />
 
@@ -111,13 +144,12 @@ const webPageData = {
 
 <!-- Primary Metadata -->
 <title>{pageTitle}</title>
-<meta name="title" content={pageTitle} />
 <meta name="description" content={pageDescription} />
 <meta name="author" content={SITE.author} />
 
 <!-- Color -->
-<meta name="color-scheme" content="" />
-<meta name="theme-color" content="" />
+<meta name="color-scheme" content="dark light" />
+<meta name="theme-color" content="#050505" />
 <!-- Initialize as inline scripts for faster response, avoiding FOUC  -->
 <script is:inline data-astro-rerun>
   ;(() => {
@@ -156,17 +188,26 @@ const webPageData = {
     <>
       <meta property="article:author" content={SITE.author} />
       <meta property="article:published_time" content={pubDate} />
-      <meta property="article:modified_time" content={lastModDate} />
+      {lastModDate && (
+        <meta property="article:modified_time" content={lastModDate} />
+      )}
+      {tags?.map((tag) => (
+        <meta property="article:tag" content={tag} />
+      ))}
     </>
   )
 }
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={canonicalURL} />
-<meta property="twitter:title" content={pageTitle} />
-<meta property="twitter:description" content={pageDescription} />
-{ogImageURL && <meta property="twitter:image" content={ogImageURL} />}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content={X_HANDLE} />
+<meta name="twitter:creator" content={X_HANDLE} />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={pageDescription} />
+{ogImageURL && <meta name="twitter:image" content={ogImageURL} />}
+{ogImageURL && <meta property="og:image:width" content="1200" />}
+{ogImageURL && <meta property="og:image:height" content="630" />}
+{ogImageURL && <meta property="og:image:alt" content={pageTitle} />}
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
@@ -186,8 +227,8 @@ const webPageData = {
 <link
   rel="alternate"
   type="application/rss+xml"
-  title={withBasePath('/rss.xml')}
-  href="/rss.xml"
+  title={`${SITE.title} · Blog`}
+  href={withBasePath('/rss.xml')}
 />
 
 <!-- Plain-markdown mirror of this page, and the site summary for LLMs -->
@@ -200,33 +241,19 @@ const webPageData = {
     />
   )
 }
-<link rel="alternate" type="text/plain" title="llms.txt" href={withBasePath('/llms.txt')} />
+<link
+  rel="alternate"
+  type="text/plain"
+  title="llms.txt"
+  href={withBasePath('/llms.txt')}
+/>
 
-<!-- Google JSON-LD Structured Data -->
-{
-  isHome && (
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify(personData)}
-    />
-  )
-}
-{
-  pubDate ? (
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify(blogPostingData)}
-    />
-  ) : (
-    <script
-      is:inline
-      type="application/ld+json"
-      set:html={JSON.stringify(webPageData)}
-    />
-  )
-}
+<!-- Structured data -->
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(structuredData)}
+/>
 
 <!-- Router -->
 <ClientRouter />

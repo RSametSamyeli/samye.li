@@ -4,6 +4,8 @@
 
 **The personal site and blog of Samet Samyeli.**
 
+[![CI](https://github.com/RSametSamyeli/samye.li/actions/workflows/ci.yml/badge.svg)](https://github.com/RSametSamyeli/samye.li/actions/workflows/ci.yml)
+
 [samye.li](https://samye.li) · [lodos.md](https://lodos.md) · [X](https://x.com/SametSamyeli2) · [LinkedIn](https://www.linkedin.com/in/sametsamyeli/) · [Medium](https://medium.com/@sametsamyeli) · [sam@samye.li](mailto:sam@samye.li)
 
 </div>
@@ -31,6 +33,15 @@ This is the source of [samye.li](https://samye.li): my home on the web, where I 
 | **Theme** | Based on [AntfuStyle](https://github.com/lin-stephanie/astro-antfustyle-theme) by Stephanie Lin |
 | **Hosting** | Docker → nginx on Coolify, behind Cloudflare |
 | **Deploys** | Every push to `main` deploys automatically via a GitHub webhook |
+| **Checks** | [CI](.github/workflows/ci.yml) runs formatting, lint, `astro check` and the build on every push and PR |
+
+## Brand
+
+The mark (a lowercase **s** and the accent dot of samye**.**li), the favicon, the app and touch icons and every share card are drawn from one file, [`src/utils/brand.ts`](src/utils/brand.ts), at build time with [Satori](https://github.com/vercel/satori). Change a colour there and every icon and OG image follows. Each post and page gets its own card: what it is, when it was published, its title and its description.
+
+## Security and caching
+
+nginx sends a Content Security Policy, `nosniff`, a strict referrer policy, a locked-down permissions policy and frame protection on every response ([`nginx/security-headers.conf`](nginx/security-headers.conf)); HSTS is set at Cloudflare. Hashed assets are cached for a year, pages and the markdown mirrors are revalidated on every request, and client work under `/branding/` is kept out of search engines with `X-Robots-Tag`.
 
 ## Built to be read by machines too
 
@@ -62,11 +73,15 @@ src/
 │   └── projects/        # projects (data.json)
 ├── data/stats.json      # X followers + GitHub contributions
 ├── pages/               # routes, plus the .md mirrors, llms.txt and robots.txt
-├── utils/ai.ts          # builds every machine-readable projection
+├── utils/
+│   ├── ai.ts            # builds every machine-readable projection
+│   ├── brand.ts         # the mark and colours: icons and OG images
+│   └── og-image/        # the share cards (Satori → PNG)
 └── config.ts            # site info, navigation, social links
+public/icons/            # project logos (lodos.md, gazla.co)
 scripts/fetch-stats.mjs  # refreshes stats.json
-nginx.conf               # static serving + markdown content negotiation
-Dockerfile               # build with pnpm, serve with nginx
+nginx/                   # static serving, markdown negotiation, security headers
+Dockerfile               # build with pnpm, serve with nginx (with a healthcheck)
 ```
 
 ## Writing

@@ -1,5 +1,5 @@
 ---
-import { FEATURES } from '~/config'
+import { COLLECTION_LABELS, FEATURES } from '~/config'
 import { withBasePath } from '~/utils/path'
 import { parseTuple } from '~/utils/data'
 
@@ -13,6 +13,11 @@ if (includes.length === 0)
     "Search feature enabled, but `includes` array is empty. Please check 'src/config.ts' for the correct configuration."
   )
 const filterEnabled = filter && includes.length > 1
+
+/** a collection's name as readers see it (COLLECTION_LABELS), else capitalized */
+const labelOf = (item: string) =>
+  COLLECTION_LABELS[item as keyof typeof COLLECTION_LABELS] ??
+  item.charAt(0).toUpperCase() + item.slice(1)
 const batchSize = parseTuple(batchLoadSize, 'batchLoadSize')
 const maxItems = parseTuple(maxItemsPerPage, 'maxItemsPerPage')
 ---
@@ -61,8 +66,9 @@ const maxItems = parseTuple(maxItemsPerPage, 'maxItemsPerPage')
                 aria-[selected=false]:op-40 aria-[selected=true]:op-100
                 aria-[selected=false]:hover:op-70 op-transition cursor-pointer"
               data-type={item.toLowerCase()}
+              data-label={labelOf(item)}
             >
-              {item.charAt(0).toUpperCase() + item.slice(1)}
+              {labelOf(item)}
             </button>
           ))}
         </div>
@@ -425,8 +431,8 @@ const maxItems = parseTuple(maxItemsPerPage, 'maxItemsPerPage')
     #updateHint = (type?: string) => {
       let hint = 'Search'
       if (type) {
-        const cap = type.charAt(0).toUpperCase() + type.slice(1)
-        hint = `Search ${cap}`.trim()
+        const tab = this.querySelector<HTMLElement>(`[data-type="${type}"]`)
+        hint = `Search ${tab?.dataset.label ?? type}`.trim()
       }
 
       if (this.#input) this.#input.placeholder = hint

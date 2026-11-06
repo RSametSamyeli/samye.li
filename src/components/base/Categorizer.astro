@@ -1,6 +1,5 @@
 ---
 import { slug } from '~/utils/toc'
-import { UI } from '~/config'
 
 interface Props {
   idx?: number
@@ -10,33 +9,28 @@ interface Props {
 }
 
 const { idx, text, needId = false, wide = false } = Astro.props
-const { maxGroupColumns } = UI.groupView
 ---
 
-<div
-  {...needId ? { id: slug(text) } : {}}
-  class={`toc-heading relative h-20
-    pointer-events-none select-none
-    ${idx !== undefined ? 'slide-enter' : ''}`}
-  style={idx !== undefined ? { '--enter-stage': idx - 2 } : undefined}
->
-  {
-    !wide ? (
-      <span
-        class="absolute left--12 top--8
-          op-10 text-8em text-stroke-2 text-stroke-#aaa font-800 color-transparent"
-      >
+{
+  wide ? (
+    <h2
+      {...(needId ? { id: slug(text) } : {})}
+      class="toc-heading m-0 px-3.5 pb-2 border-b border-[#8883] text-sm font-600 uppercase tracking-[0.12em] op-60"
+    >
+      {text}
+    </h2>
+  ) : (
+    <div
+      {...(needId ? { id: slug(text) } : {})}
+      class:list={[
+        'toc-heading relative h-20 pointer-events-none select-none',
+        { 'slide-enter': idx !== undefined },
+      ]}
+      style={idx !== undefined ? { '--enter-stage': idx - 2 } : undefined}
+    >
+      <span class="absolute left--12 top--8 op-10 text-8em text-stroke-2 text-stroke-#aaa font-800 color-transparent">
         {text}
       </span>
-    ) : (
-      <span
-        class={`absolute top-0 op-35 dark:op-20
-          text-5em lt-lg:text-4.5em lt-sm:(text-3.6em top-2) text-stroke-1.5 text-stroke-#aaa
-          font-800 color-transparent leading-1em
-          ${maxGroupColumns === 3 ? 'left--4' : 'left-[14%] lt-lg:left--4'}`}
-      >
-        {text}
-      </span>
-    )
-  }
-</div>
+    </div>
+  )
+}

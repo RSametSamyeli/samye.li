@@ -2,7 +2,6 @@
 title: 'Samet Samyeli'
 subtitle: 'Senior Full-Stack Engineer · Tech Founder'
 description: ''
-bgType: plum
 ogImage: true
 ---
 
@@ -14,10 +13,13 @@ import HomeStats from '~/components/widgets/HomeStats.astro'
 <BaseLayout
   title={frontmatter.title}
   description={frontmatter.description}
-  bgType={frontmatter.bgType}
   ogImage={frontmatter.ogImage}
 >
-  <StandardLayout title={frontmatter.title} subtitle={frontmatter.subtitle}>
+  <StandardLayout
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    articleClass="home"
+  >
     <RenderPage slot="article" collectionType="home" id="intro" />
     <HomeStats slot="article" />
     <RenderPage slot="article" collectionType="home" id="index" />

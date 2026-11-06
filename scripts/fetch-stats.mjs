@@ -37,9 +37,14 @@ try {
 }
 
 const next = { x, github }
-if (JSON.stringify(next) === JSON.stringify({ x: prev.x ?? null, github: prev.github ?? null })) {
+if (
+  JSON.stringify(next) ===
+  JSON.stringify({ x: prev.x ?? null, github: prev.github ?? null })
+) {
   console.log('No changes.')
 } else {
   await writeFile(FILE, JSON.stringify(next, null, 2) + '\n')
-  console.log(`Updated: X ${x?.followers} followers, GitHub ${github?.total} contributions`)
+  console.log(
+    `Updated: X ${x?.followers} followers, GitHub ${github?.total} contributions`
+  )
 }

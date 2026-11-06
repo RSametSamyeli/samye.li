@@ -45,10 +45,30 @@ export async function GET() {
     '',
     '## Pages',
     '',
-    entry('Home', '/', '/index.md', 'who Samet is, what he is building, and his work history.'),
-    entry('lodos.md', '/lodos/', '/lodos.md', 'the product he is building: the company that runs itself.'),
-    entry('Projects', '/projects/', '/projects.md', 'everything he has built or contributed to.'),
-    entry('Blog', '/blog/', '/blog.md', 'his writing on software architecture, security and AI.'),
+    entry(
+      'Home',
+      '/',
+      '/index.md',
+      'who Samet is, what he is building, and his work history.'
+    ),
+    entry(
+      'lodos.md',
+      '/lodos/',
+      '/lodos.md',
+      'the product he is building: the company that runs itself.'
+    ),
+    entry(
+      'Projects',
+      '/projects/',
+      '/projects.md',
+      'everything he has built or contributed to.'
+    ),
+    entry(
+      'Blog',
+      '/blog/',
+      '/blog.md',
+      'his writing on software architecture, security and AI.'
+    ),
     entry('Notes', '/shorts/', '/shorts.md', 'short notes and quick thoughts.'),
     '',
     '## Writing',

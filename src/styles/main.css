@@ -1,5 +1,7 @@
 :root {
   --c-bg: #fff;
+  /* the brand's accent (src/utils/brand.ts): the dot of samye.li */
+  --c-accent: #d90e47;
   --c-scrollbar: #ddd;
   --c-scrollbar-hover: #bbb;
   --c-text: #000;
@@ -7,6 +9,7 @@
 
 :root.dark {
   --c-bg: #050505;
+  --c-accent: #ff2d6a;
   --c-scrollbar: #222;
   --c-scrollbar-hover: #444;
   --c-text: #fff;
@@ -16,10 +19,6 @@ html {
   scroll-behavior: smooth;
 
   background-color: var(--c-bg);
-}
-
-html:has(#bg-rose) {
-  scrollbar-gutter: stable;
 }
 
 body {

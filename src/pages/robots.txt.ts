@@ -24,5 +24,7 @@ export function GET() {
     `Sitemap: ${abs('/sitemap-index.xml')}`,
     '',
   ].join('\n')
-  return new Response(body, { headers: { 'content-type': 'text/plain; charset=utf-8' } })
+  return new Response(body, {
+    headers: { 'content-type': 'text/plain; charset=utf-8' },
+  })
 }
