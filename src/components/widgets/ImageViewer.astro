@@ -1,5 +1,5 @@
 ---
-import Viewer from 'viewerjs'
+import type Viewer from 'viewerjs'
 
 interface Props {
   selector: string
@@ -25,34 +25,46 @@ const {
 </image-viewer>
 
 <script>
-  import Viewer from 'viewerjs'
+  import type Viewer from 'viewerjs'
   import { lockScroll, unlockScroll } from '~/utils/misc'
 
+  /**
+   * viewerjs (about 40 KB) is fetched only for an article that has an image to
+   * zoom, the first time one is seen, and configured once.
+   */
+  let viewerModule: Promise<typeof Viewer> | null = null
+  const loadViewer = () =>
+    (viewerModule ??= import('viewerjs').then(({ default: Viewer }) => {
+      configure(Viewer)
+      return Viewer
+    }))
+
   // global default config
-  Viewer.setDefaults({
-    button: false,
-    navbar: 2,
-    title: [
-      2,
-      (img: HTMLImageElement) => {
-        // prevent filling in alt with image URL when empty
-        const fn = img.src.split('/').pop()?.split(/[?#]/)[0]
-        return img.alt && img.alt !== fn ? img.alt : ''
+  const configure = (Viewer: typeof import('viewerjs').default) =>
+    Viewer.setDefaults({
+      button: false,
+      navbar: 2,
+      title: [
+        2,
+        (img: HTMLImageElement) => {
+          // prevent filling in alt with image URL when empty
+          const fn = img.src.split('/').pop()?.split(/[?#]/)[0]
+          return img.alt && img.alt !== fn ? img.alt : ''
+        },
+      ],
+      toolbar: false,
+      container: 'image-viewer',
+      initialCoverage: 1,
+      transition: false,
+      zIndexInline: 300,
+      filter: (image: HTMLImageElement) => {
+        return (
+          !image.classList.contains('no-zoom') &&
+          image.parentNode?.nodeName !== 'A' &&
+          image.parentNode?.parentNode?.nodeName !== 'A'
+        )
       },
-    ],
-    toolbar: false,
-    container: 'image-viewer',
-    initialCoverage: 1,
-    transition: false,
-    zIndexInline: 300,
-    filter: (image: HTMLImageElement) => {
-      return (
-        !image.classList.contains('no-zoom') &&
-        image.parentNode?.nodeName !== 'A' &&
-        image.parentNode?.parentNode?.nodeName !== 'A'
-      )
-    },
-  })
+    })
 
   export class ImageViewer extends HTMLElement {
     #viewer: InstanceType<typeof Viewer> | null = null
@@ -67,13 +79,15 @@ const {
       let userOptions: Viewer.Options = {}
       if (this.dataset.options) userOptions = JSON.parse(this.dataset.options)
 
-      const initOrUpdateViewer = () => {
+      const initOrUpdateViewer = async () => {
         if (this.#viewer) {
           this.#viewer.update()
           return
         }
 
         if (container.querySelector('img')) {
+          const Viewer = await loadViewer()
+          if (this.#viewer || !this.isConnected) return
           this.#viewer = new Viewer(container, {
             ...userOptions,
             ...(this.hasAttribute('data-tab-focus') && {
@@ -105,11 +119,13 @@ const {
         }
       }
 
-      initOrUpdateViewer()
+      void initOrUpdateViewer()
 
       // watch for future DOM changes
       if (this.hasAttribute('data-async-insert')) {
-        this.#mutationObserver = new MutationObserver(initOrUpdateViewer)
+        this.#mutationObserver = new MutationObserver(
+          () => void initOrUpdateViewer()
+        )
         this.#mutationObserver.observe(container, {
           childList: true,
         })

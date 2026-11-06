@@ -19,6 +19,7 @@
     "check": "astro check",
     "build": "astro build",
     "preview": "astro preview",
+    "verify": "node scripts/verify-build.mjs",
     "format": "prettier . --check --ignore-unknown",
     "format:write": "prettier . --write --ignore-unknown --cache",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0 --cache",

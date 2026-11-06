@@ -23,7 +23,7 @@ const { showGroupItemColorOnHover } = UI.groupView
   {
     items.map((item) => (
       <Link
-        class={`group relative flex items-center
+        class={`op-100! group relative flex items-center
           px-3.5 pt-2 pb-3.5 rounded-md
           bg-transparent hover:bg-[#88888811]
           text-4.4 transition-all duration-300`}
@@ -49,7 +49,7 @@ const { showGroupItemColorOnHover } = UI.groupView
         </div>
         <div class="flex-auto">
           <div>{item.id}</div>
-          <div class="op-50 text-sm font-normal">{item.desc}</div>
+          <div class="muted text-sm font-normal">{item.desc}</div>
         </div>
       </Link>
     ))

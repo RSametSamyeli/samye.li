@@ -12,7 +12,8 @@ export default defineEcConfig({
     showLineNumbers: false,
     collapseStyle: 'collapsible-auto',
   },
-  minSyntaxHighlightingColorContrast: 0,
+  // Every token at least 5.5:1 against the code background (WCAG AA with margin).
+  minSyntaxHighlightingColorContrast: 5.5,
 
   /* Plugins */
   plugins: [pluginLineNumbers(), pluginCollapsibleSections()],

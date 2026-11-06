@@ -33,7 +33,7 @@ This is the source of [samye.li](https://samye.li): my home on the web, where I 
 | **Theme** | Based on [AntfuStyle](https://github.com/lin-stephanie/astro-antfustyle-theme) by Stephanie Lin |
 | **Hosting** | Docker → nginx on Coolify, behind Cloudflare |
 | **Deploys** | Every push to `main` deploys automatically via a GitHub webhook |
-| **Checks** | [CI](.github/workflows/ci.yml) runs formatting, lint, `astro check` and the build on every push and PR |
+| **Checks** | [CI](.github/workflows/ci.yml) runs formatting, lint, `astro check`, the build and [`verify-build`](scripts/verify-build.mjs) (titles, descriptions, canonicals, OG images, JSON-LD, internal links, sitemap, house style) on every push and PR |
 
 ## Brand
 
@@ -41,7 +41,7 @@ The mark (a lowercase **s** and the accent dot of samye**.**li), the favicon, th
 
 ## Security and caching
 
-nginx sends a Content Security Policy, `nosniff`, a strict referrer policy, a locked-down permissions policy and frame protection on every response ([`nginx/security-headers.conf`](nginx/security-headers.conf)); HSTS is set at Cloudflare. Hashed assets are cached for a year, pages and the markdown mirrors are revalidated on every request, and client work under `/branding/` is kept out of search engines with `X-Robots-Tag`.
+Security issues can be reported as [`/.well-known/security.txt`](https://samye.li/.well-known/security.txt) describes (RFC 9116). nginx sends a Content Security Policy, `nosniff`, a strict referrer policy, a locked-down permissions policy and frame protection on every response ([`nginx/security-headers.conf`](nginx/security-headers.conf)); HSTS is set at Cloudflare. Hashed assets are cached for a year, pages and the markdown mirrors are revalidated on every request, and client work under `/branding/` is kept out of search engines with `X-Robots-Tag`.
 
 ## Built to be read by machines too
 

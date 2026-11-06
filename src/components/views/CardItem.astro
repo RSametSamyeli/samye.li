@@ -244,7 +244,7 @@ if (images && images.length > 0) {
         tags && tags.length > 0 && (
           <>
             <div class="grow" />
-            {date && <p class="text-sm op-60">{formatDate(date)}</p>}
+            {date && <p class="text-sm muted">{formatDate(date)}</p>}
             <div
               role="none"
               class="w-[calc(100%+2rem)] h-[1px] my-3.5 ml--4 bg-[#8884]"
@@ -299,7 +299,7 @@ if (images && images.length > 0) {
                 {formatDate(date)}
               </Link>
             ) : (
-              <p class="op-60">{formatDate(date)}</p>
+              <p class="muted">{formatDate(date)}</p>
             )}
             {details && (
               <button class="details-switch op-50 op-transition hover:op-100">

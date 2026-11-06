@@ -46,7 +46,7 @@ if (tocPosition === 'right' && tagPosition === 'right') asidePosition = 'right'
   (anchors.length > 0 || headings.length > 0) &&
   tags.length > 0 &&
   asidePosition !== 'both' ? (
-    <aside
+    <div
       id="desktop-aside"
       class="group/aside fixed top-8.875rem z-100 lt-lgp:hidden
         data-[position=left]:(left-2rem right-auto)
@@ -109,11 +109,11 @@ if (tocPosition === 'right' && tagPosition === 'right') asidePosition = 'right'
           style={tagStyle ? `display: none; ${tagStyle}` : 'display: none;'}
         />
       </TagFilter>
-    </aside>
+    </div>
   ) : (
     <>
       {(anchors.length > 0 || headings.length > 0) && (
-        <aside
+        <div
           id="desktop-aside"
           class="group/aside fixed top-8.875rem z-100 lt-lgp:hidden
             data-[position=left]:(left-2rem right-auto)
@@ -150,10 +150,10 @@ if (tocPosition === 'right' && tagPosition === 'right') asidePosition = 'right'
               <TocSidebar headings={headings} style={tocStyle} />
             )}
           </Toc>
-        </aside>
+        </div>
       )}
       {tags.length > 0 && (
-        <aside
+        <div
           id="desktop-aside"
           class="group/aside fixed top-8.875rem z-100 lt-lgp:hidden
             data-[position=left]:(left-2rem right-auto)
@@ -183,7 +183,7 @@ if (tocPosition === 'right' && tagPosition === 'right') asidePosition = 'right'
           <TagFilter>
             <TagSidebar tags={tags} style={tagStyle} />
           </TagFilter>
-        </aside>
+        </div>
       )}
     </>
   )

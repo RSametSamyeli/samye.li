@@ -8,5 +8,7 @@ const pathSegments = ensureTrailingSlash(Astro.url.pathname)
 const href = pathSegments.length > 1 ? pathSegments.join('/') + '/' : '/'
 ---
 
-<span class="font-mono op-50">&gt; </span>
-<Link class="font-mono op-50!" {href}>cd ..</Link>
+<span class="font-mono muted">&gt; </span>
+<Link class="font-mono op-100! muted! hover:c-[var(--c-text)]!" {href}
+  >cd ..</Link
+>

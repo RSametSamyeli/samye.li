@@ -253,6 +253,13 @@ const structuredData = {
 {ogImageURL && <meta property="og:image:height" content="630" />}
 {ogImageURL && <meta property="og:image:alt" content={pageTitle} />}
 
+<!-- The author's profiles, as the same person (rel=me) -->
+{
+  UI.socialLinks
+    .filter(({ link }) => link.startsWith('http'))
+    .map(({ link }) => <link rel="me" href={link} />)
+}
+
 <!-- Canonical URL -->
 {
   noindex ? (

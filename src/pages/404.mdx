@@ -1,6 +1,6 @@
 ---
 title: '404'
-subtitle: ''
+subtitle: 'This page does not exist, or it moved.'
 description: Page not found
 ogImage: fallback
 ---
@@ -15,6 +15,25 @@ import StandardLayout from '~/layouts/StandardLayout.astro'
   ogImage={frontmatter.ogImage}
 >
   <StandardLayout title={frontmatter.title} subtitle={frontmatter.subtitle}>
-    <p slot="article">Nice to meet you tho!</p>
+    <div slot="article">
+      <p>Try one of these instead:</p>
+      <ul>
+        <li>
+          <a href="/">Home</a>: who I am and what I am building
+        </li>
+        <li>
+          <a href="/blog/">Blog</a>: writing on software architecture, security
+          and AI
+        </li>
+        <li>
+          <a href="/projects/">Projects</a>: lodos.md, gazla.co and the rest
+        </li>
+      </ul>
+      <p>
+        Or search the site with the magnifier at the top. If a link here brought
+        you to this page, tell me at{' '}
+        <a href="mailto:sam@samye.li">sam@samye.li</a>.
+      </p>
+    </div>
   </StandardLayout>
 </BaseLayout>

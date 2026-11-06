@@ -2,6 +2,8 @@
   --c-bg: #fff;
   /* the brand's accent (src/utils/brand.ts): the dot of samye.li */
   --c-accent: #d90e47;
+  /* secondary text: 4.8:1 on white (WCAG AA), in place of dimming with opacity */
+  --c-muted: #6b7280;
   --c-scrollbar: #ddd;
   --c-scrollbar-hover: #bbb;
   --c-text: #000;
@@ -10,6 +12,8 @@
 :root.dark {
   --c-bg: #050505;
   --c-accent: #ff2d6a;
+  /* secondary text: 6:1 on #050505 */
+  --c-muted: #8e8e93;
   --c-scrollbar: #222;
   --c-scrollbar-hover: #444;
   --c-text: #fff;
@@ -379,4 +383,11 @@ html.dark .search-kbd-key {
   overscroll-behavior-y: none;
   touch-action: pan-x;
   scrollbar-width: none;
+}
+
+/* Secondary text (dates, subtitles, descriptions): a colour with enough
+   contrast in both themes, not opacity, which also faded its links. */
+.muted,
+.muted\! {
+  color: var(--c-muted) !important;
 }
