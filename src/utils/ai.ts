@@ -34,6 +34,7 @@ export const TEXT_PAGES = [
   'beliefs',
   'colophon',
   'security-by-construction',
+  'community',
 ] as const
 export type TextPage = (typeof TEXT_PAGES)[number]
 

@@ -1,0 +1,20 @@
+---
+title: 'Community'
+subtitle: 'People building things together'
+description: "Samet Samyeli's community work: co-founding the Open Software Network (AYA) after the 2023 Türkiye earthquakes, AfetHarita and deprem.io, gazla.co, and open source."
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout title={frontmatter.title} subtitle={frontmatter.subtitle}>
+    <RenderPage slot="article" collectionType="home" id="community" />
+  </StandardLayout>
+</BaseLayout>

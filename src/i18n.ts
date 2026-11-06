@@ -39,6 +39,7 @@ export const TRANSLATED_PAGES = [
   '/colophon/',
   '/blog/',
   '/security-by-construction/',
+  '/community/',
 ] as const
 
 const withSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`)
@@ -125,6 +126,10 @@ export const STRINGS = {
     portraitAlt: 'Portrait of Samet Samyeli',
     categories: {} as Record<string, string>,
     pages: 'Pages',
+    onThisSite: 'On this site',
+    beyondCode: 'Beyond code',
+    community: 'Community',
+    securityByConstruction: 'Security by construction',
     minutes: 'min',
     now: 'Now',
     uses: 'Uses',
@@ -179,6 +184,10 @@ export const STRINGS = {
       'Side Projects': 'Yan projeler',
     } as Record<string, string>,
     pages: 'Sayfalar',
+    onThisSite: 'Bu sitede',
+    beyondCode: 'Kodun ötesinde',
+    community: 'Topluluk',
+    securityByConstruction: 'Yapısal güvenlik',
     minutes: 'dk',
     now: 'Şu an',
     uses: 'Kullandıklarım',

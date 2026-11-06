@@ -1,0 +1,91 @@
+---
+import { localeOf, localized, STRINGS } from '~/i18n'
+import { withBasePath } from '~/utils/path'
+
+/**
+ * The home page's side menu: the pages about the person rather than the work
+ * listings, floating to the left of the text on wide screens. On narrower
+ * screens it would cover the text, so it hides there; the footer carries the
+ * same links on every page.
+ */
+const locale = localeOf(Astro.url.pathname)
+const S = STRINGS[locale]
+
+/** The groups, each a heading and its pages (by English path). */
+const groups = [
+  {
+    title: S.onThisSite,
+    pages: [
+      ['/now/', S.now],
+      ['/beliefs/', S.beliefs],
+      ['/security-by-construction/', S.securityByConstruction],
+      ['/uses/', S.uses],
+      ['/colophon/', S.colophon],
+    ],
+  },
+  { title: S.beyondCode, pages: [['/community/', S.community]] },
+].map(({ title, pages }) => ({
+  title,
+  items: pages.map(([path, text]) => ({
+    href: withBasePath(localized(path, locale)),
+    text,
+  })),
+}))
+---
+
+<nav
+  aria-label={S.onThisSite}
+  class="home-aside fixed top-[9.5rem] z-10 lt-lgp:hidden print:hidden flex flex-col gap-7"
+>
+  {
+    groups.map(({ title, items }) => (
+      <div>
+        <p class="m-0 mb-3 text-xs font-600 uppercase tracking-[0.12em] muted">
+          {title}
+        </p>
+        <ul class="m-0 p-0 list-none flex flex-col gap-2">
+          {items.map(({ href, text }) => (
+            <li class="m-0 p-0">
+              <a
+                class="home-aside-link no-underline whitespace-nowrap text-sm muted hover:c-[var(--c-text)] transition-colors"
+                href={href}
+              >
+                {text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</nav>
+
+<style>
+  /* Left of the 65ch text column, with a gap: the column is centred, so its
+     left edge is half the viewport minus half its width. */
+  .home-aside {
+    left: max(1.5rem, calc(50% - 32.5ch - 15rem));
+  }
+  .home-aside-link {
+    border-bottom: none;
+  }
+  .home-aside-link::before {
+    content: '';
+    display: inline-block;
+    width: 0.75rem;
+    height: 1px;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    background: currentColor;
+    opacity: 0.5;
+    transition: width 0.2s ease;
+  }
+  .home-aside-link:hover::before {
+    width: 1.25rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .home-aside-link::before {
+      transition: none;
+    }
+  }
+</style>

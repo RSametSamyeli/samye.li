@@ -1,0 +1,20 @@
+---
+title: 'Topluluk'
+subtitle: 'Birlikte bir şeyler kuran insanlar'
+description: "Samet Samyeli'nin topluluk çalışmaları: 2023 depremlerinden sonra Açık Yazılım Ağı (AYA), AfetHarita ve deprem.io, gazla.co ve açık kaynak katkıları."
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout title={frontmatter.title} subtitle={frontmatter.subtitle}>
+    <RenderPage slot="article" collectionType="home" id="tr/community" />
+  </StandardLayout>
+</BaseLayout>

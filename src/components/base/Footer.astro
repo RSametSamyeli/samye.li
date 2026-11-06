@@ -9,7 +9,9 @@ const S = STRINGS[locale]
 const year = new Date().getFullYear()
 
 /** The site's "slash pages", in the page's language. */
-const pages = (['now', 'beliefs', 'uses', 'colophon'] as const).map((key) => ({
+const pages = (
+  ['now', 'beliefs', 'uses', 'community', 'colophon'] as const
+).map((key) => ({
   href: withBasePath(localized(`/${key}/`, locale)),
   text: S[key],
 }))

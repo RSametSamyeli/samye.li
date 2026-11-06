@@ -80,6 +80,12 @@ export async function GET() {
       'his essay series on building software where the unsafe thing cannot happen, with summaries and links.'
     ),
     entry(
+      'Community',
+      '/community/',
+      '/community.md',
+      'his community work: the Open Software Network (AYA) after the 2023 Türkiye earthquakes, gazla.co, open source.'
+    ),
+    entry(
       'Now',
       '/now/',
       '/now.md',
@@ -128,6 +134,12 @@ export async function GET() {
       '/tr/security-by-construction/',
       '/tr/security-by-construction.md',
       'güvensiz şeyin hiç olamadığı yazılımlar üzerine yazı dizisi.'
+    ),
+    entry(
+      'Topluluk',
+      '/tr/community/',
+      '/tr/community.md',
+      'topluluk çalışmaları: Açık Yazılım Ağı (AYA), gazla.co, açık kaynak.'
     ),
     entry('Şu an', '/tr/now/', '/tr/now.md', 'şu sıralar neye odaklandığı.'),
     entry(

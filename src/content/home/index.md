@@ -12,6 +12,8 @@
 
 ## Beyond code
 
+More on this is on [community](./community/).
+
 - Co-founded the **Open Software Network (AYA)** during the 2023 Türkiye earthquakes: 25,000+ volunteer developers, building [AfetHarita](https://afetharita.com) (used by AFAD) and [deprem.io](https://deprem.io). Covered by [TIME](https://time.com/6254500/turkey-earthquake-twitter-musk-rescue/).
 - Mediterranean **ILCA sailing champion**: 13 medals, 2 cups, racing since age six.
 
