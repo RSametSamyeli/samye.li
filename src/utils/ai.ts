@@ -10,6 +10,9 @@ import { SITE, UI } from '~/config'
 import stats from '~/data/stats.json'
 import projectsData from '~/content/projects/data.json'
 import { getFilteredPosts, getSortedPosts } from '~/utils/data'
+import { LOCALES, localized, STRINGS } from '~/i18n'
+
+import type { Locale } from '~/i18n'
 
 export const ORIGIN = SITE.website.replace(/\/$/, '')
 export const abs = (path: string) => `${ORIGIN}${path}`
@@ -21,10 +24,14 @@ export const abs = (path: string) => `${ORIGIN}${path}`
  *   /            -> /index.md
  *   /lodos/      -> /lodos.md
  *   /blog/x/     -> /blog/x.md
+ *   /tr/         -> /tr/index.md
+ *   /tr/lodos/   -> /tr/lodos.md
  */
 export function markdownMirrorPath(pathname: string): string | null {
   const p = pathname.replace(/\/+$/, '') || '/'
   if (p === '/') return '/index.md'
+  if (p === '/tr') return '/tr/index.md'
+  if (/^\/tr\/(lodos|projects)$/.test(p)) return `${p}.md`
   if (/^\/(lodos|projects|blog|shorts)$/.test(p)) return `${p}.md`
   if (/^\/(blog|shorts)\/[^/.]+$/.test(p)) return `${p}.md`
   return null
@@ -52,6 +59,7 @@ export function plainMarkdown(body: string): string {
   return body
     .replace(/:link\[([^\]]+)\]\{id=(\S+?)(?:\s[^}]*)?\}/g, '[$1]($2)')
     .replace(/\]\(\.\/([^)]*)\)/g, (_m, p) => `](${abs('/' + p)})`)
+    .replace(/\]\((\/[^)]*)\)/g, (_m, p) => `](${abs(p)})`)
     .replace(/<p>[\s\S]*?<\/p>/g, '')
     .replace(/\n-{3,}\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n')
@@ -69,21 +77,21 @@ function docHeader(title: string, canonical: string, description?: string) {
   ].join('\n')
 }
 
-const fmt = new Intl.NumberFormat('en-US')
-
 export function socialLinksMarkdown() {
   return UI.socialLinks.map((l) => `- [${l.title}](${l.link})`).join('\n')
 }
 
-export function activityMarkdown() {
+export function activityMarkdown(locale: Locale = 'en') {
+  const S = STRINGS[locale]
+  const n = new Intl.NumberFormat(LOCALES[locale].intl)
   const lines: string[] = []
   if (stats.x)
     lines.push(
-      `- ${fmt.format(stats.x.followers)} followers on X ([@${stats.x.handle}](https://x.com/${stats.x.handle}))`
+      `- ${n.format(stats.x.followers)} ${S.followersOnX} ([@${stats.x.handle}](https://x.com/${stats.x.handle}))`
     )
   if (stats.github)
     lines.push(
-      `- ${fmt.format(stats.github.total)} GitHub contributions in the last year ([${stats.github.user}](https://github.com/${stats.github.user}))`
+      `- ${S.contributionsTotal(n.format(stats.github.total))} ([${stats.github.user}](https://github.com/${stats.github.user}))`
     )
   return lines.join('\n')
 }
@@ -94,19 +102,27 @@ async function homeBody(id: string) {
   return plainMarkdown(entry.body)
 }
 
-export async function homeDoc() {
-  const meta = await pageMeta('index.mdx')
+/** Where a page's sources live in each language. */
+const prefix = (locale: Locale) => (locale === 'en' ? '' : `${locale}/`)
+
+export async function homeDoc(locale: Locale = 'en') {
+  const S = STRINGS[locale]
+  const meta = await pageMeta(`${prefix(locale)}index.mdx`)
   return [
-    docHeader(`${meta.title}: ${meta.subtitle}`, abs('/'), SITE.description),
-    `![Portrait of ${SITE.author}](${abs('/images/samet-samyeli.jpg')})`,
+    docHeader(
+      `${meta.title}: ${meta.subtitle}`,
+      abs(localized('/', locale)),
+      meta.description || S.description
+    ),
+    `![${S.portraitAlt}](${abs('/images/samet-samyeli.jpg')})`,
     '',
-    await homeBody('intro'),
+    await homeBody(`${prefix(locale)}intro`),
     '',
-    '## Activity',
+    `## ${S.activity}`,
     '',
-    activityMarkdown(),
+    activityMarkdown(locale),
     '',
-    (await homeBody('index')).replace(/^\*\*(.+?)\*\*$/gm, '## $1'),
+    await homeBody(`${prefix(locale)}index`),
     '',
     '## Links',
     '',
@@ -115,21 +131,22 @@ export async function homeDoc() {
   ].join('\n')
 }
 
-export async function lodosDoc() {
-  const meta = await pageMeta('lodos.mdx')
+export async function lodosDoc(locale: Locale = 'en') {
+  const meta = await pageMeta(`${prefix(locale)}lodos.mdx`)
   return [
     docHeader(
       `${meta.title}: ${meta.subtitle}`,
-      abs('/lodos/'),
+      abs(localized('/lodos/', locale)),
       meta.description
     ),
-    await homeBody('lodos'),
+    await homeBody(`${prefix(locale)}lodos`),
     '',
   ].join('\n')
 }
 
-export async function projectsDoc() {
-  const meta = await pageMeta('projects.mdx')
+export async function projectsDoc(locale: Locale = 'en') {
+  const meta = await pageMeta(`${prefix(locale)}projects.mdx`)
+  const S = STRINGS[locale]
   // data.json order is the display order (the collection loader does not keep it).
   const groups = new Map<string, typeof projectsData>()
   for (const p of projectsData) {
@@ -139,11 +156,18 @@ export async function projectsDoc() {
   }
   const sections = [...groups].map(
     ([category, list]) =>
-      `## ${category}\n\n` +
-      list.map((p) => `- [${p.id}](${p.link}): ${p.desc}`).join('\n')
+      `## ${S.categories[category] ?? category}\n\n` +
+      list
+        .map((p) => {
+          const link = p.link.startsWith('/')
+            ? abs(localized(p.link, locale))
+            : p.link
+          return `- [${p.id}](${link}): ${locale === 'tr' ? p.descTr : p.desc}`
+        })
+        .join('\n')
   )
   return [
-    docHeader(meta.title, abs('/projects/'), meta.subtitle),
+    docHeader(meta.title, abs(localized('/projects/', locale)), meta.subtitle),
     sections.join('\n\n'),
     '',
   ].join('\n')

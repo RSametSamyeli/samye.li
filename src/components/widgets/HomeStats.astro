@@ -1,5 +1,16 @@
 ---
 import stats from '~/data/stats.json'
+import { LOCALES, localeOf, STRINGS } from '~/i18n'
+
+const locale = localeOf(Astro.url.pathname)
+const S = STRINGS[locale]
+const intl = LOCALES[locale].intl
+const dayFmt = new Intl.DateTimeFormat(intl, {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+})
 
 interface Day {
   date: string
@@ -14,7 +25,7 @@ const github = stats.github as {
   days: Day[]
 } | null
 
-const fmt = new Intl.NumberFormat('en-US')
+const fmt = new Intl.NumberFormat(intl)
 
 // Lay days out GitHub-style: one column per week, Sunday on top.
 const CELL = 11
@@ -40,7 +51,7 @@ for (const c of cells) {
   const m = new Date(c.date + 'T00:00:00Z').getUTCMonth()
   if (m !== lastMonth) {
     months.push({
-      label: new Date(c.date + 'T00:00:00Z').toLocaleString('en-US', {
+      label: new Date(c.date + 'T00:00:00Z').toLocaleString(intl, {
         month: 'short',
         timeZone: 'UTC',
       }),
@@ -53,7 +64,7 @@ if (months.length > 1 && months[1].col - months[0].col < 3) months.shift()
 if (months.length && cols - months[months.length - 1].col < 3) months.pop()
 ---
 
-{(x || github) && <h2 id="activity">Activity</h2>}
+{(x || github) && <h2 id="activity">{S.activity}</h2>}
 {
   (x || github) && (
     <div class="not-prose flex flex-wrap gap-x-8 gap-y-3">
@@ -66,7 +77,7 @@ if (months.length && cols - months[months.length - 1].col < 3) months.pop()
         >
           <span class="i-ri-twitter-x-fill op-60" />
           <span class="stat-value">{fmt.format(x.followers)}</span>
-          <span class="muted">followers on X</span>
+          <span class="muted">{S.followersOnX}</span>
         </a>
       )}
       {github && (
@@ -78,7 +89,7 @@ if (months.length && cols - months[months.length - 1].col < 3) months.pop()
         >
           <span class="i-uil-github-alt op-60" />
           <span class="stat-value">{fmt.format(github.total)}</span>
-          <span class="muted">contributions in the last year</span>
+          <span class="muted">{S.contributionsLastYear}</span>
         </a>
       )}
     </div>
@@ -92,7 +103,7 @@ if (months.length && cols - months[months.length - 1].col < 3) months.pop()
         viewBox={`0 -16 ${width} ${height + 16}`}
         width={width}
         role="img"
-        aria-label={`${fmt.format(github.total)} GitHub contributions in the last year`}
+        aria-label={S.contributionsTotal(fmt.format(github.total))}
       >
         {months.map((m) => (
           <text x={m.col * (CELL + GAP)} y={-5} class="heatmap-month">
@@ -108,7 +119,12 @@ if (months.length && cols - months[months.length - 1].col < 3) months.pop()
             rx={2}
             class={`lvl-${c.level}`}
           >
-            <title>{`${c.count} contribution${c.count === 1 ? '' : 's'} on ${c.date}`}</title>
+            <title>
+              {S.contributionsOn(
+                c.count,
+                dayFmt.format(new Date(`${c.date}T00:00:00Z`))
+              )}
+            </title>
           </rect>
         ))}
       </svg>

@@ -2,6 +2,9 @@
 import Link from '~/components/base/Link.astro'
 import { SITE } from '~/config'
 import { withBasePath } from '~/utils/path'
+import { stringsFor } from '~/i18n'
+
+const S = stringsFor(Astro.url.pathname)
 
 const year = new Date().getFullYear()
 
@@ -9,7 +12,7 @@ const year = new Date().getFullYear()
 const links = [
   { href: withBasePath('/rss.xml'), text: 'RSS' },
   { href: withBasePath('/llms.txt'), text: 'llms.txt' },
-  { href: 'https://github.com/RSametSamyeli/samye.li', text: 'Source' },
+  { href: 'https://github.com/RSametSamyeli/samye.li', text: S.source },
 ]
 ---
 
@@ -18,7 +21,7 @@ const links = [
     class="prose mx-auto flex lt-sm:flex-col items-center justify-between gap-2 text-sm muted"
   >
     <span>© {year} {SITE.author}</span>
-    <nav aria-label="Elsewhere" class="flex items-center gap-4">
+    <nav aria-label={S.elsewhere} class="flex items-center gap-4">
       {
         links.map(({ href, text }) => (
           <Link

@@ -43,6 +43,10 @@ The mark (a lowercase **s** and the accent dot of samye**.**li), the favicon, th
 
 Security issues can be reported as [`/.well-known/security.txt`](https://samye.li/.well-known/security.txt) describes (RFC 9116). nginx sends a Content Security Policy, `nosniff`, a strict referrer policy, a locked-down permissions policy and frame protection on every response ([`nginx/security-headers.conf`](nginx/security-headers.conf)); HSTS is set at Cloudflare. Hashed assets are cached for a year, pages and the markdown mirrors are revalidated on every request, and client work under `/branding/` is kept out of search engines with `X-Robots-Tag`.
 
+## Two languages
+
+The home page, the lodos.md page and the projects are published in English at the root and in Turkish under [`/tr/`](https://samye.li/tr/), with the same paths. [`src/i18n.ts`](src/i18n.ts) holds the interface text and which pages are translated; Turkish page text lives in `src/content/home/tr/` and `src/pages/tr/`. Each translated page names the other with `hreflang` (and `x-default` English), in its `<head>` and in the sitemap; its share card, JSON-LD, breadcrumbs and markdown mirror are in its own language. The blog and the notes are written in English. There is no automatic redirect by browser language (search engines crawl from one place); a TR/EN switch in the navigation leads to the same page in the other language.
+
 ## Built to be read by machines too
 
 The site is meant to be found, read and cited by people and by AI assistants alike. Every machine-readable file is generated from the same content the pages render from, so nothing drifts out of date.

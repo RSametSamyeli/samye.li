@@ -13,13 +13,6 @@ export interface Site {
   xHandle: `@${string}`
 
   /**
-   * Follows the name in the home page's title, for searches on the name.
-   *
-   * @example 'Senior Full-Stack Engineer, Founder of lodos.md'
-   */
-  tagline: string
-
-  /**
    * Specifies the final deployed URL, which must start with `http://` or `https://`.
    *
    * It will be passed to the
@@ -356,6 +349,7 @@ type NavBarComponentType =
   | 'searchButton'
   | 'themeButton'
   | 'rssLink'
+  | 'langSwitch'
   | 'hr'
 
 export interface NavBarLayout {

@@ -1,12 +1,14 @@
 ---
+import { stringsFor } from '~/i18n'
 
+const S = stringsFor(Astro.url.pathname)
 ---
 
 <button
   id="nav-open-button"
   class="hidden lt-md:block op-60 hover:op-100 op-transition"
-  title="Navigation"
-  aria-label="Navigation"
+  title={S.navigation}
+  aria-label={S.navigation}
   aria-expanded="false"
   aria-controls="nav-panel"
 >

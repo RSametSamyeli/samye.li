@@ -159,6 +159,11 @@ export const projectSchema = z.object({
   desc: z
     .string()
     .describe('**Required**. A brief description summarizing the project.'),
+  descTr: z
+    .string()
+    .describe(
+      '**Required**. The description in Turkish, for the /tr/projects/ page.'
+    ),
   icon: z
     .string()
     .regex(

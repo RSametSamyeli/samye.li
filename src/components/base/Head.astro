@@ -9,6 +9,7 @@ import {
 import { silentLogger } from '~/utils/server'
 import { withBasePath } from '~/utils/path'
 import { COLLECTION_LABELS, SITE, UI } from '~/config'
+import { alternatesOf, englishPath, LOCALES, localeOf, STRINGS } from '~/i18n'
 import { markdownMirrorPath } from '~/utils/ai'
 
 interface Props {
@@ -25,15 +26,23 @@ const { title, description, ogImage, pubDate, lastModDate, tags, noindex } =
   Astro.props
 
 const X_HANDLE = SITE.xHandle
-const isHome = (Astro.url.pathname.replace(/\/+$/, '') || '/') === '/'
+const locale = localeOf(Astro.url.pathname)
+const S = STRINGS[locale]
+const lang = LOCALES[locale].lang
+// The same page in every language it exists in (hreflang), x-default English.
+const alternates = alternatesOf(Astro.url.pathname)?.map((a) => ({
+  ...a,
+  href: new URL(a.path, SITE.website).href,
+}))
+const isHome = englishPath(Astro.url.pathname) === '/'
 // The home page leads with the name and what he does, which is what a search
 // on the name should show. Every other page is "Page · Samet Samyeli".
 const pageTitle = isHome
-  ? `${SITE.title} · ${SITE.tagline}`
+  ? `${SITE.title} · ${S.tagline}`
   : title && title !== SITE.title
     ? `${title} · ${SITE.title}`
     : SITE.title
-const pageDescription = description || SITE.description
+const pageDescription = description || S.description
 
 const siteName = new URL(SITE.website).hostname
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
@@ -67,8 +76,8 @@ const person = {
   'name': SITE.author,
   'alternateName': 'Rüzgar Samet Samyeli',
   'url': SITE.website,
-  'jobTitle': 'Senior Full-Stack Engineer',
-  'description': SITE.description,
+  'jobTitle': S.jobTitle,
+  'description': S.description,
   'email': 'mailto:sam@samye.li',
   'image': {
     '@type': 'ImageObject',
@@ -105,8 +114,8 @@ const website = {
   '@id': WEBSITE_ID,
   'url': SITE.website,
   'name': siteName,
-  'description': SITE.description,
-  'inLanguage': SITE.lang,
+  'description': S.description,
+  'inLanguage': Object.values(LOCALES).map((l) => l.lang),
   'publisher': { '@id': PERSON_ID },
 }
 
@@ -122,7 +131,7 @@ const page = pubDate
       'datePublished': pubDate,
       'dateModified': lastModDate || pubDate,
       ...(tags?.length && { keywords: tags }),
-      'inLanguage': SITE.lang,
+      'inLanguage': lang,
       'author': { '@id': PERSON_ID },
       'publisher': { '@id': PERSON_ID },
       'isPartOf': { '@id': WEBSITE_ID },
@@ -135,7 +144,7 @@ const page = pubDate
       'name': pageTitle,
       'description': pageDescription,
       ...(ogImageURL && { image: ogImageURL }),
-      'inLanguage': SITE.lang,
+      'inLanguage': lang,
       'isPartOf': { '@id': WEBSITE_ID },
       ...(isHome
         ? { mainEntity: { '@id': PERSON_ID } }
@@ -147,21 +156,24 @@ const page = pubDate
 
 // Where the page sits: Home > Blog > Post. Sections are named as in the
 // navigation; the last crumb is the page itself.
+// In Turkish the trail starts at /tr/.
 const SECTION_NAMES: Record<string, string> = {
   blog: COLLECTION_LABELS.blog,
   shorts: COLLECTION_LABELS.shorts,
-  projects: 'Projects',
+  projects: S.projects,
   lodos: 'lodos.md',
 }
-const segments = Astro.url.pathname.split('/').filter(Boolean)
+const home = LOCALES[locale].home
+const segments = englishPath(Astro.url.pathname).split('/').filter(Boolean)
 const crumbs = [
-  { name: SITE.title, url: SITE.website },
+  { name: SITE.title, url: new URL(home, SITE.website).href },
   ...segments.map((segment, i) => ({
     name:
       i === segments.length - 1
         ? title || SECTION_NAMES[segment] || segment
         : SECTION_NAMES[segment] || segment,
-    url: new URL(`/${segments.slice(0, i + 1).join('/')}/`, SITE.website).href,
+    url: new URL(`${home}${segments.slice(0, i + 1).join('/')}/`, SITE.website)
+      .href,
   })),
 ]
 const breadcrumb =
@@ -234,7 +246,17 @@ const structuredData = {
 <meta property="og:description" content={pageDescription} />
 {ogImageURL && <meta property="og:image" content={ogImageURL} />}
 <meta property="og:site_name" content={siteName} />
-<meta property="og:locale" content={SITE.ogLocale} />
+<meta property="og:locale" content={LOCALES[locale].ogLocale} />
+{
+  alternates
+    ?.filter((a) => a.locale !== locale)
+    .map((a) => (
+      <meta
+        property="og:locale:alternate"
+        content={LOCALES[a.locale].ogLocale}
+      />
+    ))
+}
 {
   pubDate && (
     <>
@@ -266,6 +288,22 @@ const structuredData = {
   UI.socialLinks
     .filter(({ link }) => link.startsWith('http'))
     .map(({ link }) => <link rel="me" href={link} />)
+}
+
+<!-- This page in other languages -->
+{
+  alternates && (
+    <>
+      {alternates.map((a) => (
+        <link rel="alternate" hreflang={LOCALES[a.locale].lang} href={a.href} />
+      ))}
+      <link
+        rel="alternate"
+        hreflang="x-default"
+        href={alternates.find((a) => a.locale === 'en')?.href}
+      />
+    </>
+  )
 }
 
 <!-- Canonical URL -->

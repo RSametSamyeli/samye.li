@@ -6,6 +6,9 @@ import TagSidebar from '~/components/tags/TagSidebar.astro'
 import { FEATURES } from '~/config'
 
 import type { MarkdownHeading } from 'astro'
+import { stringsFor } from '~/i18n'
+
+const S = stringsFor(Astro.url.pathname)
 
 interface Props {
   anchors?: string[]
@@ -65,7 +68,7 @@ if (tocPosition === 'right' && tagPosition === 'right') asidePosition = 'right'
             group-hover/content:data-[display-mode=content]:aria-[selected=true]:op-60
             group-hover/aside:data-[display-mode=hover]:aria-[selected=true]:op-60"
           aria-selected="true"
-          aria-label="Table of contents"
+          aria-label={S.tableOfContents}
           data-type="toc"
           data-display-mode={tocDisplayMode}
         >
@@ -130,8 +133,8 @@ if (tocPosition === 'right' && tagPosition === 'right') asidePosition = 'right'
               group-hover/content:data-[display-mode=content]:op-60
               group-hover/aside:data-[display-mode=hover]:op-60
               ${tocButtonText ? 'op-100!' : undefined}`}
-            aria-label="Table of contents"
-            title="Table of contents"
+            aria-label={S.tableOfContents}
+            title={S.tableOfContents}
             data-display-mode={tocDisplayMode}
           >
             {tocButtonText ? (

@@ -14,6 +14,8 @@ import {
 } from '~/utils/og-image/routing'
 
 import type { CollectionEntry } from 'astro:content'
+import { LOCALES, localeOf, STRINGS } from '~/i18n'
+
 import type { OgImageCollectionConfig } from '~/types'
 
 export interface OgImageManifestItem {
@@ -26,6 +28,8 @@ export interface OgImageManifestItem {
   description: string
   /** show the author's portrait (the home page's card) */
   portrait?: boolean
+  /** the page's language, for casing the kicker (Turkish has a dotted İ) */
+  lang: string
 }
 
 export interface PostEntry {
@@ -151,6 +155,7 @@ function addManifestItem(
   manifest.set(slug, {
     slug,
     authorOrBrand,
+    lang: LOCALES[localeOf(pathname)].lang,
     ...card,
   })
 }
@@ -202,9 +207,27 @@ function addPageManifestItem(
   page: CollectionEntry<'pages'>,
   authorOrBrand: string
 ) {
+  const pathname = getPagePathname(page.id)
+
+  // A home page in another language (/tr/): the author's card, in that
+  // language, with the portrait.
+  if (
+    pathname !== '/' &&
+    page.data.title === authorOrBrand &&
+    page.data.ogImage === true
+  ) {
+    const S = STRINGS[localeOf(pathname)]
+    addManifestItem(manifest, pathname, authorOrBrand, {
+      title: authorOrBrand,
+      kicker: S.ogKicker,
+      description: S.ogDescription,
+      portrait: true,
+    })
+    return
+  }
+
   if (!shouldGenerateOgImage(authorOrBrand, page.data)) return
 
-  const pathname = getPagePathname(page.id)
   addManifestItem(manifest, pathname, authorOrBrand, {
     title: page.data.title,
     kicker: authorOrBrand,

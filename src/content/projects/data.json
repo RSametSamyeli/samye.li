@@ -4,62 +4,71 @@
     "link": "/lodos/",
     "desc": "The company that runs itself: an AI team across every department; you decide, nobody else sees your data",
     "icon": "/icons/lodos.svg",
-    "category": "Building Now"
+    "category": "Building Now",
+    "descTr": "Kendi kendini yöneten şirket: her departmanda çalışan bir yapay zekâ ekibi; kararları siz verirsiniz, verilerinizi kimse görmez"
   },
   {
     "id": "gazla.co",
     "link": "https://gazla.co",
     "desc": "Startup community of 50,000+ people and 280+ startups",
     "icon": "/icons/gazla.svg",
-    "category": "Building Now"
+    "category": "Building Now",
+    "descTr": "50.000'den fazla kişi ve 280'i aşkın girişimden oluşan girişim topluluğu"
   },
   {
     "id": "OHIF Viewers",
     "link": "https://ohif.org/",
     "desc": "Contributed a viewport-aware grayscale tool to the open-source medical imaging viewer",
     "icon": "i-ph-brain-duotone",
-    "category": "Open Source & Community"
+    "category": "Open Source & Community",
+    "descTr": "Açık kaynak tıbbi görüntüleme yazılımına, görüntü alanına göre çalışan bir gri tonlama aracı kazandırdım"
   },
   {
     "id": "AfetHarita",
     "link": "https://afetharita.com",
     "desc": "Emergency aid map built by 25,000+ volunteers after the 2023 Türkiye earthquakes, used by AFAD",
     "icon": "i-ph-map-trifold-duotone",
-    "category": "Open Source & Community"
+    "category": "Open Source & Community",
+    "descTr": "2023 Türkiye depremlerinden sonra 25.000'den fazla gönüllünün geliştirdiği, AFAD'ın da kullandığı acil yardım haritası"
   },
   {
     "id": "deprem.io",
     "link": "https://deprem.io",
     "desc": "Earthquake relief platform built with the Open Software Network (AYA)",
     "icon": "i-ph-hand-heart-duotone",
-    "category": "Open Source & Community"
+    "category": "Open Source & Community",
+    "descTr": "Açık Yazılım Ağı (AYA) ile geliştirilen deprem yardım platformu"
   },
   {
     "id": "Designy",
     "link": "https://github.com/RSametSamyeli/prompt-to-mobile-app-design",
     "desc": "AI-powered platform that turns plain-language prompts into mobile and web app designs",
     "icon": "i-ph-magic-wand-duotone",
-    "category": "Side Projects"
+    "category": "Side Projects",
+    "descTr": "Sade bir dille anlatılan isteği mobil ve web uygulama tasarımına dönüştüren yapay zekâ platformu"
   },
   {
     "id": "Commerci",
     "link": "https://github.com/RSametSamyeli/commerci",
     "desc": "AI image generator with image restore and generative fill",
     "icon": "i-ph-image-duotone",
-    "category": "Side Projects"
+    "category": "Side Projects",
+    "descTr": "Görsel onarma ve üretken doldurma özellikli yapay zekâ görsel üreticisi"
   },
   {
     "id": "AI Shopping Agent Inbox",
     "link": "https://github.com/RSametSamyeli/ai-shopping",
     "desc": "Agent inbox UI for managing AI-powered customer conversations, built with Next.js 16",
     "icon": "i-ph-chats-circle-duotone",
-    "category": "Side Projects"
+    "category": "Side Projects",
+    "descTr": "Yapay zekâ destekli müşteri konuşmalarını yönetmek için Next.js 16 ile geliştirilmiş ajan gelen kutusu arayüzü"
   },
   {
     "id": "Tailwind Design to CSS",
     "link": "https://github.com/RSametSamyeli/tailwindcss-design-to-css",
     "desc": "Pixel-perfect design-to-code conversions using only Tailwind CSS",
     "icon": "i-devicon-tailwindcss",
-    "category": "Side Projects"
+    "category": "Side Projects",
+    "descTr": "Yalnızca Tailwind CSS ile piksel piksel tasarımdan koda dönüşümler"
   }
 ]

@@ -15,14 +15,17 @@ export function ogImageMarkup({
   title,
   description,
   portrait,
+  lang = 'en',
 }: Pick<OgImageManifestItem, 'kicker' | 'title' | 'description'> & {
+  /** the page's language: the kicker is upper-cased by its rules */
+  lang?: string
   /** the author's portrait as a data URL, shown at the right */
   portrait?: string
 }) {
   const titleSize = title.length > LONG_TITLE ? 64 : 76
 
   const kickerHtml = kicker
-    ? `<div style="display: flex; margin-bottom: 24px; font-size: ${portrait ? 21 : 26}px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: ${BRAND.accent};">${escapeHtml(kicker)}</div>`
+    ? `<div style="display: flex; margin-bottom: 24px; font-size: ${portrait ? 21 : 26}px; font-weight: 700; letter-spacing: 0.08em; color: ${BRAND.accent};">${escapeHtml(kicker.toLocaleUpperCase(lang))}</div>`
     : ''
   const descriptionHtml = description
     ? `<div style="display: block; margin-top: 28px; font-size: 30px; line-height: 1.4; color: ${BRAND.muted}; overflow: hidden; line-clamp: 2;">${escapeHtml(description)}</div>`

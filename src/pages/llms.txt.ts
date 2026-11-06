@@ -74,6 +74,30 @@ export async function GET() {
     ),
     entry('Notes', '/shorts/', '/shorts.md', 'short notes and quick thoughts.'),
     '',
+    '## Türkçe (Turkish)',
+    '',
+    'The home page, lodos.md and the projects are also published in Turkish; the',
+    'writing is in English.',
+    '',
+    entry(
+      'Ana sayfa',
+      '/tr/',
+      '/tr/index.md',
+      'Samet Samyeli kimdir, neler geliştiriyor.'
+    ),
+    entry(
+      'lodos.md',
+      '/tr/lodos/',
+      '/tr/lodos.md',
+      'kendi kendini yöneten şirket.'
+    ),
+    entry(
+      'Projeler',
+      '/tr/projects/',
+      '/tr/projects.md',
+      'geliştirdiği ve katkıda bulunduğu projeler.'
+    ),
+    '',
     '## Writing',
     '',
     ...blog.map(

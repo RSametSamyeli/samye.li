@@ -103,6 +103,39 @@ for (const file of files.filter((f) => f.endsWith('.html'))) {
     }
   }
 
+  // Languages: <html lang> follows the path (/tr/ is Turkish), and every
+  // hreflang alternate exists and points back (Google ignores one-way pairs).
+  const lang = attr(html, /<html[^>]* lang="([a-z-]+)"/)
+  const expected = /^tr(\/|$)/.test(file) ? 'tr' : 'en'
+  if (lang && lang !== expected)
+    fail(file, `html lang="${lang}", expected ${expected}`)
+  const alternates = [
+    ...head.matchAll(
+      /<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g
+    ),
+  ].map(([, hreflang, href]) => ({ hreflang, href }))
+  if (alternates.length) {
+    const self = canonical
+    if (!alternates.some((a) => a.href === self && a.hreflang === lang))
+      fail(file, 'hreflang set does not include the page itself')
+    if (!alternates.some((a) => a.hreflang === 'x-default'))
+      fail(file, 'hreflang without x-default')
+    for (const { hreflang, href } of alternates) {
+      if (hreflang === 'x-default' || href === self) continue
+      const target = href.slice(SITE.length)
+      if (!href.startsWith(SITE) || !exists(target)) {
+        fail(file, `hreflang ${hreflang} target missing: ${href}`)
+        continue
+      }
+      const other = fs.readFileSync(
+        path.join(DIST, target, 'index.html'),
+        'utf8'
+      )
+      if (!other.includes(`hreflang="${lang}" href="${self}"`))
+        fail(file, `hreflang ${hreflang} -> ${href} does not link back`)
+    }
+  }
+
   for (const [, ref] of html.matchAll(/\s(?:href|src)="(\/[^"]*)"/g)) {
     if (ref.startsWith('//') || ref.startsWith('/cdn-cgi/')) continue
     if (!exists(ref)) fail(file, `broken internal link: ${ref}`)

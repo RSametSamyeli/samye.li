@@ -1,0 +1,25 @@
+---
+title: Projeler
+subtitle: Geliştirdiğim, katkıda bulunduğum ya da şu an üzerinde çalıştığım işler
+description: "Samet Samyeli'nin projeleri: lodos.md ve gazla.co, OHIF, AfetHarita ve deprem.io'daki açık kaynak çalışmaları, yapay zekâ ve e-ticaret alanındaki yan projeler."
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import GroupView from '~/components/views/GroupView.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout
+    class="max-w-300 group/content"
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    isCentered={true}
+  >
+    <GroupView collectionType="projects" pageToc={true} locale="tr" />
+  </StandardLayout>
+</BaseLayout>

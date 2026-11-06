@@ -9,7 +9,13 @@ const pages = defineCollection({
 })
 
 const home = defineCollection({
-  loader: glob({ base: './src/content/home', pattern: '*.{md,mdx}' }),
+  // ids are the file paths without the extension: 'index', 'tr/index'
+  // (the default would turn 'tr/index' into 'tr')
+  loader: glob({
+    base: './src/content/home',
+    pattern: '**/*.{md,mdx}',
+    generateId: ({ entry }) => entry.replace(/\.mdx?$/, ''),
+  }),
 })
 
 const blog = defineCollection({

@@ -2,6 +2,9 @@
 import { COLLECTION_LABELS, FEATURES } from '~/config'
 import { withBasePath } from '~/utils/path'
 import { parseTuple } from '~/utils/data'
+import { stringsFor } from '~/i18n'
+
+const S = stringsFor(Astro.url.pathname)
 
 const { search } = FEATURES
 if (!search || (Array.isArray(search) && !search[0])) return
@@ -27,8 +30,8 @@ const maxItems = parseTuple(maxItemsPerPage, 'maxItemsPerPage')
   type="button"
   id="search-switch"
   class="op-60 hover:op-100 op-transition"
-  title="Search"
-  aria-label="Search"
+  title={S.search}
+  aria-label={S.search}
 >
   <div u-i-grommet-icons-search></div>
 </button>

@@ -1,0 +1,29 @@
+---
+title: 'Samet Samyeli'
+subtitle: 'Kıdemli Full-Stack Mühendis · Teknoloji Girişimcisi'
+description: "Kıdemli full-stack mühendis; gazla.co ve lodos.md'nin kurucusu. Yazılım mimarisi, güvenlik ve yapay zekâ üzerine yazıyor."
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+import HomeStats from '~/components/widgets/HomeStats.astro'
+import portrait from '~/assets/samet-samyeli.jpg'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    articleClass="home"
+    avatar={{ src: portrait, alt: "Samet Samyeli'nin portresi" }}
+  >
+    <RenderPage slot="article" collectionType="home" id="tr/intro" />
+    <HomeStats slot="article" />
+    <RenderPage slot="article" collectionType="home" id="tr/index" />
+  </StandardLayout>
+</BaseLayout>

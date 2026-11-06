@@ -1,19 +1,24 @@
 ---
 import Link from '~/components/base/Link.astro'
 import { UI } from '~/config'
+import { localized } from '~/i18n'
+
+import type { Locale } from '~/i18n'
 
 export interface GroupItemData {
   id: string
   link: string
   desc: string
+  descTr: string
   icon: string
 }
 
 interface Props {
   items: GroupItemData[]
+  locale?: Locale
 }
 
-const { items } = Astro.props
+const { items, locale = 'en' } = Astro.props
 const { showGroupItemColorOnHover } = UI.groupView
 ---
 
@@ -27,7 +32,9 @@ const { showGroupItemColorOnHover } = UI.groupView
           px-3.5 pt-2 pb-3.5 rounded-md
           bg-transparent hover:bg-[#88888811]
           text-4.4 transition-all duration-300`}
-        href={item.link}
+        href={
+          item.link.startsWith('/') ? localized(item.link, locale) : item.link
+        }
         external={/^https?:/.test(item.link)}
       >
         <div class="flex-none pt-2 pr-5" aria-hidden="true">
@@ -49,7 +56,9 @@ const { showGroupItemColorOnHover } = UI.groupView
         </div>
         <div class="flex-auto">
           <div>{item.id}</div>
-          <div class="muted text-sm font-normal">{item.desc}</div>
+          <div class="muted text-sm font-normal">
+            {locale === 'tr' ? item.descTr : item.desc}
+          </div>
         </div>
       </Link>
     ))

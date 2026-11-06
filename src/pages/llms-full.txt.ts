@@ -19,6 +19,10 @@ export async function GET() {
     await listDoc('blog'),
     await listDoc('shorts'),
     ...(await Promise.all(shorts.map((p) => postDoc('shorts', p)))),
+    // The same pages in Turkish, for answers in Turkish
+    await homeDoc('tr'),
+    await lodosDoc('tr'),
+    await projectsDoc('tr'),
   ]
   return new Response(docs.join('\n---\n\n'), {
     headers: { 'content-type': 'text/plain; charset=utf-8' },

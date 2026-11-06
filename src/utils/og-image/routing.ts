@@ -114,7 +114,9 @@ export function getPostPathname(pathnamePrefix: string, postId: string) {
  * 'blog/hi' -> '/blog/hi/'
  */
 export function getPagePathname(pageId: string) {
-  return pageId === 'index' ? '/' : ensureTrailingSlash(`/${pageId}`)
+  // 'index' -> '/', 'tr/index' -> '/tr/', 'tr/lodos' -> '/tr/lodos/'
+  const path = pageId.replace(/(^|\/)index$/, '')
+  return path ? ensureTrailingSlash(`/${path}`) : '/'
 }
 
 /**
@@ -194,8 +196,10 @@ export function resolveOgImagePathname({
     return FALLBACK_OG_IMAGE_PATHNAME
   }
 
-  if (title?.trim() && title !== authorOrBrand) {
-    const pagePathname = stripBasePath(pathname)
+  // A page titled with the author's name gets its own card too, except the
+  // root, whose card is the fallback: the Turkish home page (/tr/).
+  const pagePathname = stripBasePath(pathname)
+  if (title?.trim() && (title !== authorOrBrand || pagePathname !== '/')) {
     return pathnameToOgImagePath(pagePathname)
   }
 

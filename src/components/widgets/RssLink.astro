@@ -1,6 +1,9 @@
 ---
 import Link from '~/components/base/Link.astro'
 import { withBasePath } from '~/utils/path'
+import { stringsFor } from '~/i18n'
+
+const S = stringsFor(Astro.url.pathname)
 
 interface Props {
   class?: string
@@ -12,7 +15,7 @@ const { class: className } = Astro.props
 <Link
   class:list={['op-transition', className]}
   href={withBasePath('/rss.xml')}
-  title="RSS feed"
+  title={S.rssFeed}
   external={true}
 >
   <div u-i-lucide-rss></div>

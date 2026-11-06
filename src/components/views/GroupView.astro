@@ -8,16 +8,21 @@ import Categorizer from '~/components/base/Categorizer.astro'
 import GroupItem from '~/components/views/GroupItem.astro'
 import projectsData from '~/content/projects/data.json'
 import { FEATURES, UI } from '~/config'
+import { STRINGS } from '~/i18n'
 
 import type { CollectionKey } from 'astro:content'
+import type { Locale } from '~/i18n'
 import type { GroupItemData } from '~/components/views/GroupItem.astro'
 
 interface Props {
   collectionType: CollectionKey
   pageToc?: boolean
+  locale?: Locale
 }
 
-const { collectionType, pageToc = false } = Astro.props
+const { collectionType, pageToc = false, locale = 'en' } = Astro.props
+/** a category's name in the page's language */
+const categoryName = (key: string) => STRINGS[locale].categories[key] ?? key
 
 const WARNING = `No content available for display.
   Please review and modify <code>GroupView.astro</code> as needed.`
@@ -60,14 +65,14 @@ const tocEnabled = Array.isArray(toc) && toc[0] && pageToc
       {tocEnabled && (
         <>
           <DesktopAside
-            anchors={Object.keys(data)}
+            anchors={Object.keys(data).map(categoryName)}
             style={
               toc[1].displayPosition === 'right'
                 ? 'left: calc(100vw - 15.625rem + 5rem)'
                 : undefined
             }
           />
-          <MobileControl anchors={Object.keys(data)} />
+          <MobileControl anchors={Object.keys(data).map(categoryName)} />
         </>
       )}
       {Object.keys(data).map((key, idx) => (
@@ -78,8 +83,12 @@ const tocEnabled = Array.isArray(toc) && toc[0] && pageToc
             'max-width': `calc(350px * ${UI.groupView.maxGroupColumns} + ${UI.groupView.maxGroupColumns - 1} * 0.75rem)`,
           }}
         >
-          <Categorizer text={key} needId={tocEnabled} wide={true} />
-          <GroupItem items={data[key]} />
+          <Categorizer
+            text={categoryName(key)}
+            needId={tocEnabled}
+            wide={true}
+          />
+          <GroupItem items={data[key]} {locale} />
         </section>
       ))}
     </>

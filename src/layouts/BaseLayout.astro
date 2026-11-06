@@ -11,8 +11,9 @@ import Footer from '~/components/base/Footer.astro'
 import ToTopButton from '~/components/widgets/ToTopButton.astro'
 import Backdrop from '~/components/base/Backdrop.astro'
 
-import { SITE, UI, FEATURES } from '~/config'
+import { UI, FEATURES } from '~/config'
 import { withBasePath } from '~/utils/path'
+import { LOCALES, localeOf, STRINGS } from '~/i18n'
 
 interface Props {
   title?: string
@@ -27,6 +28,7 @@ interface Props {
 
 const { title, description, ogImage, pubDate, lastModDate, tags, noindex } =
   Astro.props
+const locale = localeOf(Astro.url.pathname)
 
 let style: Record<string, string> = {}
 
@@ -44,7 +46,7 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
 ---
 
 <!doctype html>
-<html lang={SITE.lang}>
+<html lang={LOCALES[locale].lang}>
   <head>
     <Head
       {title}
@@ -71,7 +73,7 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
       href="#main"
       class="sr-only focus:(not-sr-only fixed start-1 top-1.5 op-20)"
     >
-      Skip to content
+      {STRINGS[locale].skipToContent}
     </Link>
 
     <!-- Nav Bar -->

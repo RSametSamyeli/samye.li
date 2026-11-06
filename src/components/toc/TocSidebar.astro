@@ -5,6 +5,9 @@ import { generateToc } from '~/utils/toc'
 import { FEATURES } from '~/config'
 
 import type { MarkdownHeading } from 'astro'
+import { stringsFor } from '~/i18n'
+
+const S = stringsFor(Astro.url.pathname)
 
 type Props =
   | {
@@ -36,7 +39,7 @@ const specHeadings = generateToc(headings, minHeadingLevel, maxHeadingLevel)
     [.prose:hover_&[data-display-mode=content]]:op-60
     group-hover/content:data-[display-mode=content]:op-60
     data-[display-mode=hover]:hover:op-60"
-  aria-label="Table of contents"
+  aria-label={S.tableOfContents}
   data-position={displayPosition}
   data-display-mode={displayMode}
   {style}

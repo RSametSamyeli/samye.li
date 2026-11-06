@@ -1,13 +1,15 @@
 ---
+import { stringsFor } from '~/i18n'
 
+const S = stringsFor(Astro.url.pathname)
 ---
 
 <button
   id="theme-switch"
   class="op-60 hover:op-100 op-transition"
-  title="Toggle theme"
+  title={S.toggleTheme}
   role="switch"
-  aria-label="Dark mode"
+  aria-label={S.darkMode}
   aria-checked="false"
 >
   <div u-i-ri-sun-line u-dark:i-ri-moon-line></div>

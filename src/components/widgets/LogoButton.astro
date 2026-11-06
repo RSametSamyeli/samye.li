@@ -2,13 +2,17 @@
 import Link from '~/components/base/Link.astro'
 import { withBasePath } from '~/utils/path'
 import { SITE } from '~/config'
+import { LOCALES, localeOf, STRINGS } from '~/i18n'
+
+const locale = localeOf(Astro.url.pathname)
+const home = withBasePath(LOCALES[locale].home)
 ---
 
 <Link
   class="select-none op-100! op-transition"
-  href={withBasePath('/')}
-  aria-label={`${SITE.author}, home`}
-  aria-current={Astro.url.pathname === `${withBasePath('/')}` ? 'page' : false}
+  href={home}
+  aria-label={`${SITE.author}, ${STRINGS[locale].homeLabel}`}
+  aria-current={Astro.url.pathname === home ? 'page' : false}
 >
   <div class="logo-container">
     <span class="logo-text">samye<span class="logo-dot">.</span>li</span>

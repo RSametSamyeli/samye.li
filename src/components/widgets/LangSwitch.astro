@@ -1,0 +1,24 @@
+---
+import { counterpartOf, LOCALES, localeOf, STRINGS } from '~/i18n'
+import { withBasePath } from '~/utils/path'
+
+/**
+ * The other language: the same page in it when there is one, else its home.
+ * Shown as its short name (TR / EN), named in full for screen readers.
+ */
+const here = localeOf(Astro.url.pathname)
+const { locale, path } = counterpartOf(Astro.url.pathname)
+const target = LOCALES[locale]
+---
+
+<a
+  class="op-80! hover:op-100! op-transition no-underline! text-sm font-600 tracking-wide"
+  href={withBasePath(path)}
+  hreflang={target.lang}
+  lang={target.lang}
+  title={STRINGS[here].switchTo}
+  aria-label={STRINGS[here].switchTo}
+  data-lang-switch
+>
+  {target.short}
+</a>

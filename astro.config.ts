@@ -8,6 +8,7 @@ import { unified } from '@astrojs/markdown-remark'
 import { remarkPlugins, rehypePlugins } from './plugins'
 import { SITE } from './src/config'
 import { sitemapIndex } from './src/utils/sitemap'
+import { alternatesOf, LOCALES } from './src/i18n'
 
 const sansFallbacks = [
   'ui-sans-serif',
@@ -44,7 +45,20 @@ export default defineConfig({
       filter: (page) => !sitemapPosts.skip.has(page),
       serialize: (item) => {
         const lastmod = sitemapPosts.lastmod.get(item.url)
-        return lastmod ? { ...item, lastmod } : item
+        // a page that exists in both languages lists both, and English as the
+        // default for everyone else (hreflang in the sitemap)
+        const alternates = alternatesOf(new URL(item.url).pathname)
+        const links = alternates && [
+          ...alternates.map((a) => ({
+            lang: LOCALES[a.locale].lang,
+            url: new URL(a.path, SITE.website).href,
+          })),
+          {
+            lang: 'x-default',
+            url: new URL(alternates[0].path, SITE.website).href,
+          },
+        ]
+        return { ...item, ...(lastmod && { lastmod }), ...(links && { links }) }
       },
     }),
     unocss({ injectReset: true }),

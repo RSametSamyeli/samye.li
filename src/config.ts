@@ -1,14 +1,14 @@
+import { STRINGS } from './i18n'
+
 import type { Site, Ui, Features } from './types'
 
 export const SITE: Site = {
   website: 'https://samye.li/',
   base: '/',
   title: 'Samet Samyeli',
-  description:
-    'Senior full-stack engineer and founder of gazla.co and lodos.md. Writing about software architecture, security and AI.',
+  description: STRINGS.en.description,
   author: 'Samet Samyeli',
   xHandle: '@SametSamyeli2',
-  tagline: 'Senior Full-Stack Engineer, Founder of lodos.md',
   lang: 'en',
   ogLocale: 'en_US',
   imageDomains: [],
@@ -81,6 +81,7 @@ export const UI: Ui = {
       'socialLinks',
       'hr',
       'searchButton',
+      'langSwitch',
       'themeButton',
       'rssLink',
     ],
@@ -112,9 +113,8 @@ export const FEATURES: Features = {
     true,
     {
       authorOrBrand: SITE.title,
-      fallbackKicker: 'Senior Full-Stack Engineer · Tech Founder',
-      fallbackTitle:
-        'Building lodos.md and gazla.co. Writing about software architecture, security and AI.',
+      fallbackKicker: STRINGS.en.ogKicker,
+      fallbackTitle: STRINGS.en.ogDescription,
       collections: [
         {
           collection: 'blog',
