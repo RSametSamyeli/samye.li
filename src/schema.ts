@@ -24,6 +24,12 @@ export const pageSchema = z.object({
     .describe(
       'Provides a brief description, used in meta tags for SEO and sharing purposes. If not needed, leave the field as an empty string or delete it, and the `SITE.description` will be used directly.'
     ),
+  updated: z.coerce
+    .date()
+    .optional()
+    .describe(
+      'When the page last changed in substance (a /now page). Shown as "Last updated", and used for dateModified and the sitemap.'
+    ),
   ogImage: z
     .union([z.literal('fallback'), z.string(), z.boolean()])
     .default(true)

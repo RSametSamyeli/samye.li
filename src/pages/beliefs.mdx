@@ -1,0 +1,20 @@
+---
+title: 'Beliefs'
+subtitle: 'What I believe about building software and companies'
+description: "Samet Samyeli's principles on software architecture, security, performance and AI, each linked to the writing behind it."
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout title={frontmatter.title} subtitle={frontmatter.subtitle}>
+    <RenderPage slot="article" collectionType="home" id="beliefs" />
+  </StandardLayout>
+</BaseLayout>

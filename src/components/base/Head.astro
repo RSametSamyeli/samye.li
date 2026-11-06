@@ -146,6 +146,7 @@ const page = pubDate
       ...(ogImageURL && { image: ogImageURL }),
       'inLanguage': lang,
       'isPartOf': { '@id': WEBSITE_ID },
+      ...(lastModDate && { dateModified: lastModDate }),
       ...(isHome
         ? { mainEntity: { '@id': PERSON_ID } }
         : {

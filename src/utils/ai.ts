@@ -27,12 +27,18 @@ export const abs = (path: string) => `${ORIGIN}${path}`
  *   /tr/         -> /tr/index.md
  *   /tr/lodos/   -> /tr/lodos.md
  */
+/** Pages of plain text (src/content/home/<name>.md), in both languages. */
+export const TEXT_PAGES = ['now', 'uses', 'beliefs', 'colophon'] as const
+export type TextPage = (typeof TEXT_PAGES)[number]
+
+const PAGES = ['lodos', 'projects', ...TEXT_PAGES].join('|')
+
 export function markdownMirrorPath(pathname: string): string | null {
   const p = pathname.replace(/\/+$/, '') || '/'
   if (p === '/') return '/index.md'
   if (p === '/tr') return '/tr/index.md'
-  if (/^\/tr\/(lodos|projects)$/.test(p)) return `${p}.md`
-  if (/^\/(lodos|projects|blog|shorts)$/.test(p)) return `${p}.md`
+  if (new RegExp(`^/tr/(${PAGES})$`).test(p)) return `${p}.md`
+  if (new RegExp(`^/(${PAGES}|blog|shorts)$`).test(p)) return `${p}.md`
   if (/^\/(blog|shorts)\/[^/.]+$/.test(p)) return `${p}.md`
   return null
 }
@@ -140,6 +146,28 @@ export async function lodosDoc(locale: Locale = 'en') {
       meta.description
     ),
     await homeBody(`${prefix(locale)}lodos`),
+    '',
+  ].join('\n')
+}
+
+/** A text page (now, uses, beliefs, colophon) in the given language. */
+export async function textPageDoc(name: TextPage, locale: Locale = 'en') {
+  const meta = (await pageMeta(`${prefix(locale)}${name}.mdx`)) as {
+    title: string
+    subtitle?: string
+    description?: string
+    updated?: Date | string
+  }
+  const updated = meta.updated
+    ? `Updated: ${new Date(meta.updated).toISOString().slice(0, 10)}\n`
+    : ''
+  return [
+    docHeader(
+      meta.subtitle ? `${meta.title}: ${meta.subtitle}` : meta.title,
+      abs(localized(`/${name}/`, locale)),
+      meta.description
+    ) + updated,
+    await homeBody(`${prefix(locale)}${name}`),
     '',
   ].join('\n')
 }

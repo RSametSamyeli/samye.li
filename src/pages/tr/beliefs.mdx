@@ -1,0 +1,20 @@
+---
+title: 'İnandıklarım'
+subtitle: 'Yazılım ve şirket kurmak üzerine inandıklarım'
+description: "Samet Samyeli'nin yazılım mimarisi, güvenlik, performans ve yapay zekâ üzerine ilkeleri; her biri arkasındaki yazıya bağlı."
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout title={frontmatter.title} subtitle={frontmatter.subtitle}>
+    <RenderPage slot="article" collectionType="home" id="tr/beliefs" />
+  </StandardLayout>
+</BaseLayout>

@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets'
+
+import { SITE } from '~/config'
+import { localeOf, localized, STRINGS } from '~/i18n'
+import { withBasePath } from '~/utils/path'
+import portrait from '~/assets/samet-samyeli.jpg'
+
+/**
+ * Who wrote this, at the end of every post: the portrait, a line about the
+ * author and what he is building, and where to go next (lodos.md, /now, X,
+ * RSS). Readers get a person behind the writing; search and answer engines
+ * get the author named on the page (rel=author), next to the JSON-LD.
+ */
+const locale = localeOf(Astro.url.pathname)
+const S = STRINGS[locale]
+const x = `https://x.com/${SITE.xHandle.slice(1)}`
+const links = [
+  {
+    href: withBasePath(localized('/lodos/', locale)),
+    text: S.authorLinks.lodos,
+  },
+  { href: withBasePath(localized('/now/', locale)), text: S.authorLinks.now },
+  { href: x, text: S.authorLinks.follow },
+  { href: withBasePath('/rss.xml'), text: S.authorLinks.rss },
+]
+---
+
+<aside
+  aria-label={S.aboutAuthor}
+  class="not-prose mt-12 flex gap-4 items-start p-5 rounded-xl border border-[#8883]"
+>
+  <a
+    href={withBasePath(localized('/', locale))}
+    rel="author"
+    class="flex-none border-none!"
+  >
+    <Image
+      class="block m-0! w-14 h-14 rounded-full! object-cover ring-1 ring-[#8884]"
+      src={portrait}
+      alt={S.portraitAlt}
+      widths={[56, 112, 168]}
+      sizes="56px"
+    />
+  </a>
+  <div class="min-w-0">
+    <p class="m-0 font-600">
+      <a
+        class="no-underline! hover:underline!"
+        href={withBasePath(localized('/', locale))}
+        rel="author">{SITE.author}</a
+      >
+    </p>
+    <p class="mt-1 mb-3 text-sm muted leading-relaxed">{S.authorBio}</p>
+    <p class="m-0 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+      {
+        links.map(({ href, text }) => (
+          <a class="underline-offset-3 hover:underline" href={href}>
+            {text}
+          </a>
+        ))
+      }
+    </p>
+  </div>
+</aside>

@@ -73,11 +73,25 @@ export async function GET() {
       'his writing on software architecture, security and AI.'
     ),
     entry('Notes', '/shorts/', '/shorts.md', 'short notes and quick thoughts.'),
+    entry(
+      'Now',
+      '/now/',
+      '/now.md',
+      'what he is focused on right now (dated).'
+    ),
+    entry(
+      'Beliefs',
+      '/beliefs/',
+      '/beliefs.md',
+      'his principles on architecture, security, performance and AI, each linked to its source.'
+    ),
+    entry('Uses', '/uses/', '/uses.md', 'the tools he builds with.'),
+    entry('Colophon', '/colophon/', '/colophon.md', 'how this site is built.'),
     '',
     '## Türkçe (Turkish)',
     '',
-    'The home page, lodos.md and the projects are also published in Turkish; the',
-    'writing is in English.',
+    'The home page, lodos.md, the projects and the pages below are also published',
+    'in Turkish; the writing is in English.',
     '',
     entry(
       'Ana sayfa',
@@ -96,6 +110,25 @@ export async function GET() {
       '/tr/projects/',
       '/tr/projects.md',
       'geliştirdiği ve katkıda bulunduğu projeler.'
+    ),
+    entry('Şu an', '/tr/now/', '/tr/now.md', 'şu sıralar neye odaklandığı.'),
+    entry(
+      'İnandıklarım',
+      '/tr/beliefs/',
+      '/tr/beliefs.md',
+      'mimari, güvenlik, performans ve yapay zekâ üzerine ilkeleri.'
+    ),
+    entry(
+      'Kullandıklarım',
+      '/tr/uses/',
+      '/tr/uses.md',
+      'geliştirirken kullandığı araçlar.'
+    ),
+    entry(
+      'Künye',
+      '/tr/colophon/',
+      '/tr/colophon.md',
+      'bu sitenin nasıl yapıldığı.'
     ),
     '',
     '## Writing',

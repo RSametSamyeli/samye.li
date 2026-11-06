@@ -15,7 +15,7 @@
 - 2023 Türkiye depremleri sırasında **Açık Yazılım Ağı'nın (AYA)** kurucularından biri oldum. 25.000'den fazla gönüllü geliştiriciyle, AFAD'ın da kullandığı [AfetHarita](https://afetharita.com)'yı ve [deprem.io](https://deprem.io)'yu geliştirdik. Çalışmamız [TIME](https://time.com/6254500/turkey-earthquake-twitter-musk-rescue/) dergisinde haber oldu.
 - **ILCA yelken** sınıfında Akdeniz şampiyonuyum: 13 madalya ve 2 kupa. Altı yaşımdan beri yarışıyorum.
 
-Yazılım mimarisi, güvenlik ve yapay zekâ üzerine [blogda](/blog/) İngilizce yazıyorum. Çalışmalarımın bir kısmı [projeler](/tr/projects/) sayfasında.
+Yazılım mimarisi, güvenlik ve yapay zekâ üzerine [blogda](/blog/) İngilizce yazıyorum; yazılım geliştirmeye dair inandıklarım [inandıklarım](/tr/beliefs/) sayfasında. Çalışmalarımın bir kısmı [projeler](/tr/projects/) sayfasında, bu aralar ne yaptığım ise [şu an](/tr/now/) sayfasında.
 
 ---
 

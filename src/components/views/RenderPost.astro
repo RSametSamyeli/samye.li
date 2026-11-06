@@ -9,6 +9,7 @@ import DesktopAside from '~/components/base/DesktopAside.astro'
 import MobileControl from '~/components/base/MobileControl.astro'
 import PostCover from '~/components/base/PostCover.astro'
 import ShareLink from '~/components/widgets/ShareLink.astro'
+import AuthorCard from '~/components/widgets/AuthorCard.astro'
 import ImageViewer from '~/components/widgets/ImageViewer.astro'
 
 import { getMinutesRead } from '~/utils/data'
@@ -79,6 +80,7 @@ frontmatter to <code>false</code> or remove it to publish the post.`
       }
       <PostCover {cover} {coverAlt} />
       <Content />
+      <AuthorCard />
     </Fragment>
   </StandardLayout>
   <Fragment slot="share">

@@ -1,15 +1,21 @@
 ---
 import Link from '~/components/base/Link.astro'
 import { SITE } from '~/config'
+import { localeOf, localized, STRINGS } from '~/i18n'
 import { withBasePath } from '~/utils/path'
-import { stringsFor } from '~/i18n'
 
-const S = stringsFor(Astro.url.pathname)
-
+const locale = localeOf(Astro.url.pathname)
+const S = STRINGS[locale]
 const year = new Date().getFullYear()
 
-/** Where the site can be read other than as pages: its feed, its source, and its summary for LLMs. */
-const links = [
+/** The site's "slash pages", in the page's language. */
+const pages = (['now', 'beliefs', 'uses', 'colophon'] as const).map((key) => ({
+  href: withBasePath(localized(`/${key}/`, locale)),
+  text: S[key],
+}))
+
+/** Where the site can be read other than as pages: its feed, its summary for LLMs, and its source. */
+const elsewhere = [
   { href: withBasePath('/rss.xml'), text: 'RSS' },
   { href: withBasePath('/llms.txt'), text: 'llms.txt' },
   { href: 'https://github.com/RSametSamyeli/samye.li', text: S.source },
@@ -18,21 +24,41 @@ const links = [
 
 <footer class="slide-enter animate-delay-1600! px-7 mt-auto mb-8">
   <div
-    class="prose mx-auto flex lt-sm:flex-col items-center justify-between gap-2 text-sm muted"
+    class="prose mx-auto flex flex-col gap-3 text-sm muted lt-sm:items-center"
   >
-    <span>© {year} {SITE.author}</span>
-    <nav aria-label={S.elsewhere} class="flex items-center gap-4">
+    <nav
+      aria-label={S.pages}
+      class="flex flex-wrap items-center gap-x-4 gap-y-1 lt-sm:justify-center"
+    >
       {
-        links.map(({ href, text }) => (
+        pages.map(({ href, text }) => (
           <Link
             class="op-100! muted! no-underline! hover:underline!"
             href={href}
-            external={href.startsWith('http')}
+            aria-current={Astro.url.pathname === href ? 'page' : undefined}
           >
             {text}
           </Link>
         ))
       }
     </nav>
+    <div
+      class="flex lt-sm:flex-col items-center justify-between gap-2 lt-sm:gap-1"
+    >
+      <span>© {year} {SITE.author}</span>
+      <nav aria-label={S.elsewhere} class="flex items-center gap-4">
+        {
+          elsewhere.map(({ href, text }) => (
+            <Link
+              class="op-100! muted! no-underline! hover:underline!"
+              href={href}
+              external={href.startsWith('http')}
+            >
+              {text}
+            </Link>
+          ))
+        }
+      </nav>
+    </div>
   </div>
 </footer>

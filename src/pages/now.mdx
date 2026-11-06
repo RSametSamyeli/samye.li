@@ -1,0 +1,26 @@
+---
+title: 'Now'
+subtitle: "What I'm focused on right now"
+description: 'What Samet Samyeli is working on right now: building lodos.md full time, side projects in WebAssembly and open source, and writing.'
+updated: 2026-11-07
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+  lastModDate={new Date(frontmatter.updated).toISOString()}
+>
+  <StandardLayout
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    updated={new Date(frontmatter.updated).toISOString()}
+  >
+    <RenderPage slot="article" collectionType="home" id="now" />
+  </StandardLayout>
+</BaseLayout>

@@ -8,6 +8,8 @@ import {
   postDoc,
   postsOf,
   projectsDoc,
+  TEXT_PAGES,
+  textPageDoc,
 } from '~/utils/ai'
 
 export async function GET() {
@@ -16,6 +18,7 @@ export async function GET() {
     await homeDoc(),
     await lodosDoc(),
     await projectsDoc(),
+    ...(await Promise.all(TEXT_PAGES.map((name) => textPageDoc(name)))),
     await listDoc('blog'),
     await listDoc('shorts'),
     ...(await Promise.all(shorts.map((p) => postDoc('shorts', p)))),
@@ -23,6 +26,7 @@ export async function GET() {
     await homeDoc('tr'),
     await lodosDoc('tr'),
     await projectsDoc('tr'),
+    ...(await Promise.all(TEXT_PAGES.map((name) => textPageDoc(name, 'tr')))),
   ]
   return new Response(docs.join('\n---\n\n'), {
     headers: { 'content-type': 'text/plain; charset=utf-8' },

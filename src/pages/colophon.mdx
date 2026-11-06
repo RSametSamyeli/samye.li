@@ -1,0 +1,20 @@
+---
+title: 'Colophon'
+subtitle: 'How this site is built'
+description: 'How samye.li is built: Astro, a brand drawn in code, two languages, pages written for people and for machines, and a build that checks itself.'
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout title={frontmatter.title} subtitle={frontmatter.subtitle}>
+    <RenderPage slot="article" collectionType="home" id="colophon" />
+  </StandardLayout>
+</BaseLayout>

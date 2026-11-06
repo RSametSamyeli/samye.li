@@ -1,0 +1,26 @@
+---
+title: 'Şu an'
+subtitle: 'Şu sıralar neye odaklandığım'
+description: "Samet Samyeli'nin şu an üzerinde çalıştıkları: tam zamanlı lodos.md, WebAssembly ve açık kaynak yan projeler ve yazılar."
+updated: 2026-11-07
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+  lastModDate={new Date(frontmatter.updated).toISOString()}
+>
+  <StandardLayout
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    updated={new Date(frontmatter.updated).toISOString()}
+  >
+    <RenderPage slot="article" collectionType="home" id="tr/now" />
+  </StandardLayout>
+</BaseLayout>

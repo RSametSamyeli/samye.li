@@ -29,7 +29,15 @@ export type Locale = keyof typeof LOCALES
 export const DEFAULT_LOCALE: Locale = 'en'
 
 /** Pages with a Turkish translation, by their English path. */
-export const TRANSLATED_PAGES = ['/', '/lodos/', '/projects/'] as const
+export const TRANSLATED_PAGES = [
+  '/',
+  '/lodos/',
+  '/projects/',
+  '/now/',
+  '/uses/',
+  '/beliefs/',
+  '/colophon/',
+] as const
 
 const withSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`)
 
@@ -114,6 +122,21 @@ export const STRINGS = {
       `${n} GitHub contributions in the last year`,
     portraitAlt: 'Portrait of Samet Samyeli',
     categories: {} as Record<string, string>,
+    pages: 'Pages',
+    now: 'Now',
+    uses: 'Uses',
+    beliefs: 'Beliefs',
+    colophon: 'Colophon',
+    lastUpdated: (date: string) => `Last updated ${date}`,
+    aboutAuthor: 'About the author',
+    authorBio:
+      'Senior full-stack engineer in Istanbul. I am building lodos.md, the company that runs itself: an AI team that works across every department while you make the decisions.',
+    authorLinks: {
+      lodos: 'See lodos.md',
+      now: 'What I am doing now',
+      follow: 'Follow on X',
+      rss: 'Subscribe via RSS',
+    },
   },
   tr: {
     tagline: 'Kıdemli Full-Stack Mühendis, lodos.md Kurucusu',
@@ -152,6 +175,21 @@ export const STRINGS = {
       'Open Source & Community': 'Açık kaynak ve topluluk',
       'Side Projects': 'Yan projeler',
     } as Record<string, string>,
+    pages: 'Sayfalar',
+    now: 'Şu an',
+    uses: 'Kullandıklarım',
+    beliefs: 'İnandıklarım',
+    colophon: 'Künye',
+    lastUpdated: (date: string) => `Son güncelleme: ${date}`,
+    aboutAuthor: 'Yazar hakkında',
+    authorBio:
+      "İstanbul'da kıdemli full-stack mühendis. Kendi kendini yöneten şirket lodos.md'yi geliştiriyorum: kararları siz verirken her departmanda çalışan bir yapay zekâ ekibi.",
+    authorLinks: {
+      lodos: "lodos.md'yi incele",
+      now: 'Şu an ne yapıyorum',
+      follow: "X'te takip et",
+      rss: 'RSS ile abone ol',
+    },
   },
 } as const
 

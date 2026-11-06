@@ -43,6 +43,10 @@ The mark (a lowercase **s** and the accent dot of samye**.**li), the favicon, th
 
 Security issues can be reported as [`/.well-known/security.txt`](https://samye.li/.well-known/security.txt) describes (RFC 9116). nginx sends a Content Security Policy, `nosniff`, a strict referrer policy, a locked-down permissions policy and frame protection on every response ([`nginx/security-headers.conf`](nginx/security-headers.conf)); HSTS is set at Cloudflare. Hashed assets are cached for a year, pages and the markdown mirrors are revalidated on every request, and client work under `/branding/` is kept out of search engines with `X-Robots-Tag`.
 
+## Slash pages
+
+[/now](https://samye.li/now/) (what I am focused on, dated), [/beliefs](https://samye.li/beliefs/) (principles, each linked to the writing behind it), [/uses](https://samye.li/uses/) and [/colophon](https://samye.li/colophon/), linked from the footer, in both languages. A page with `updated:` in its frontmatter shows "Last updated", and carries the date as `dateModified` and as its sitemap `lastmod`. Every post ends with an author card.
+
 ## Two languages
 
 The home page, the lodos.md page and the projects are published in English at the root and in Turkish under [`/tr/`](https://samye.li/tr/), with the same paths. [`src/i18n.ts`](src/i18n.ts) holds the interface text and which pages are translated; Turkish page text lives in `src/content/home/tr/` and `src/pages/tr/`. Each translated page names the other with `hreflang` (and `x-default` English), in its `<head>` and in the sitemap; its share card, JSON-LD, breadcrumbs and markdown mirror are in its own language. The blog and the notes are written in English. There is no automatic redirect by browser language (search engines crawl from one place); a TR/EN switch in the navigation leads to the same page in the other language.
@@ -98,6 +102,7 @@ Dockerfile               # build with pnpm, serve with nginx (with a healthcheck
 | A Medium post | the same, with `redirect:` and `platform: Medium` in the frontmatter |
 | A short note | `src/content/shorts/<slug>.md` |
 | A project | an entry in `src/content/projects/data.json` |
+| A change to /now or /uses | edit `src/content/home/now.md` (and `tr/now.md`), then `updated:` in `src/pages/now.mdx` |
 
 Push to `main` and the site, its markdown mirrors and `llms.txt` update on their own.
 

@@ -1,0 +1,20 @@
+---
+title: 'Künye'
+subtitle: 'Bu site nasıl yapıldı'
+description: 'samye.li nasıl yapıldı: Astro, kodla çizilen bir marka, iki dil, hem insanlar hem makineler için yazılmış sayfalar ve kendini denetleyen bir build.'
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout title={frontmatter.title} subtitle={frontmatter.subtitle}>
+    <RenderPage slot="article" collectionType="home" id="tr/colophon" />
+  </StandardLayout>
+</BaseLayout>

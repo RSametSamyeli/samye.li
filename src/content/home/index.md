@@ -15,7 +15,7 @@
 - Co-founded the **Open Software Network (AYA)** during the 2023 Türkiye earthquakes: 25,000+ volunteer developers, building [AfetHarita](https://afetharita.com) (used by AFAD) and [deprem.io](https://deprem.io). Covered by [TIME](https://time.com/6254500/turkey-earthquake-twitter-musk-rescue/).
 - Mediterranean **ILCA sailing champion**: 13 medals, 2 cups, racing since age six.
 
-I write about software architecture, security and AI on the [blog](./blog/). Some of my work is on the [projects](./projects/) page.
+I write about software architecture, security and AI on the [blog](./blog/), and what I believe about building software is on [beliefs](./beliefs/). Some of my work is on the [projects](./projects/) page, and what I'm doing these days is on [now](./now/).
 
 ---
 

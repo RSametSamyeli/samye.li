@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import type { ImageMetadata } from 'astro'
+import { LOCALES, localeOf, STRINGS } from '~/i18n'
 
 interface Props {
   title?: string
@@ -13,6 +14,8 @@ interface Props {
   articleClass?: string
   /** a portrait beside the title (the home page) */
   avatar?: { src: ImageMetadata; alt: string }
+  /** when the page last changed (ISO date): shown as "Last updated" */
+  updated?: string
 }
 
 const {
@@ -24,7 +27,20 @@ const {
   class: className,
   articleClass,
   avatar,
+  updated,
 } = Astro.props
+
+const locale = localeOf(Astro.url.pathname)
+const updatedText =
+  updated &&
+  STRINGS[locale].lastUpdated(
+    new Intl.DateTimeFormat(LOCALES[locale].intl, {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
+    }).format(new Date(updated))
+  )
 ---
 
 <header
@@ -54,6 +70,11 @@ const {
       <>
         {title && <h1>{title}</h1>}
         {subtitle && <p class="mt--4! muted italic">{subtitle}</p>}
+        {updatedText && (
+          <p class="mt--2! text-sm muted">
+            <time datetime={updated}>{updatedText}</time>
+          </p>
+        )}
       </>
     )
   }

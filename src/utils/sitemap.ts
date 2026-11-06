@@ -40,5 +40,29 @@ export function sitemapIndex(site: string) {
     }
   }
 
+  // pages that say when they last changed (updated: in their frontmatter)
+  for (const file of walk('src/pages')) {
+    if (!file.endsWith('.mdx')) continue
+    const front =
+      /^---\n([\s\S]*?)\n---/.exec(fs.readFileSync(file, 'utf8'))?.[1] ?? ''
+    const updated = /^updated:\s*['"]?([^'"\n]+)/m.exec(front)?.[1]?.trim()
+    if (!updated || Number.isNaN(Date.parse(updated))) continue
+    const route = path
+      .relative('src/pages', file)
+      .replace(/\.mdx$/, '')
+      .replace(/(^|\/)index$/, '')
+    lastmod.set(
+      new URL(route ? `/${route}/` : '/', site).href,
+      new Date(updated).toISOString()
+    )
+  }
+
   return { skip, lastmod }
+}
+
+function walk(dir: string): string[] {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = path.join(dir, entry.name)
+    return entry.isDirectory() ? walk(full) : [full]
+  })
 }

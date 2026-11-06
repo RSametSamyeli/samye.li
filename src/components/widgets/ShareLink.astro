@@ -18,12 +18,12 @@ const postUrl = Astro.url
 
 const SHARE_LINKS: Record<string, ShareLink> = {
   twitter: {
-    baseUrl: 'https://twitter.com/intent/tweet?text=',
+    baseUrl: 'https://x.com/intent/post?text=',
     formatUrl: (url, cfg) =>
       `${SHARE_LINKS.twitter.baseUrl}${encodeURIComponent(
         `Reading ${cfg?.[1] ? `${cfg[1]}'s ` : ''}${url}\n\nI think...`
       )}`,
-    label: 'twitter',
+    label: 'X',
     title: 'Tweet this post',
   },
   bluesky: {
