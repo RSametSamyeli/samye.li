@@ -70,6 +70,14 @@ const person = {
   'jobTitle': 'Senior Full-Stack Engineer',
   'description': SITE.description,
   'email': 'mailto:sam@samye.li',
+  'image': {
+    '@type': 'ImageObject',
+    '@id': new URL('/#portrait', SITE.website).href,
+    'url': new URL('/images/samet-samyeli.jpg', SITE.website).href,
+    'width': 800,
+    'height': 800,
+    'caption': SITE.author,
+  },
   'homeLocation': { '@type': 'Place', 'name': 'Istanbul, Türkiye' },
   'founder': [
     { '@type': 'Organization', 'name': 'lodos.md', 'url': 'https://lodos.md/' },

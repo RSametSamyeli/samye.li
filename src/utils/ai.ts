@@ -98,6 +98,8 @@ export async function homeDoc() {
   const meta = await pageMeta('index.mdx')
   return [
     docHeader(`${meta.title}: ${meta.subtitle}`, abs('/'), SITE.description),
+    `![Portrait of ${SITE.author}](${abs('/images/samet-samyeli.jpg')})`,
+    '',
     await homeBody('intro'),
     '',
     '## Activity',

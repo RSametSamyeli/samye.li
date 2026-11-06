@@ -24,6 +24,8 @@ export interface OgImageManifestItem {
   kicker: string
   /** a line under the title, if the page has one */
   description: string
+  /** show the author's portrait (the home page's card) */
+  portrait?: boolean
 }
 
 export interface PostEntry {
@@ -109,7 +111,10 @@ function addManifestItem(
   manifest: Map<string, OgImageManifestItem>,
   pathname: string,
   authorOrBrand: string,
-  card: Pick<OgImageManifestItem, 'title' | 'kicker' | 'description'>,
+  card: Pick<
+    OgImageManifestItem,
+    'title' | 'kicker' | 'description' | 'portrait'
+  >,
   context: 'fallback' | 'page' = 'page'
 ) {
   const slug =
@@ -231,6 +236,7 @@ export async function getOgImageManifest() {
       title: authorOrBrand,
       kicker: fallbackKicker,
       description: fallbackTitle,
+      portrait: true,
     },
     'fallback'
   )

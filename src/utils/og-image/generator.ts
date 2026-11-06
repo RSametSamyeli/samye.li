@@ -1,6 +1,8 @@
 import { experimental_getFontFileURL, fontData } from 'astro:assets'
 import { decode } from 'html-entities'
 import satori from 'satori'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 import sharp from 'sharp'
 
 import { BRAND_ICONS, markMarkup } from '~/utils/brand'
@@ -134,6 +136,16 @@ function pngsToIco(images: { size: number; png: Buffer }[]) {
   return Buffer.concat([header, ...entries, ...images.map((i) => i.png)])
 }
 
+/** The author's portrait as a data URL for Satori, read and sized once. */
+let portraitData: Promise<string> | null = null
+const getPortrait = () =>
+  (portraitData ??= fs
+    .readFile(path.resolve('src/assets/samet-samyeli.jpg'))
+    .then((file) =>
+      sharp(file).resize(640, 640).jpeg({ quality: 85 }).toBuffer()
+    )
+    .then((jpeg) => `data:image/jpeg;base64,${jpeg.toString('base64')}`))
+
 /**
  * Generates an Open Graph image as a PNG buffer.
  */
@@ -141,8 +153,9 @@ export async function generateOgImageBuffer(
   item: OgImageManifestItem,
   requestUrl: URL
 ) {
+  const portrait = item.portrait ? await getPortrait() : undefined
   const svg = await renderSvg(
-    ogImageMarkup(item),
+    ogImageMarkup({ ...item, portrait }),
     { width: 1200, height: 630 },
     requestUrl
   )

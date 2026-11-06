@@ -1,7 +1,9 @@
 ---
 import { formatDate } from '~/utils/datetime'
 import { SITE, UI } from '~/config'
+import { Image } from 'astro:assets'
 import { withBasePath } from '~/utils/path'
+import portrait from '~/assets/samet-samyeli.jpg'
 
 interface Props {
   pubDate: string
@@ -19,6 +21,14 @@ const isMinimal = UI.postView.postMetaStyle === 'minimal'
   isMinimal ? (
     <div class="mt--6! muted lt-md:text-sm">
       <span>
+        <Image
+          class="inline-block m-0! mr-1.5! w-5 h-5 rounded-full! align-[-0.3em] object-cover"
+          src={portrait}
+          alt=""
+          widths={[20, 40, 60]}
+          sizes="20px"
+          loading="eager"
+        />
         By{' '}
         <a
           class="no-underline! hover:underline!"

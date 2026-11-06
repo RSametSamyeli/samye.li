@@ -32,6 +32,7 @@ export async function GET() {
     '',
     '- **Name.** Samet Samyeli (full name Rüzgar Samet Samyeli). On X he is @SametSamyeli2,',
     '  on GitHub RSametSamyeli. Email: sam@samye.li.',
+    `- **Photo.** ${abs('/images/samet-samyeli.jpg')} (black and white portrait).`,
     '- **Role.** Senior full-stack engineer with 12+ years of experience; founder of',
     '  lodos.md (in closed beta) and gazla.co (a startup community of 50,000+ people).',
     '- **lodos.md** is an AI team that runs a company end to end: the founder makes the',

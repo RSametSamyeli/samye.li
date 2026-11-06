@@ -108,7 +108,7 @@ for (const file of files.filter((f) => f.endsWith('.html'))) {
     if (!exists(ref)) fail(file, `broken internal link: ${ref}`)
   }
   for (const [, img] of html.matchAll(/<img\b([^>]*)>/g)) {
-    if (!/\salt="/.test(img)) fail(file, 'image without alt')
+    if (!/\salt(=|\s|\/|$)/.test(img)) fail(file, 'image without alt')
   }
 }
 
