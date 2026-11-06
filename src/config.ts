@@ -8,6 +8,7 @@ export const SITE: Site = {
     'Senior full-stack engineer and founder of gazla.co and lodos.md. Writing about software architecture, security and AI.',
   author: 'Samet Samyeli',
   xHandle: '@SametSamyeli2',
+  tagline: 'Senior Full-Stack Engineer, Founder of lodos.md',
   lang: 'en',
   ogLocale: 'en_US',
   imageDomains: [],

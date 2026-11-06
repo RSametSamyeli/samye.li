@@ -7,6 +7,7 @@ import { unified } from '@astrojs/markdown-remark'
 
 import { remarkPlugins, rehypePlugins } from './plugins'
 import { SITE } from './src/config'
+import { sitemapIndex } from './src/utils/sitemap'
 
 const sansFallbacks = [
   'ui-sans-serif',
@@ -29,6 +30,8 @@ const monoFallbacks = [
   'monospace',
 ]
 
+const sitemapPosts = sitemapIndex(SITE.website)
+
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
   site: SITE.website,
@@ -37,7 +40,13 @@ export default defineConfig({
     inlineStylesheets: 'never',
   },
   integrations: [
-    sitemap(),
+    sitemap({
+      filter: (page) => !sitemapPosts.skip.has(page),
+      serialize: (item) => {
+        const lastmod = sitemapPosts.lastmod.get(item.url)
+        return lastmod ? { ...item, lastmod } : item
+      },
+    }),
     unocss({ injectReset: true }),
     astroExpressiveCode(),
     mdx(),

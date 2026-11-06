@@ -1,6 +1,7 @@
 ---
 import { formatDate } from '~/utils/datetime'
-import { UI } from '~/config'
+import { SITE, UI } from '~/config'
+import { withBasePath } from '~/utils/path'
 
 interface Props {
   pubDate: string
@@ -17,6 +18,17 @@ const isMinimal = UI.postView.postMetaStyle === 'minimal'
 {
   isMinimal ? (
     <div class="mt--6! op-50 lt-md:text-sm">
+      <span>
+        By{' '}
+        <a
+          class="no-underline! hover:underline!"
+          href={withBasePath('/')}
+          rel="author"
+        >
+          {SITE.author}
+        </a>
+        {' · '}
+      </span>
       <time datetime={pubDate}>{formatDate(pubDate)}</time>
       {lastModDate && (
         <time datetime={lastModDate}> · Updated {formatDate(lastModDate)}</time>

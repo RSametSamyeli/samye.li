@@ -1,6 +1,6 @@
 ---
 title: Hello, world
-description: This site is live.
+description: 'samye.li is live: the personal site and blog of Samet Samyeli, built with Astro and self-hosted behind Cloudflare.'
 pubDate: 2026-11-01
 ---
 

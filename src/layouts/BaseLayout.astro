@@ -21,9 +21,12 @@ interface Props {
   pubDate?: string
   lastModDate?: string
   tags?: string[]
+  /** keep this page out of search results (the 404 page) */
+  noindex?: boolean
 }
 
-const { title, description, ogImage, pubDate, lastModDate, tags } = Astro.props
+const { title, description, ogImage, pubDate, lastModDate, tags, noindex } =
+  Astro.props
 
 let style: Record<string, string> = {}
 
@@ -43,7 +46,15 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
 <!doctype html>
 <html lang={SITE.lang}>
   <head>
-    <Head {title} {description} {ogImage} {pubDate} {lastModDate} {tags} />
+    <Head
+      {title}
+      {description}
+      {ogImage}
+      {pubDate}
+      {lastModDate}
+      {tags}
+      {noindex}
+    />
   </head>
 
   <body

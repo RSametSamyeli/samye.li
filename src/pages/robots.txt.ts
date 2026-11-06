@@ -19,7 +19,6 @@ export function GET() {
     'User-agent: *',
     'Content-Signal: search=yes,ai-input=yes,ai-train=yes,use=full',
     'Allow: /',
-    'Disallow: /giscus/',
     '',
     `Sitemap: ${abs('/sitemap-index.xml')}`,
     '',

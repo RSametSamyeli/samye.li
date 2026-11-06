@@ -2,37 +2,38 @@ import { getCollection } from 'astro:content'
 import rss from '@astrojs/rss'
 
 import { SITE } from '~/config'
-import { withBasePath } from '~/utils/path'
 
-export async function GET() {
-  const blog = await getCollection('blog')
+/** RSS 2.0 wants an email in <author>: "address (Name)". */
+const AUTHOR = `sam@samye.li (${SITE.author})`
 
-  const filteredBlogitems = blog.filter((item) => !item.data.draft)
+export async function GET(context) {
+  const posts = (await getCollection('blog'))
+    .filter((post) => !post.data.draft)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 
-  const sortedBlogItems = filteredBlogitems.sort(
-    (a, b) => new Date(b.data.pubDate) - new Date(a.data.pubDate)
-  )
+  const feedUrl = new URL('/rss.xml', context.site).href
+  const iconUrl = new URL('/icon-512.png', context.site).href
 
   return rss({
-    title: SITE.title,
+    title: `${SITE.title} · Blog`,
     description: SITE.description,
-    site: SITE.website,
-    customData: `
-      <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-      <image>
-        <title>${SITE.title}</title>
-        <url>${SITE.website}/icon-512.png</url>
-        <link>${SITE.website}</link>
-      </image>`,
-
-    items: sortedBlogItems.map((item) => ({
-      title: `${item.data.title}`,
-      link: withBasePath(`/blog/${item.id}/`),
-      pubDate: item.data.pubDate,
-      description: item.data.description,
-      author: SITE.author,
+    site: context.site,
+    xmlns: { atom: 'http://www.w3.org/2005/Atom' },
+    customData: [
+      `<language>${SITE.lang}</language>`,
+      `<atom:link href="${feedUrl}" rel="self" type="application/rss+xml"/>`,
+      `<lastBuildDate>${new Date().toUTCString()}</lastBuildDate>`,
+      `<image><title>${SITE.title}</title><url>${iconUrl}</url><link>${context.site}</link></image>`,
+    ].join(''),
+    items: posts.map((post) => ({
+      title: post.data.title,
+      // A post published elsewhere links to the original.
+      link: post.data.redirect || `/blog/${post.id}/`,
+      pubDate: post.data.pubDate,
+      description: post.data.description,
+      author: AUTHOR,
+      categories: post.data.tags,
     })),
-
-    stylesheet: withBasePath('/rss-styles.xsl'),
+    stylesheet: '/rss-styles.xsl',
   })
 }

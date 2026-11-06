@@ -12,6 +12,10 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props
+
+// A post published elsewhere (Medium) has no page here: its URL is a
+// permanent redirect to the original, which stays the canonical copy.
+if (post.data.redirect) return Astro.redirect(post.data.redirect, 301)
 ---
 
 <RenderPost {post} />
