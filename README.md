@@ -60,15 +60,15 @@ The site is meant to be found, read and cited by people and by AI assistants ali
 - **[`/llms.txt`](https://samye.li/llms.txt):** a one-file summary of the site and its author, following [llmstxt.org](https://llmstxt.org).
 - **[`/llms-full.txt`](https://samye.li/llms-full.txt):** every page as plain markdown, in one file.
 - **Markdown mirrors:** every page has a clean markdown copy, e.g. [`/index.md`](https://samye.li/index.md), [`/lodos.md`](https://samye.li/lodos.md), [`/projects.md`](https://samye.li/projects.md).
-- **Markdown discovery:** each page names its mirror twice, in `<link rel="alternate" type="text/markdown">` and in its response headers as `Link: <...>; rel="alternate"; type="text/markdown"`. (Answering `Accept: text/markdown` at the page's own URL would need code on the request path; the site stays static.)
+- **Content negotiation:** request any page with `Accept: text/markdown` and you get its markdown at the same URL, still with no code on the request path: the build writes each page's markdown to `/_markdown/<page>/index.md`, and one URL Rewrite rule at Cloudflare's edge (spelled out in [`src/integrations/cloudflare-pages.ts`](src/integrations/cloudflare-pages.ts)) serves it in the page's place. HTML responses say `Vary: Accept` and advertise the mirror with `Link: <...>; rel="alternate"; type="text/markdown"`; the markdown names the page as canonical.
 - **Open `robots.txt`:** search, retrieval and training are all welcome.
 - **Structured data:** one linked JSON-LD graph per page: `Person` and `WebSite` everywhere, `ProfilePage` on the home page, `BlogPosting` with a visible author byline on posts, and `BreadcrumbList`.
 - **Search hygiene:** a sitemap of real pages only, with each post's last change; posts published on Medium redirect there and name it canonical; the 404 page is `noindex`.
 - **IndexNow:** after every deploy [CI](.github/workflows/ci.yml) tells Bing (and through it ChatGPT search and Copilot), Yandex and others which pages exist, so changes are picked up in minutes.
 
 ```sh
+curl -H "Accept: text/markdown" https://samye.li/lodos/
 curl -sI https://samye.li/lodos/ | grep -i '^link'
-curl https://samye.li/lodos.md
 ```
 
 ## Activity data

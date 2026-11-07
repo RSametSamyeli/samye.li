@@ -166,9 +166,13 @@ for (const file of files.filter((f) => f.endsWith('.html'))) {
   }
 }
 
-// Sitemap: every URL is a real page (no redirect stubs, no 404).
+// Sitemap: every URL is a real page (no redirect stubs, no 404), and says
+// when it last changed (Bing and the answer engines behind it crawl by it).
 for (const file of files.filter((f) => /^sitemap-\d+\.xml$/.test(f))) {
   const xml = fs.readFileSync(path.join(DIST, file), 'utf8')
+  for (const [entry] of xml.matchAll(/<url>[\s\S]*?<\/url>/g))
+    if (!/<lastmod>\d{4}-\d{2}-\d{2}T[^<]+<\/lastmod>/.test(entry))
+      fail(file, `no lastmod: ${/<loc>([^<]+)/.exec(entry)?.[1]}`)
   for (const [, loc] of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) {
     const page = loc.slice(SITE.length)
     if (!loc.startsWith(SITE) || !exists(page)) {
@@ -292,6 +296,7 @@ const expected = {
   'cross-origin-opener-policy': 'same-origin',
   'x-frame-options': 'SAMEORIGIN',
   'strict-transport-security': 'max-age=31536000; includeSubDomains',
+  'vary': 'Accept, Accept-Encoding',
 }
 for (const [name, value] of Object.entries(expected))
   if (everywhere[name] !== value)
@@ -359,6 +364,38 @@ for (const [page, target] of stubs) {
       fail('_redirects', `${from} does not redirect to ${target}`)
   }
 }
+
+// Markdown at a page's own address (Accept: text/markdown, rewritten at
+// Cloudflare's edge to /_markdown/<page>/index.md): every page has its twin,
+// the same bytes as its mirror (an English post's, for its Turkish-interface
+// page), naming the page as canonical; a moved post's twin redirects too.
+const twinOf = (page) => `/_markdown${page}index.md`
+for (const page of files
+  .filter((f) => f.endsWith('.html'))
+  .map(pageOf)
+  .filter(
+    (p) => p.endsWith('/') && !stubs.has(p) && !p.startsWith('/branding/')
+  )) {
+  const mirror = mirrors.get(page) ?? mirrors.get(page.replace(/^\/tr\//, '/'))
+  const twin = twinOf(page)
+  if (!mirror) {
+    fail(page, 'no markdown to answer Accept: text/markdown with')
+    continue
+  }
+  if (!exists(twin)) {
+    fail(twin.slice(1), 'missing')
+    continue
+  }
+  const same = fs
+    .readFileSync(path.join(DIST, twin))
+    .equals(fs.readFileSync(path.join(DIST, mirror)))
+  if (!same) fail(twin.slice(1), `differs from ${mirror}`)
+  if (headersFor(twin).link !== `<${SITE}${page}>; rel="canonical"`)
+    fail('_headers', `${twin}: Link is ${headersFor(twin).link ?? 'missing'}`)
+}
+for (const [page, target] of stubs)
+  if (redirects.get(twinOf(page)) !== target)
+    fail('_redirects', `${twinOf(page)} does not redirect to ${target}`)
 
 if (problems.length) {
   console.error(`verify-build: ${problems.length} problem(s)\n`)

@@ -16,7 +16,7 @@ samye.li statik bir site; Markdown dosyalarından ve birkaç TypeScript dosyası
 
 ## Makineler için
 
-- Her sayfanın sade bir Markdown kopyası var; sayfa onu hem `<head>` içinde hem de `text/markdown` arayan istemciler için bir `Link` başlığında gösteriyor. [llms.txt](/llms.txt) ve [llms-full.txt](/llms-full.txt) tüm siteyi anlatıyor.
+- Her sayfanın sade bir Markdown kopyası var; `text/markdown` isteyen istemcilere sayfanın kendi adresinde dönüyor, ayrıca sayfa onu `<head>` içinde ve bir `Link` başlığında gösteriyor. [llms.txt](/llms.txt) ve [llms-full.txt](/llms-full.txt) tüm siteyi anlatıyor.
 - Birbirine bağlı JSON-LD (Person, ProfilePage, BlogPosting, breadcrumb), hreflang ile eşleştirilmiş İngilizce ve Türkçe sayfalar, son değişiklik tarihli bir sitemap ve her yayından sonra IndexNow bildirimi.
 - robots.txt arama motorlarına, yapay zekâ cevap motorlarına ve model eğitimine açık.
 

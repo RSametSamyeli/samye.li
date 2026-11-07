@@ -254,7 +254,8 @@
 .prose thead {
   border-bottom: 1px solid var(--c-border);
 }
-.prose thead th {
+.prose thead th,
+.prose thead td {
   vertical-align: bottom;
   padding: 0 0.75em 0.6em;
   color: var(--ds-gray-900);
@@ -266,16 +267,22 @@
 .prose tbody tr:last-child {
   border-bottom-width: 0;
 }
-.prose tbody td {
+.prose tbody td,
+.prose tbody th {
   vertical-align: top;
   padding: 0.6em 0.75em;
 }
-.prose thead th:first-child,
-.prose tbody td:first-child {
+/* a row's own name (a two-way table's first column) */
+.prose tbody th {
+  color: var(--ds-gray-1000);
+  font-weight: 500;
+}
+.prose thead :is(th, td):first-child,
+.prose tbody :is(th, td):first-child {
   padding-left: 0;
 }
-.prose thead th:last-child,
-.prose tbody td:last-child {
+.prose thead :is(th, td):last-child,
+.prose tbody :is(th, td):last-child {
   padding-right: 0;
 }
 

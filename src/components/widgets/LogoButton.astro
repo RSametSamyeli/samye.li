@@ -1,16 +1,18 @@
 ---
 import { withBasePath } from '~/utils/path'
-import { SITE } from '~/config'
 import { LOCALES, localeOf, STRINGS } from '~/i18n'
 
 const locale = localeOf(Astro.url.pathname)
 const home = withBasePath(LOCALES[locale].home)
+
+/* The name a screen reader or voice control hears starts with the words on
+   screen (WCAG 2.5.3, label in name). */
 ---
 
 <a
   class="logo"
   href={home}
-  aria-label={`${SITE.author}, ${STRINGS[locale].homeLabel}`}
+  aria-label={`sam@samye.li, ${STRINGS[locale].homeLabel}`}
   aria-current={Astro.url.pathname === home ? 'page' : undefined}
 >
   sam<span class="logo-at">@</span>samye.li

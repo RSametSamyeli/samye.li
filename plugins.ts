@@ -74,6 +74,48 @@ export const remarkPlugins: RemarkPlugins = [
   remarkReadingTime,
 ]
 
+/** The hast nodes rehypeTableRowHeaders reads: elements and their text. */
+interface HastNode {
+  type: string
+  tagName?: string
+  value?: string
+  properties?: Record<string, unknown>
+  children?: HastNode[]
+}
+
+/**
+ * A table whose top-left header cell is empty is a two-way table: its first
+ * column names each row. Those cells become row headers (<th scope="row">)
+ * and the empty corner a plain cell, so a screen reader announces both
+ * headers with every value (WCAG 1.3.1, info and relationships).
+ */
+function rehypeTableRowHeaders() {
+  const elements = (node: HastNode | undefined, ...tags: string[]) =>
+    (node?.children ?? []).filter(
+      (child) => child.type === 'element' && tags.includes(child.tagName ?? '')
+    )
+  const text = (node: HastNode): string =>
+    node.type === 'text'
+      ? (node.value ?? '')
+      : (node.children ?? []).map(text).join('')
+
+  return (tree: HastNode) => {
+    visit(tree as never, 'element', (table: HastNode) => {
+      if (table.tagName !== 'table') return
+      const [head] = elements(table, 'thead')
+      const [corner] = elements(elements(head, 'tr')[0], 'th', 'td')
+      if (corner?.tagName !== 'th' || text(corner).trim()) return
+      corner.tagName = 'td'
+      for (const row of elements(elements(table, 'tbody')[0], 'tr')) {
+        const [first] = elements(row, 'th', 'td')
+        if (first?.tagName !== 'td') continue
+        first.tagName = 'th'
+        first.properties = { ...first.properties, scope: 'row' }
+      }
+    })
+  }
+}
+
 export const rehypePlugins: RehypePlugins = [
   // https://docs.astro.build/en/guides/markdown-content/#heading-ids-and-plugins
   rehypeHeadingIds,
@@ -176,6 +218,7 @@ export const rehypePlugins: RehypePlugins = [
       },
     },
   ],
+  rehypeTableRowHeaders,
   // https://github.com/florentb/rehype-wrap-all
   [
     rehypeWrapAll,

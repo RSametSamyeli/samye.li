@@ -16,7 +16,7 @@ samye.li is a static site, built from Markdown and a few TypeScript files: no da
 
 ## For machines
 
-- Every page has a plain Markdown copy, named in its `<head>` and in a `Link` header for clients that look for `text/markdown`. [llms.txt](/llms.txt) and [llms-full.txt](/llms-full.txt) describe the whole site.
+- Every page has a plain Markdown copy, returned at the page's own URL to clients that ask for `text/markdown`, and named in its `<head>` and a `Link` header. [llms.txt](/llms.txt) and [llms-full.txt](/llms-full.txt) describe the whole site.
 - Linked JSON-LD (Person, ProfilePage, BlogPosting, breadcrumbs), English and Turkish pages paired with hreflang, a sitemap with last-change dates, and IndexNow pings after each deploy.
 - robots.txt welcomes search engines, answer engines and training.
 

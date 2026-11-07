@@ -87,6 +87,8 @@ const markdownMirror = markdownMirrorPath(Astro.url.pathname)
 // https://developers.google.com/search/docs/appearance/structured-data/profile-page
 const PERSON_ID = new URL('/#person', SITE.website).href
 const WEBSITE_ID = new URL('/#website', SITE.website).href
+const LODOS_ID = new URL('/#lodos-md', SITE.website).href
+const GAZLA_ID = new URL('/#gazla-co', SITE.website).href
 const pageId = `${canonicalURL.href}#webpage`
 
 const person = {
@@ -94,6 +96,9 @@ const person = {
   '@id': PERSON_ID,
   'name': SITE.author,
   'alternateName': 'Rüzgar Samet Samyeli',
+  'givenName': 'Samet',
+  'additionalName': 'Rüzgar',
+  'familyName': 'Samyeli',
   'url': SITE.website,
   'jobTitle': S.jobTitle,
   'description': S.description,
@@ -107,19 +112,28 @@ const person = {
     'caption': SITE.author,
   },
   'homeLocation': { '@type': 'Place', 'name': 'Istanbul, Türkiye' },
+  // the companies, as nodes of their own: what he founded, and where he works
   'founder': [
-    { '@type': 'Organization', 'name': 'lodos.md', 'url': 'https://lodos.md/' },
-    { '@type': 'Organization', 'name': 'gazla.co', 'url': 'https://gazla.co/' },
+    {
+      '@type': 'Organization',
+      '@id': LODOS_ID,
+      'name': 'lodos.md',
+      'url': 'https://lodos.md/',
+    },
+    {
+      '@type': 'Organization',
+      '@id': GAZLA_ID,
+      'name': 'gazla.co',
+      'url': 'https://gazla.co/',
+    },
   ],
+  'worksFor': { '@id': LODOS_ID },
+  'knowsLanguage': ['tr', 'en'],
   'award': [
     locale === 'tr'
       ? 'ILCA yelken sınıfında Akdeniz şampiyonu (13 madalya, 2 kupa)'
       : 'Mediterranean ILCA sailing champion (13 medals, 2 cups)',
   ],
-  'alumniOf': {
-    '@type': 'CollegeOrUniversity',
-    'name': 'Süleyman Demirel University',
-  },
   'knowsAbout': [
     'Software architecture',
     'Application security',
@@ -151,7 +165,15 @@ const page = pubDate
       'mainEntityOfPage': canonicalURL.href,
       'headline': title || SITE.title,
       ...(description && { description }),
-      ...(ogImageURL && { image: ogImageURL }),
+      // the share card, with its size: Google wants 1200 px wide or more
+      ...(ogImageURL && {
+        image: {
+          '@type': 'ImageObject',
+          'url': ogImageURL,
+          'width': 1200,
+          'height': 630,
+        },
+      }),
       'datePublished': pubDate,
       'dateModified': lastModDate || pubDate,
       ...(tags?.length && { keywords: tags }),

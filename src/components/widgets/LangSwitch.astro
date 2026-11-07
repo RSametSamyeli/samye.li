@@ -4,7 +4,8 @@ import { withBasePath } from '~/utils/path'
 
 /**
  * The other language: the same page in it when there is one, else its home.
- * Shown as its short name (TR / EN), named in full for screen readers.
+ * Shown as its short name (TR / EN); screen readers and voice control hear
+ * that name first, then the language in full (WCAG 2.5.3, label in name).
  */
 const here = localeOf(Astro.url.pathname)
 const { locale, path } = counterpartOf(Astro.url.pathname)
@@ -17,7 +18,7 @@ const target = LOCALES[locale]
   hreflang={target.lang}
   lang={target.lang}
   title={STRINGS[here].switchTo}
-  aria-label={STRINGS[here].switchTo}
+  aria-label={`${target.short}, ${STRINGS[here].switchTo}`}
   data-lang-switch
 >
   {target.short}
