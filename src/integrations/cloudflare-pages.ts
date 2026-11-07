@@ -5,9 +5,8 @@
  * so they cannot drift from the pages they describe:
  *
  *   - every response carries the security headers: a Content Security
- *     Policy, nosniff, a strict referrer policy, a locked-down permissions
- *     policy, and frame and opener isolation. HSTS is set at Cloudflare's
- *     edge for the whole zone (SSL/TLS > Edge Certificates), not here.
+ *     Policy, HSTS, nosniff, a strict referrer policy, a locked-down
+ *     permissions policy, and frame and opener isolation.
  *   - caching: hashed files (/_astro/, Pagefind's index) for a year,
  *     immutable; generated images and icons for a day; everything else,
  *     pages included, revalidated on every request against its ETag
@@ -86,6 +85,9 @@ const SECURITY: Record<string, string> = {
     'camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()',
   'Cross-Origin-Opener-Policy': 'same-origin',
   'X-Frame-Options': 'SAMEORIGIN',
+  // HTTPS only, for a year, here and on every subdomain (www included). Not
+  // preloaded: leaving the preload list takes months.
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
 }
 
 const IMMUTABLE = { 'Cache-Control': 'public, max-age=31536000, immutable' }

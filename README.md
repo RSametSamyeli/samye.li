@@ -41,7 +41,7 @@ The mark (a lowercase **s** and the accent dot of samye**.**li), the favicon, th
 
 ## Security and caching
 
-Security issues can be reported as [`/.well-known/security.txt`](https://samye.li/.well-known/security.txt) describes (RFC 9116). Every response carries a Content Security Policy, `nosniff`, a strict referrer policy, a locked-down permissions policy, and frame and opener isolation; HSTS is set at Cloudflare's edge. Hashed assets (and Pagefind's hashed index) are cached for a year as immutable, generated images and icons for a day, and pages and the markdown mirrors are revalidated on every request. Client work under `/branding/` and the `*.pages.dev` addresses are kept out of search engines with `X-Robots-Tag`, and a post that moved to lodos.md answers with a 301.
+Security issues can be reported as [`/.well-known/security.txt`](https://samye.li/.well-known/security.txt) describes (RFC 9116). Every response carries a Content Security Policy, HSTS, `nosniff`, a strict referrer policy, a locked-down permissions policy, and frame and opener isolation. Hashed assets (and Pagefind's hashed index) are cached for a year as immutable, generated images and icons for a day, and pages and the markdown mirrors are revalidated on every request. Client work under `/branding/` and the `*.pages.dev` addresses are kept out of search engines with `X-Robots-Tag`, and a post that moved to lodos.md answers with a 301.
 
 All of it is written at the end of each build by [`src/integrations/cloudflare-pages.ts`](src/integrations/cloudflare-pages.ts), into `dist/_headers` and `dist/_redirects`, from the pages the build produced; `verify-build` then checks it. To see it served the way Cloudflare serves it: `pnpm build && npx wrangler pages dev dist`.
 

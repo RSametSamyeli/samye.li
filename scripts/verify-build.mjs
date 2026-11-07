@@ -291,6 +291,7 @@ const expected = {
   'referrer-policy': 'strict-origin-when-cross-origin',
   'cross-origin-opener-policy': 'same-origin',
   'x-frame-options': 'SAMEORIGIN',
+  'strict-transport-security': 'max-age=31536000; includeSubDomains',
 }
 for (const [name, value] of Object.entries(expected))
   if (everywhere[name] !== value)
