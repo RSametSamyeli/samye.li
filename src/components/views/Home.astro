@@ -1,0 +1,695 @@
+---
+import { Image } from 'astro:assets'
+import HomeStats from '~/components/widgets/HomeStats.astro'
+import HomePosts from '~/components/widgets/HomePosts.astro'
+import portrait from '~/assets/samet-samyeli.jpg'
+import stats from '~/data/stats.json'
+import { HOME, HOME_LABELS, inline } from '~/data/home'
+import { SHELVES } from '~/data/books'
+import { LOGOS, logoUrl, opticalSize } from '~/data/logos'
+import type { Logo } from '~/data/logos'
+import { getWordmark } from '~/utils/logo-fetch'
+import { UI } from '~/config'
+import { localeOf, localized, STRINGS } from '~/i18n'
+import { withBasePath } from '~/utils/path'
+
+/**
+ * The home page, in Geist's layout for a profile: who I am at the top, with
+ * two actions, then one section per subject, its name in a column at the
+ * left (above the content on narrow screens), every section ruled off from
+ * the next. The words come from src/data/home.ts, shared with the markdown
+ * mirror.
+ */
+interface Props {
+  name: string
+  role: string
+}
+
+const { name, role } = Astro.props
+const locale = localeOf(Astro.url.pathname)
+const S = STRINGS[locale]
+const L = (key: keyof typeof HOME_LABELS) => HOME_LABELS[key][locale]
+
+/** a path on this site in the reader's language, or a URL as it is */
+const to = (href: string) =>
+  href.startsWith('/') ? withBasePath(localized(href, locale)) : href
+const isExternal = (href: string) => /^https?:/.test(href)
+
+/** each brand's wordmark size: equal visual weight, at the height of the type */
+const brandSlugs = [
+  ...new Set([
+    ...HOME.previously.flatMap((r) => r.clients ?? []),
+    ...HOME.alsoWith,
+  ]),
+].filter((slug) => logoUrl(slug))
+const marks = Object.fromEntries(
+  await Promise.all(
+    brandSlugs.map(
+      async (slug) =>
+        [
+          slug,
+          opticalSize(
+            await getWordmark(LOGOS[slug]),
+            1000,
+            22,
+            (LOGOS[slug] as Logo).scale
+          ),
+        ] as const
+    )
+  )
+)
+
+const books = SHELVES.reduce((n, shelf) => n + shelf.books.length, 0)
+const hasActivity = Boolean(stats.x || stats.github)
+const socials = UI.socialLinks.filter((l) => !l.link.startsWith('mailto:'))
+---
+
+<div class="home">
+  <header class="home-hero">
+    <div class="home-hero-text">
+      <div class="home-id">
+        <Image
+          class="home-avatar"
+          src={portrait}
+          alt={S.portraitAlt}
+          widths={[64, 128, 192]}
+          sizes="64px"
+          width={64}
+          height={64}
+          loading="eager"
+          fetchpriority="high"
+        />
+        <div>
+          <h1 class="home-name">{name}</h1>
+          <p class="home-role">{role}</p>
+        </div>
+      </div>
+      <p class="home-bio" set:html={inline(HOME.bio[locale])} />
+      <div class="home-actions">
+        <a class="ds-button ds-button-primary" href={to('/lodos/')}>
+          {L('aboutLodos')}
+          <span class="i-ri-arrow-right-line" aria-hidden="true"></span>
+        </a>
+        <a class="ds-button" href="mailto:sam@samye.li">
+          <span class="i-ri-mail-line" aria-hidden="true"></span>
+          sam@samye.li
+        </a>
+        <ul class="home-social" aria-label={S.elsewhere}>
+          {
+            socials.map((item) => (
+              <li>
+                <a
+                  class="ds-icon-button"
+                  href={item.link}
+                  rel="me noopener"
+                  title={item.title}
+                  aria-label={item.title}
+                >
+                  {'icon' in item && (
+                    <span class={item.icon} aria-hidden="true" />
+                  )}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <ul class="home-facts">
+        {
+          HOME.facts.map((f) => (
+            <li>
+              <span class={f.icon} aria-hidden="true" />
+              {f.text[locale]}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <Image
+      class="home-portrait"
+      src={portrait}
+      alt=""
+      widths={[320, 480, 640]}
+      sizes="(min-width: 1024px) 20rem, 0px"
+      width={320}
+      height={320}
+      loading="lazy"
+    />
+  </header>
+
+  <section class="home-section" aria-labelledby="home-building">
+    <h2 id="home-building" class="home-label">{L('building')}</h2>
+    <div class="home-ventures">
+      {
+        HOME.building.map((v) => (
+          <a
+            class="ds-card venture"
+            href={to(v.href)}
+            rel={isExternal(v.href) ? 'noopener' : undefined}
+          >
+            <span class="venture-head">
+              <img
+                class="venture-icon"
+                src={v.icon}
+                alt=""
+                width="32"
+                height="32"
+                decoding="async"
+              />
+              <span class="venture-name">{v.name}</span>
+              <span
+                class={`venture-arrow ${isExternal(v.href) ? 'i-ri-arrow-right-up-line' : 'i-ri-arrow-right-line'}`}
+                aria-hidden="true"
+              />
+            </span>
+            <span class="venture-text">{v.description[locale]}</span>
+            <span class="venture-facts">{v.facts[locale]}</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  {
+    hasActivity && (
+      <section class="home-section" aria-labelledby="home-activity">
+        <h2 id="home-activity" class="home-label">
+          {L('activity')}
+        </h2>
+        <div>
+          <HomeStats />
+        </div>
+      </section>
+    )
+  }
+
+  <section class="home-section" aria-labelledby="home-writing">
+    <h2 id="home-writing" class="home-label">{L('writing')}</h2>
+    <div>
+      <HomePosts />
+    </div>
+  </section>
+
+  <section class="home-section" aria-labelledby="home-previously">
+    <h2 id="home-previously" class="home-label">{L('previously')}</h2>
+    <ol class="roles">
+      {
+        HOME.previously.map((r) => (
+          <li class="role">
+            <div class="role-line">
+              <h3 class="role-company">{r.company}</h3>
+              <span class="role-place">{r.place[locale]}</span>
+            </div>
+            <div class="role-line role-sub">
+              <span class="role-title">{r.role[locale]}</span>
+              <span class="role-years">{r.years}</span>
+            </div>
+            <p class="role-text" set:html={inline(r.description[locale])} />
+            {r.clients && (
+              <ul class="chips" aria-label={L('clients')}>
+                {r.clients.map((slug) => (
+                  <li class="chip">
+                    {logoUrl(slug) ? (
+                      <img
+                        class="brand-logo chip-wordmark"
+                        src={logoUrl(slug)}
+                        alt={LOGOS[slug].name}
+                        width={marks[slug]?.width}
+                        height={marks[slug]?.height}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <span class="chip-name">{LOGOS[slug].name}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+      <li class="role">
+        <h3 class="role-company">{L('alsoWith')}</h3>
+        <ul class="chips" aria-label={L('alsoWith')}>
+          {
+            HOME.alsoWith.map((slug) => (
+              <li class="chip">
+                {logoUrl(slug) ? (
+                  <img
+                    class="brand-logo chip-wordmark"
+                    src={logoUrl(slug)}
+                    alt={LOGOS[slug].name}
+                    width={marks[slug]?.width}
+                    height={marks[slug]?.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <span class="chip-name">{LOGOS[slug].name}</span>
+                )}
+              </li>
+            ))
+          }
+          <li class="chip chip-more">{L('andMore')}</li>
+        </ul>
+      </li>
+    </ol>
+  </section>
+
+  <section class="home-section" aria-labelledby="home-beyond">
+    <h2 id="home-beyond" class="home-label">{L('beyond')}</h2>
+    <div class="interests">
+      {
+        HOME.beyond.map((i) => (
+          <a class="ds-card interest" href={to(`/${i.key}/`)}>
+            {i.image ? (
+              <img
+                class="interest-media"
+                src={i.image}
+                alt=""
+                width="640"
+                height="274"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <span class="interest-media interest-figure" aria-hidden="true">
+                <span class="interest-number">{books}</span>
+                <span class="interest-unit">
+                  {locale === 'tr'
+                    ? `kitap, ${SHELVES.length} rafta`
+                    : `books on ${SHELVES.length} shelves`}
+                </span>
+              </span>
+            )}
+            <span class="interest-body">
+              <span class="interest-name">
+                {S[i.key]}
+                <span class="i-ri-arrow-right-line" aria-hidden="true" />
+              </span>
+              <span class="interest-text">{i.description[locale]}</span>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="home-section" aria-labelledby="home-contact">
+    <h2 id="home-contact" class="home-label">{L('contact')}</h2>
+    <div>
+      <p class="contact-text">{HOME.contact[locale]}</p>
+      <a class="ds-button ds-button-primary" href="mailto:sam@samye.li">
+        <span class="i-ri-mail-line" aria-hidden="true"></span>
+        sam@samye.li
+      </a>
+    </div>
+  </section>
+</div>
+
+<style>
+  .home {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+
+  /* Hero */
+  /* the words at the left, the portrait at the right on wide screens */
+  .home-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 20rem;
+    align-items: center;
+    gap: 3rem;
+    padding: 1rem 0 3.5rem;
+  }
+  /* with the big portrait beside it, the small one would say it twice */
+  @media (min-width: 1280px) {
+    .home-avatar {
+      display: none;
+    }
+  }
+  .home-portrait {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    box-shadow: var(--ds-shadow-border);
+  }
+  .home-id {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .home-avatar {
+    flex: none;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 9999px;
+    object-fit: cover;
+    box-shadow: var(--ds-shadow-border);
+  }
+  /* the name is the page's title now: Geist's heading scale */
+  .home-name {
+    margin: 0;
+    color: var(--ds-gray-1000);
+    font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 1.15;
+  }
+  .home-role {
+    margin: 0.375rem 0 0;
+    color: var(--ds-gray-900);
+    font-size: 1rem;
+  }
+  .home-bio {
+    max-width: 42rem;
+    margin: 2rem 0 0;
+    color: var(--ds-text-body);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    text-wrap: pretty;
+  }
+  .home-bio :global(a) {
+    color: var(--ds-gray-1000);
+    font-weight: 500;
+    text-decoration-line: underline;
+    text-decoration-color: var(--ds-gray-alpha-500);
+    text-underline-offset: 0.2em;
+  }
+  .home-bio :global(a:hover) {
+    text-decoration-color: currentColor;
+  }
+  .home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .home-social {
+    display: flex;
+    gap: 0.25rem;
+    margin: 0 0 0 0.25rem;
+    padding: 0;
+    list-style: none;
+  }
+  .home-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ds-gray-900);
+    font-size: 0.875rem;
+  }
+  .home-facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  /* Sections: the name in a column at the left, the content beside it */
+  .home-section {
+    display: grid;
+    grid-template-columns: 10rem minmax(0, 1fr);
+    gap: 2.5rem;
+    padding: 3rem 0;
+    border-top: 1px solid var(--c-border);
+  }
+  .home-label {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+    align-self: start;
+    margin: 0;
+    color: var(--ds-gray-900);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.5rem;
+  }
+
+  /* Currently building */
+  .home-ventures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 1rem;
+  }
+  .venture {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+  }
+  .venture-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .venture-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--ds-shadow-border);
+  }
+  .venture-name {
+    color: var(--ds-gray-1000);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .venture-arrow {
+    margin-left: auto;
+    color: var(--ds-gray-900);
+    transition: transform 0.15s ease;
+  }
+  .venture:hover .venture-arrow {
+    color: var(--ds-gray-1000);
+    transform: translateX(2px);
+  }
+  .venture-text {
+    color: var(--ds-text-body);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+  .venture-facts {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--c-border);
+    color: var(--ds-gray-900);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  /* Previously: one row per company; the place and the years at the right
+     edge, level with the name and the role */
+  .roles {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .role {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--c-border);
+  }
+  .role:first-child {
+    padding-top: 0;
+  }
+  .role:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+  .role-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+  .role-company {
+    margin: 0;
+    color: var(--ds-gray-1000);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.4;
+  }
+  .role-place {
+    color: var(--ds-gray-900);
+    font-size: 0.875rem;
+    text-align: right;
+  }
+  .role-sub {
+    margin-top: 0.125rem;
+  }
+  .role-title {
+    color: var(--ds-text-body);
+    font-size: 0.9375rem;
+  }
+  .role-years {
+    color: var(--ds-gray-900);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .role-text {
+    max-width: 42rem;
+    margin: 0.75rem 0 0;
+    color: var(--ds-text-body);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+  .role-text :global(a) {
+    color: var(--ds-gray-1000);
+    text-decoration-line: underline;
+    text-decoration-color: var(--ds-gray-alpha-500);
+    text-underline-offset: 0.2em;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2rem;
+    padding: 0 0.875rem;
+    border-radius: 9999px;
+    box-shadow: var(--ds-shadow-border);
+    color: var(--ds-gray-1000);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+  /* brand logos sit on a white disc in both themes: most are drawn for white */
+  .chip-more {
+    color: var(--ds-gray-900);
+  }
+  /* the brand's wordmark, one colour, at the height of the type */
+  .chip-wordmark {
+    display: block;
+  }
+
+  /* Beyond code */
+  .interests {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .interest {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .interest-media {
+    display: block;
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    object-fit: cover;
+    border-bottom: 1px solid var(--c-border);
+    transition: transform 0.3s ease;
+  }
+  .interest:hover img.interest-media {
+    transform: scale(1.02);
+  }
+  .interest-figure {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 1.25rem;
+    background: var(--ds-background-200);
+  }
+  .interest-number {
+    color: var(--ds-gray-1000);
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+  .interest-unit {
+    margin-top: 0.375rem;
+    color: var(--ds-gray-900);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+  .interest-body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    padding: 1rem 1.25rem 1.25rem;
+    background: var(--ds-background-100);
+  }
+  .interest-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--ds-gray-1000);
+    font-weight: 600;
+  }
+  .interest-name span {
+    color: var(--ds-gray-900);
+    transition: transform 0.15s ease;
+  }
+  .interest:hover .interest-name span {
+    color: var(--ds-gray-1000);
+    transform: translateX(2px);
+  }
+  .interest-text {
+    color: var(--ds-text-body);
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  /* Contact */
+  .contact-text {
+    max-width: 36rem;
+    margin: 0 0 1.25rem;
+    color: var(--ds-gray-1000);
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.45;
+    text-wrap: balance;
+  }
+
+  @media (max-width: 1279.98px) {
+    .home-hero {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .home-portrait {
+      display: none;
+    }
+  }
+  @media (max-width: 1023.98px) {
+    .home-section {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.25rem;
+      padding: 2.5rem 0;
+    }
+    .home-label {
+      position: static;
+    }
+  }
+  @media (max-width: 639.98px) {
+    .interests {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .home-social {
+      margin-left: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .venture-arrow,
+    .interest-media,
+    .interest-name span {
+      transition: none;
+    }
+  }
+</style>

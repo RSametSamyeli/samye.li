@@ -9,7 +9,14 @@ import {
 import { silentLogger } from '~/utils/server'
 import { withBasePath } from '~/utils/path'
 import { COLLECTION_LABELS, SITE, UI } from '~/config'
-import { alternatesOf, englishPath, LOCALES, localeOf, STRINGS } from '~/i18n'
+import {
+  alternatesOf,
+  englishPath,
+  isMirror,
+  LOCALES,
+  localeOf,
+  STRINGS,
+} from '~/i18n'
 import { markdownMirrorPath } from '~/utils/ai'
 
 interface Props {
@@ -20,10 +27,19 @@ interface Props {
   lastModDate?: string
   tags?: string[]
   noindex?: boolean
+  schema?: Record<string, unknown>[]
 }
 
-const { title, description, ogImage, pubDate, lastModDate, tags, noindex } =
-  Astro.props
+const {
+  title,
+  description,
+  ogImage,
+  pubDate,
+  lastModDate,
+  tags,
+  noindex,
+  schema = [],
+} = Astro.props
 
 const X_HANDLE = SITE.xHandle
 const locale = localeOf(Astro.url.pathname)
@@ -52,7 +68,10 @@ const ogImagePathname = ogImageConfig
       ogImage,
       title,
       authorOrBrand: ogImageConfig.authorOrBrand,
-      pathname: Astro.url.pathname,
+      // a Turkish-interface mirror shows its English page's card
+      pathname: isMirror(Astro.url.pathname)
+        ? englishPath(Astro.url.pathname)
+        : Astro.url.pathname,
       logger: Astro.logger ?? silentLogger,
     })
   : undefined
@@ -91,6 +110,11 @@ const person = {
   'founder': [
     { '@type': 'Organization', 'name': 'lodos.md', 'url': 'https://lodos.md/' },
     { '@type': 'Organization', 'name': 'gazla.co', 'url': 'https://gazla.co/' },
+  ],
+  'award': [
+    locale === 'tr'
+      ? 'ILCA yelken sınıfında Akdeniz şampiyonu (13 madalya, 2 kupa)'
+      : 'Mediterranean ILCA sailing champion (13 medals, 2 cups)',
   ],
   'alumniOf': {
     '@type': 'CollegeOrUniversity',
@@ -193,7 +217,13 @@ const breadcrumb =
 
 const structuredData = {
   '@context': 'https://schema.org',
-  '@graph': [person, website, page, ...(breadcrumb ? [breadcrumb] : [])],
+  '@graph': [
+    person,
+    website,
+    page,
+    ...(breadcrumb ? [breadcrumb] : []),
+    ...schema,
+  ],
 }
 ---
 
@@ -205,7 +235,6 @@ const structuredData = {
 <!-- Font -->
 <Font cssVariable="--font-sans" preload />
 <Font cssVariable="--font-mono" />
-<Font cssVariable="--font-condensed" />
 
 <!-- Primary Metadata -->
 <title>{pageTitle}</title>
@@ -214,14 +243,14 @@ const structuredData = {
 
 <!-- Color -->
 <meta name="color-scheme" content="dark light" />
-<meta name="theme-color" content="#050505" />
+<meta name="theme-color" content="#0a0a0a" />
 <!-- Initialize as inline scripts for faster response, avoiding FOUC  -->
 <script is:inline data-astro-rerun>
   ;(() => {
     // Dark by default; only an explicit toggle by the visitor switches to light.
     const storedTheme = localStorage.getItem('site-theme')
     const theme = storedTheme === 'light' ? 'light' : 'dark'
-    const themeColor = theme === 'dark' ? '#050505' : '#fff'
+    const themeColor = theme === 'dark' ? '#0a0a0a' : '#ffffff'
 
     if (theme === 'dark') {
       document.documentElement.classList.add('dark')

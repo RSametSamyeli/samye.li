@@ -21,26 +21,6 @@ export const COLLECTION_LABELS = {
 } as const satisfies Record<'blog' | 'shorts', string>
 
 export const UI: Ui = {
-  internalNavs: [
-    {
-      path: '/blog',
-      title: 'Blog',
-      displayMode: 'alwaysText',
-      text: 'Blog',
-    },
-    {
-      path: '/projects',
-      title: 'Projects',
-      displayMode: 'alwaysText',
-      text: 'Projects',
-    },
-    {
-      path: '/shorts',
-      title: 'Notes',
-      displayMode: 'alwaysText',
-      text: 'Notes',
-    },
-  ],
   socialLinks: [
     {
       link: 'https://github.com/RSametSamyeli',
@@ -73,20 +53,6 @@ export const UI: Ui = {
       icon: 'i-ri-mail-line',
     },
   ],
-  navBarLayout: {
-    left: [],
-    right: [
-      'internalNavs',
-      'hr',
-      'socialLinks',
-      'hr',
-      'searchButton',
-      'langSwitch',
-      'themeButton',
-      'rssLink',
-    ],
-    mergeOnMobile: true,
-  },
   postView: {
     postMetaStyle: 'minimal',
     useCoverAltAsCaption: true,
@@ -108,7 +74,8 @@ export const UI: Ui = {
  *  - Set to `[true, {...}]` to enable and configure the feature.
  */
 export const FEATURES: Features = {
-  slideEnterAnim: [true, { enterStep: 80 }],
+  // off: the pages appear at once, as on vercel.com
+  slideEnterAnim: [false, { enterStep: 80 }],
   ogImage: [
     true,
     {
@@ -135,7 +102,7 @@ export const FEATURES: Features = {
       minHeadingLevel: 2,
       maxHeadingLevel: 4,
       displayPosition: 'right',
-      displayMode: 'content',
+      displayMode: 'always',
     },
   ],
   share: [
@@ -166,7 +133,7 @@ export const FEATURES: Features = {
     true,
     {
       displayPosition: 'right',
-      displayMode: 'content',
+      displayMode: 'always',
       filterMode: 'AND',
     },
   ],

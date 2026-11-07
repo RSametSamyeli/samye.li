@@ -5,6 +5,10 @@
     "desc": "The company that runs itself: an AI team across every department; you decide, nobody else sees your data",
     "icon": "/icons/lodos.svg",
     "category": "Building Now",
+    "facts": {
+      "en": "Closed beta · 1,200+ on the waitlist",
+      "tr": "Kapalı beta · 1.200+ bekleme listesi"
+    },
     "descTr": "Kendi kendini yöneten şirket: her departmanda çalışan bir yapay zekâ ekibi; kararları siz verirsiniz, verilerinizi kimse görmez"
   },
   {
@@ -13,7 +17,119 @@
     "desc": "Startup community of 50,000+ people and 280+ startups",
     "icon": "/icons/gazla.svg",
     "category": "Building Now",
+    "facts": {
+      "en": "50,000+ people · 280+ startups",
+      "tr": "50.000+ kişi · 280+ girişim"
+    },
     "descTr": "50.000'den fazla kişi ve 280'i aşkın girişimden oluşan girişim topluluğu"
+  },
+  {
+    "id": "Sony",
+    "link": "https://www.sony.com.tr",
+    "desc": "Front-end developer: interfaces in JavaScript and jQuery, in a Scrum team.",
+    "logo": "sony",
+    "category": "Brands I've Worked With",
+    "via": "Sony · 2016",
+    "descTr": "Front-end geliştirici olarak JavaScript ve jQuery ile arayüzler yazdım; Scrum ekibinde çalıştım."
+  },
+  {
+    "id": "Toshiba",
+    "link": "https://toshibashop.com.tr",
+    "desc": "Electronics storefront for the Turkish market, delivered on my own, pixel-true to the design.",
+    "logo": "toshiba",
+    "category": "Brands I've Worked With",
+    "via": "T-Soft · 2023",
+    "descTr": "Türkiye pazarı için elektronik e-ticaret sitesi; tek başıma, tasarıma birebir sadık."
+  },
+  {
+    "id": "Pierre Cardin",
+    "link": "https://www.pierrecardin.com.tr",
+    "desc": "Fashion storefront built for conversion, from catalogue to checkout.",
+    "logo": "pierrecardin",
+    "category": "Brands I've Worked With",
+    "via": "T-Soft · 2023",
+    "descTr": "Katalogdan ödemeye, dönüşüm odaklı moda e-ticaret sitesi."
+  },
+  {
+    "id": "U.S. Polo Assn.",
+    "link": "https://tr.uspoloassn.com",
+    "desc": "Sportswear storefront on Akinon, from catalogue to checkout.",
+    "logo": "uspolo",
+    "category": "Brands I've Worked With",
+    "via": "Akinon · 2022–2023",
+    "descTr": "Akinon üzerinde, katalogdan ödemeye spor giyim e-ticaret sitesi."
+  },
+  {
+    "id": "LC Waikiki",
+    "link": "https://www.lcw.com",
+    "desc": "Storefront for the global fashion retailer, with SEO, accessibility and responsive design across the catalogue.",
+    "logo": "lcwaikiki",
+    "category": "Brands I've Worked With",
+    "via": "Akinon · 2022–2023",
+    "descTr": "Küresel moda perakendecisinin e-ticaret sitesi; tüm katalogda SEO, erişilebilirlik ve duyarlı tasarım."
+  },
+  {
+    "id": "Pegasus Airlines",
+    "link": "https://www.flypgs.com",
+    "desc": "Web software developer, building for the web in JavaScript as part of the team.",
+    "logo": "pegasus",
+    "category": "Brands I've Worked With",
+    "via": "Pegasus Airlines · 2015",
+    "descTr": "Web yazılım geliştirici olarak ekiple birlikte JavaScript ile web tarafında geliştirme yaptım."
+  },
+  {
+    "id": "Türk Telekom",
+    "link": "https://www.turktelekom.com.tr",
+    "desc": "System administrator at sixteen, working on computer networks and Linux.",
+    "logo": "turktelekom",
+    "category": "Brands I've Worked With",
+    "via": "Türk Telekom · 2012",
+    "descTr": "On altı yaşında sistem yöneticisi olarak bilgisayar ağları ve Linux üzerinde çalıştım."
+  },
+  {
+    "id": "Koton",
+    "link": "https://www.koton.com",
+    "desc": "Fashion storefront with thousands of products, led end to end.",
+    "logo": "koton",
+    "category": "Brands I've Worked With",
+    "via": "Akinon · 2022–2023",
+    "descTr": "Binlerce ürünlü moda e-ticaret sitesi, uçtan uca."
+  },
+  {
+    "id": "Vakko",
+    "link": "https://www.vakko.com",
+    "desc": "Luxury fashion storefront on Akinext, Akinon's Next.js commerce framework, 70% faster than the stack it replaced.",
+    "logo": "vakko",
+    "category": "Brands I've Worked With",
+    "via": "Akinon · 2022–2023",
+    "descTr": "Yerini aldığı altyapıdan %70 daha hızlı, Akinon'un Next.js ticaret çatısı Akinext üzerinde lüks moda e-ticaret sitesi."
+  },
+  {
+    "id": "OYAK",
+    "link": "https://www.oyak.com.tr",
+    "desc": "Enterprise project for the OYAK group, in React and Next.js; load times down 40%.",
+    "logo": "oyak",
+    "category": "Brands I've Worked With",
+    "via": "Nuevo · 2023–2024",
+    "descTr": "OYAK grubu için kurumsal proje, React ve Next.js ile; yüklenme süreleri %40 kısaldı."
+  },
+  {
+    "id": "Sarar",
+    "link": "https://www.sarar.com",
+    "desc": "Menswear storefront, delivered on my own and true to the Figma designs to the pixel.",
+    "logo": "sarar",
+    "category": "Brands I've Worked With",
+    "via": "T-Soft · 2023",
+    "descTr": "Erkek giyim e-ticaret sitesi; tek başıma, Figma tasarımlarına piksel piksel sadık."
+  },
+  {
+    "id": "Otokoç",
+    "link": "https://www.otokoc.com.tr",
+    "desc": "Enterprise platform for Koç Group's automotive company, in React and Next.js.",
+    "logo": "otokoc",
+    "category": "Brands I've Worked With",
+    "via": "Nuevo · 2023–2024",
+    "descTr": "Koç Topluluğu'nun otomotiv şirketi için kurumsal platform, React ve Next.js ile."
   },
   {
     "id": "OHIF Viewers",
@@ -21,6 +137,10 @@
     "desc": "Contributed a viewport-aware grayscale tool to the open-source medical imaging viewer",
     "icon": "i-ph-brain-duotone",
     "category": "Open Source & Community",
+    "facts": {
+      "en": "Open source · Cornerstone3D, WebGL",
+      "tr": "Açık kaynak · Cornerstone3D, WebGL"
+    },
     "descTr": "Açık kaynak tıbbi görüntüleme yazılımına, görüntü alanına göre çalışan bir gri tonlama aracı kazandırdım"
   },
   {
@@ -29,6 +149,10 @@
     "desc": "Emergency aid map built by 25,000+ volunteers after the 2023 Türkiye earthquakes, used by AFAD",
     "icon": "i-ph-map-trifold-duotone",
     "category": "Open Source & Community",
+    "facts": {
+      "en": "2023 · 627,000 visitors in its first month",
+      "tr": "2023 · ilk ayında 627.000 ziyaretçi"
+    },
     "descTr": "2023 Türkiye depremlerinden sonra 25.000'den fazla gönüllünün geliştirdiği, AFAD'ın da kullandığı acil yardım haritası"
   },
   {
@@ -37,6 +161,10 @@
     "desc": "Earthquake relief platform built with the Open Software Network (AYA)",
     "icon": "i-ph-hand-heart-duotone",
     "category": "Open Source & Community",
+    "facts": {
+      "en": "2023 · Open Software Network (AYA)",
+      "tr": "2023 · Açık Yazılım Ağı (AYA)"
+    },
     "descTr": "Açık Yazılım Ağı (AYA) ile geliştirilen deprem yardım platformu"
   },
   {
@@ -45,6 +173,10 @@
     "desc": "AI-powered platform that turns plain-language prompts into mobile and web app designs",
     "icon": "i-ph-magic-wand-duotone",
     "category": "Side Projects",
+    "facts": {
+      "en": "AI · from a prompt to app designs",
+      "tr": "Yapay zekâ · istekten uygulama tasarımına"
+    },
     "descTr": "Sade bir dille anlatılan isteği mobil ve web uygulama tasarımına dönüştüren yapay zekâ platformu"
   },
   {
@@ -53,22 +185,23 @@
     "desc": "AI image generator with image restore and generative fill",
     "icon": "i-ph-image-duotone",
     "category": "Side Projects",
+    "facts": {
+      "en": "AI · image generation and restore",
+      "tr": "Yapay zekâ · görsel üretimi ve onarma"
+    },
     "descTr": "Görsel onarma ve üretken doldurma özellikli yapay zekâ görsel üreticisi"
   },
   {
-    "id": "AI Shopping Agent Inbox",
-    "link": "https://github.com/RSametSamyeli/ai-shopping",
-    "desc": "Agent inbox UI for managing AI-powered customer conversations, built with Next.js 16",
-    "icon": "i-ph-chats-circle-duotone",
+    "id": "nfsu2.xyz",
+    "link": "https://nfsu2.xyz",
+    "repo": "https://github.com/th0mk/nfsu2-web",
+    "desc": "Need for Speed Underground 2 in the browser: a regular contributor, from the Turkish translation (all 3,918 texts, by hand) to the game following the browser's language",
+    "icon": "i-ph-steering-wheel-duotone",
     "category": "Side Projects",
-    "descTr": "Yapay zekâ destekli müşteri konuşmalarını yönetmek için Next.js 16 ile geliştirilmiş ajan gelen kutusu arayüzü"
-  },
-  {
-    "id": "Tailwind Design to CSS",
-    "link": "https://github.com/RSametSamyeli/tailwindcss-design-to-css",
-    "desc": "Pixel-perfect design-to-code conversions using only Tailwind CSS",
-    "icon": "i-devicon-tailwindcss",
-    "category": "Side Projects",
-    "descTr": "Yalnızca Tailwind CSS ile piksel piksel tasarımdan koda dönüşümler"
+    "facts": {
+      "en": "Open source · 3,918 texts in Turkish",
+      "tr": "Açık kaynak · 3.918 Türkçe metin"
+    },
+    "descTr": "Tarayıcıda Need for Speed Underground 2: düzenli katkı veriyorum; Türkçe çeviriden (3.918 metnin hepsi, elle) oyunun tarayıcının diline göre açılmasına kadar"
   }
 ]

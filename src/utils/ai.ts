@@ -11,6 +11,10 @@ import stats from '~/data/stats.json'
 import projectsData from '~/content/projects/data.json'
 import { getFilteredPosts, getSortedPosts } from '~/utils/data'
 import { LOCALES, localized, STRINGS } from '~/i18n'
+import { readingListMarkdown } from '~/data/books'
+import { musicMarkdown } from '~/data/music'
+import { HOME, HOME_LABELS } from '~/data/home'
+import { LOGOS } from '~/data/logos'
 
 import type { Locale } from '~/i18n'
 
@@ -19,8 +23,8 @@ export const abs = (path: string) => `${ORIGIN}${path}`
 
 /**
  * Which HTML paths have a markdown mirror, and where it lives. This is the single
- * answer used by the <link rel="alternate"> tag. nginx.conf mirrors the same rule
- * for `Accept: text/markdown` and the `Link` header; keep the two in sync.
+ * answer: the <link rel="alternate"> tag uses it, and the `Link` header Cloudflare
+ * Pages sends is read back from that tag (src/integrations/cloudflare-pages.ts).
  *   /            -> /index.md
  *   /lodos/      -> /lodos.md
  *   /blog/x/     -> /blog/x.md
@@ -35,6 +39,9 @@ export const TEXT_PAGES = [
   'colophon',
   'security-by-construction',
   'community',
+  'outdoors',
+  'music',
+  'reading',
 ] as const
 export type TextPage = (typeof TEXT_PAGES)[number]
 
@@ -120,7 +127,17 @@ const prefix = (locale: Locale) => (locale === 'en' ? '' : `${locale}/`)
 
 export async function homeDoc(locale: Locale = 'en') {
   const S = STRINGS[locale]
+  const L = (key: keyof typeof HOME_LABELS) => HOME_LABELS[key][locale]
   const meta = await pageMeta(`${prefix(locale)}index.mdx`)
+  const to = (href: string) =>
+    href.startsWith('/') ? abs(localized(href, locale)) : href
+  const posts = getSortedPosts(await getFilteredPosts('blog'))
+    .slice(0, 4)
+    .map(({ id, data }) => {
+      const t = locale !== 'en' ? data.translations?.[locale] : undefined
+      const href = t?.redirect || data.redirect || abs(`/blog/${id}/`)
+      return `- [${t?.title ?? data.title}](${href}) (${data.pubDate.toISOString().slice(0, 10)})`
+    })
   return [
     docHeader(
       `${meta.title}: ${meta.subtitle}`,
@@ -129,13 +146,60 @@ export async function homeDoc(locale: Locale = 'en') {
     ),
     `![${S.portraitAlt}](${abs('/images/samet-samyeli.jpg')})`,
     '',
-    await homeBody(`${prefix(locale)}intro`),
+    plainMarkdown(HOME.bio[locale]),
     '',
-    `## ${S.activity}`,
+    HOME.facts.map((f) => f.text[locale]).join(' · '),
+    '',
+    `## ${L('building')}`,
+    '',
+    HOME.building
+      .map(
+        (v) =>
+          `- [${v.name}](${to(v.href)}): ${v.description[locale]} (${v.facts[locale]})`
+      )
+      .join('\n'),
+    '',
+    `## ${L('activity')}`,
     '',
     activityMarkdown(locale),
     '',
-    await homeBody(`${prefix(locale)}index`),
+    `## ${L('writing')}`,
+    '',
+    posts.join('\n'),
+    '',
+    `## ${L('previously')}`,
+    '',
+    HOME.previously
+      .map((r) =>
+        [
+          `### ${r.company} (${r.years})`,
+          '',
+          `${r.role[locale]} · ${r.place[locale]}`,
+          '',
+          plainMarkdown(r.description[locale]),
+          ...(r.clients
+            ? [
+                '',
+                `${L('clients')}: ${r.clients.map((c) => LOGOS[c].name).join(', ')}`,
+              ]
+            : []),
+        ].join('\n')
+      )
+      .join('\n\n'),
+    '',
+    `### ${L('alsoWith')}\n\n${HOME.alsoWith.map((c) => LOGOS[c].name).join(', ')} ${L('andMore')}.`,
+    '',
+    `## ${L('beyond')}`,
+    '',
+    HOME.beyond
+      .map(
+        (i) => `- [${S[i.key]}](${to(`/${i.key}/`)}): ${i.description[locale]}`
+      )
+      .join('\n'),
+    '',
+    `## ${L('contact')}`,
+    '',
+    `${HOME.contact[locale]} [sam@samye.li](mailto:sam@samye.li)`,
     '',
     '## Links',
     '',
@@ -175,6 +239,8 @@ export async function textPageDoc(name: TextPage, locale: Locale = 'en') {
       meta.description
     ) + updated,
     await homeBody(`${prefix(locale)}${name}`),
+    ...(name === 'reading' ? ['', readingListMarkdown(locale)] : []),
+    ...(name === 'music' ? ['', musicMarkdown(locale)] : []),
     '',
   ].join('\n')
 }
@@ -197,7 +263,17 @@ export async function projectsDoc(locale: Locale = 'en') {
           const link = p.link.startsWith('/')
             ? abs(localized(p.link, locale))
             : p.link
-          return `- [${p.id}](${link}): ${locale === 'tr' ? p.descTr : p.desc}`
+          const source =
+            'repo' in p
+              ? ` (${locale === 'tr' ? 'kaynak kod' : 'source'}: ${p.repo})`
+              : ''
+          const via =
+            'via' in p
+              ? ` (${p.via})`
+              : 'facts' in p && p.facts
+                ? ` (${p.facts[locale]})`
+                : ''
+          return `- [${p.id}](${link}): ${locale === 'tr' ? p.descTr : p.desc}${via}${source}`
         })
         .join('\n')
   )

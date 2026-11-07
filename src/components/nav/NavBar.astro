@@ -1,166 +1,63 @@
 ---
 import LogoButton from '~/components/widgets/LogoButton.astro'
-import Divider from '~/components/base/Divider.astro'
 import SearchSwitch from '~/components/widgets/SearchSwitch.astro'
 import ThemeSwitch from '~/components/widgets/ThemeSwitch.astro'
-import RssLink from '~/components/widgets/RssLink.astro'
-import NavItem from '~/components/nav/NavItem.astro'
-import NavSwitch from '~/components/nav/NavSwitch.astro'
 import LangSwitch from '~/components/widgets/LangSwitch.astro'
-import { localeOf, localized, STRINGS } from '~/i18n'
+import { stringsFor } from '~/i18n'
 
-import { UI } from '~/config'
-
-const { navBarLayout, socialLinks } = UI
-
-// The site's sections, named and linked in the page's language: a section with
-// a Turkish page (projects) links to it from Turkish pages; the blog and the
-// notes are English everywhere.
-const locale = localeOf(Astro.url.pathname)
-const S = STRINGS[locale]
-const NAV_NAMES: Record<string, string> = {
-  '/blog': S.blog,
-  '/projects': S.projects,
-  '/shorts': S.notes,
-}
-const TRANSLATED = new Set(['/projects', '/blog'])
-const internalNavs = UI.internalNavs.map((item) => {
-  const name = NAV_NAMES[item.path] ?? item.title
-  return {
-    ...item,
-    title: name,
-    ...('text' in item && { text: name }),
-    path: (TRANSLATED.has(item.path)
-      ? localized(item.path, locale).replace(/\/$/, '')
-      : item.path) as typeof item.path,
-  }
-})
-const { left, right, mergeOnMobile } = navBarLayout
-
-for (const item of new Set(left)) {
-  if (new Set(right).has(item)) {
-    throw new Error(
-      `Duplicate '${item}' found in both 'UI.navBarLayout.left' and 'UI.navBarLayout.right'.`
-    )
-  }
-}
+/**
+ * The header: the name at the left, search, language and theme at the right.
+ * The site's pages are in the sidebar (SideNav); below 1024px the sidebar is
+ * a sheet that the menu button here opens.
+ */
+const S = stringsFor(Astro.url.pathname)
 ---
 
-<header
-  class={`flex items-center gap-6 p-[1.75rem_2rem_2rem] ${mergeOnMobile ? 'lt-md:px-7' : 'lt-md:(px-6 gap-3)'}`}
->
-  <LogoButton />
-  <nav
-    class={`flex items-center gap-4.8 w-full lt-md:justify-end
-    ${left.length !== 0 ? (right.length !== 0 ? 'justify-between' : '') : 'justify-end'}`}
-    aria-label={S.mainMenu}
-  >
-    {
-      left.length !== 0 && (
-        <div
-          class={`grid grid-flow-col items-center gap-4.8 print:op-0 ${mergeOnMobile ? '' : 'lt-md:(gap-3)'}`}
-        >
-          {left.map((key) =>
-            key === 'hr' ? (
-              <Divider class={mergeOnMobile ? 'lt-md:hidden' : undefined} />
-            ) : key === 'searchButton' ? (
-              <SearchSwitch />
-            ) : key === 'themeButton' ? (
-              <ThemeSwitch />
-            ) : key === 'langSwitch' ? (
-              <LangSwitch />
-            ) : key === 'rssLink' ? (
-              <RssLink class={mergeOnMobile ? 'lt-md:hidden' : undefined} />
-            ) : key === 'internalNavs' ? (
-              internalNavs.map((item) => (
-                <NavItem type="internal" {item} {mergeOnMobile} />
-              ))
-            ) : (
-              socialLinks.map((item) => (
-                <NavItem type="social" {item} {mergeOnMobile} />
-              ))
-            )
-          )}
-        </div>
-      )
-    }
-    {
-      right.length !== 0 && (
-        <div
-          class={`grid grid-flow-col items-center gap-4.8 print:op-0
-              ${!right.includes('themeButton') && !right.includes('searchButton') && 'lt-md:hidden'}
-              ${mergeOnMobile ? '' : 'lt-md:(gap-3)'}`}
-        >
-          {right.map((key) =>
-            key === 'hr' ? (
-              <Divider class={mergeOnMobile ? 'lt-md:hidden' : undefined} />
-            ) : key === 'searchButton' ? (
-              <SearchSwitch />
-            ) : key === 'themeButton' ? (
-              <ThemeSwitch />
-            ) : key === 'langSwitch' ? (
-              <LangSwitch />
-            ) : key === 'rssLink' ? (
-              <RssLink class={mergeOnMobile ? 'lt-md:hidden' : undefined} />
-            ) : key === 'internalNavs' ? (
-              internalNavs.map((item) => (
-                <NavItem type="internal" {item} {mergeOnMobile} />
-              ))
-            ) : (
-              socialLinks.map((item) => (
-                <NavItem type="social" {item} {mergeOnMobile} />
-              ))
-            )
-          )}
-        </div>
-      )
-    }
-    {
-      mergeOnMobile && (
-        <NavSwitch>
-          <Fragment slot="text">
-            {internalNavs.length !== 0 &&
-              internalNavs.map((item) => (
-                <NavItem
-                  type="internal"
-                  {item}
-                  {mergeOnMobile}
-                  mobileItemType="text"
-                />
-              ))}
-            {socialLinks.length !== 0 &&
-              socialLinks.map((item) => (
-                <NavItem
-                  type="social"
-                  {item}
-                  {mergeOnMobile}
-                  mobileItemType="text"
-                />
-              ))}
-          </Fragment>
-          <Fragment slot="icon">
-            {internalNavs.length !== 0 &&
-              internalNavs.map((item) => (
-                <NavItem
-                  type="internal"
-                  {item}
-                  {mergeOnMobile}
-                  mobileItemType="icon"
-                />
-              ))}
-            {socialLinks.length !== 0 &&
-              socialLinks.map((item) => (
-                <NavItem
-                  type="social"
-                  {item}
-                  {mergeOnMobile}
-                  mobileItemType="icon"
-                />
-              ))}
-            <RssLink class="op-80!" />
-          </Fragment>
-        </NavSwitch>
-      )
-    }
-  </nav>
+<header class="site-header print:hidden">
+  <div class="flex items-center gap-2 h-full px-4 md:px-6">
+    <button
+      type="button"
+      id="side-nav-button"
+      class="ds-icon-button -ml-1.5"
+      aria-label={S.menu}
+      aria-controls="side-nav"
+      aria-expanded="false"
+    >
+      <span class="menu-open i-ri-menu-line text-lg" aria-hidden="true"></span>
+      <span class="menu-close i-ri-close-line text-lg" aria-hidden="true"
+      ></span>
+    </button>
+    <LogoButton />
+    <div class="ml-auto flex items-center gap-1.5 md:gap-2">
+      <SearchSwitch />
+      <LangSwitch />
+      <ThemeSwitch />
+    </div>
+  </div>
 </header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--header-h);
+    border-bottom: 1px solid var(--c-border);
+    background: color-mix(in srgb, var(--ds-background-100) 80%, transparent);
+    backdrop-filter: saturate(180%) blur(8px);
+    -webkit-backdrop-filter: saturate(180%) blur(8px);
+  }
+  #side-nav-button .menu-close,
+  #side-nav-button[aria-expanded='true'] .menu-open {
+    display: none;
+  }
+  #side-nav-button[aria-expanded='true'] .menu-close {
+    display: inline-block;
+  }
+  /* the sidebar is always there from 1024px: no button to open it */
+  @media (min-width: 1024px) {
+    #side-nav-button {
+      display: none;
+    }
+  }
+</style>

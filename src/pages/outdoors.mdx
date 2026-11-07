@@ -1,0 +1,20 @@
+---
+title: 'Into the wind'
+subtitle: 'Sailing, water, mountains and sky'
+description: "Samet Samyeli's life with the wind: sailing since 2002 at Eğirdir Sailing Club, Optimist then ILCA, Mediterranean ILCA champion with 13 medals; windsurfing, diving, mountaineering, paragliding and the open road."
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout title={frontmatter.title} subtitle={frontmatter.subtitle}>
+    <RenderPage slot="article" collectionType="home" id="outdoors" />
+  </StandardLayout>
+</BaseLayout>

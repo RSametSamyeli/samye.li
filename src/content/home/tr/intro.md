@@ -1,1 +1,0 @@
-Merhaba, ben Samet 👋 İstanbul'da yaşayan kıdemli bir full-stack mühendis ve girişimciyim. 12 yılı aşkın süredir canlıda çalışan sistemler tasarlıyor ve işletiyorum: asenkron Python ve TypeScript backend'ler, PostgreSQL şemaları, gerçek zamanlı olay akışları ve bunların üzerinde çalışan Next.js/React ürünleri.

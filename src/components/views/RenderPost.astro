@@ -20,9 +20,14 @@ import type { CollectionEntry } from 'astro:content'
 interface Props {
   post: CollectionEntry<'blog' | 'shorts'>
   pageToc?: boolean
+  /**
+   * The Turkish-interface mirror of this English post (src/i18n.ts
+   * isMirrored): noindex, out of the site search, the text marked English.
+   */
+  mirror?: boolean
 }
 
-const { post, pageToc = true } = Astro.props
+const { post, pageToc = true, mirror = false } = Astro.props
 const { toc, share, search } = FEATURES
 
 const { data: frontmatter } = post
@@ -51,6 +56,7 @@ const shareEnabled = Array.isArray(share) && share[0] && frontmatter.share
 
 const collectionType = post.collection
 const isSearchable =
+  !mirror &&
   Array.isArray(search) &&
   search[0] &&
   search[1].includes.includes(collectionType) &&
@@ -63,8 +69,22 @@ in production. Set the post's <code>draft</code> property in
 frontmatter to <code>false</code> or remove it to publish the post.`
 ---
 
-<BaseLayout {title} {description} {ogImage} {pubDate} {lastModDate} {tags}>
-  <StandardLayout {title} {subtitle} {isSearchable} {searchFilter}>
+<BaseLayout
+  {title}
+  {description}
+  {ogImage}
+  {pubDate}
+  {lastModDate}
+  {tags}
+  noindex={mirror}
+>
+  <StandardLayout
+    {title}
+    {subtitle}
+    {isSearchable}
+    {searchFilter}
+    contentLang={mirror ? 'en' : undefined}
+  >
     <Fragment slot="head">
       <PostMeta {pubDate} {lastModDate} {minutesRead} {tags} />
     </Fragment>

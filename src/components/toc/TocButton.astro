@@ -6,15 +6,12 @@ const S = stringsFor(Astro.url.pathname)
 
 <button
   id="toc-open-button"
-  class="z-50 fixed right-5 bottom-18
-    w-10 h-10 rounded-full
-    op-0 bg-#8883 dark:bg-#8886 pointer-events-none op-transition
-    lt-lgp:(op-50 pointer-events-auto)
-    hover:op-100 print:hidden"
+  class="ds-fab z-50 fixed right-5 bottom-18
+    op-0 pointer-events-none
+    lt-xl:(op-100 pointer-events-auto) print:hidden"
   title={S.openTableOfContents}
 >
-  <div u-i-lucide-table-of-contents class="text-gray-700 dark:text-gray-200">
-  </div>
+  <span class="i-lucide-table-of-contents" aria-hidden="true"></span>
 </button>
 
 <script>

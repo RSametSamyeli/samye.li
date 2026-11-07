@@ -25,25 +25,28 @@ const batchSize = parseTuple(batchLoadSize, 'batchLoadSize')
 const maxItems = parseTuple(maxItemsPerPage, 'maxItemsPerPage')
 ---
 
-<!-- Search Switch -->
+<!-- Search Switch: a field-like button, as on vercel.com; ⌘K, Ctrl+K or / open it too -->
 <button
   type="button"
   id="search-switch"
-  class="op-60 hover:op-100 op-transition"
-  title={S.search}
+  class="ds-button search-trigger"
   aria-label={S.search}
+  aria-keyshortcuts="Meta+K Control+K /"
+  aria-haspopup="dialog"
 >
-  <div u-i-grommet-icons-search></div>
+  <span class="i-ri-search-line text-base" aria-hidden="true"></span>
+  <span class="search-trigger-text">{S.search}…</span>
+  <kbd class="ds-kbd search-trigger-kbd" aria-hidden="true">⌘K</kbd>
 </button>
 
 <!-- Search Panel -->
 <search-panel
   role="dialog"
   id="search-panel"
-  class={`hidden z-200 fixed top-15% lt-lgp:(top-10%) left-50% translate-x--50%
+  class={`hidden z-200 fixed top-[12vh] lt-md:(top-4) left-50% translate-x--50%
     grid grid-rows-[auto_1fr_auto]
-    w-42rem lt-lgp:(w-90%) max-h-70vh lt-lgp:(max-h-80vh) p-3 lt-lgp:(pb-1) rounded-lg
-    text-[var(--c-text)] bg-[var(--c-bg)] shadow-custom_0_0_10_0`}
+    w-[40rem] lt-md:(w-[calc(100%-2rem)]) max-h-[70vh] lt-md:(max-h-[80vh]) p-2 rounded-xl
+    text-[var(--ds-gray-1000)] bg-[var(--ds-background-100)] shadow-[var(--ds-shadow-modal)]`}
   aria-modal="true"
   aria-labelledby="search-label"
   aria-keyshortcuts="ArrowUp,ArrowDown,Enter,Esc"
@@ -57,17 +60,14 @@ const maxItems = parseTuple(maxItemsPerPage, 'maxItemsPerPage')
       filterEnabled && (
         <div
           role="tablist"
-          class="search-tabs flex gap-2 justify-start items-center text-xs"
+          class="search-tabs flex gap-1.5 justify-start items-center px-2 pt-1 text-xs"
           aria-label="Search categories"
         >
           {includes.map((item) => (
             <button
               type="button"
               role="tab"
-              class="px-1.5 py-0.5 rounded
-                bg-[#88888816] dark:bg-[#88888823]
-                aria-[selected=false]:op-40 aria-[selected=true]:op-100
-                aria-[selected=false]:hover:op-70 op-transition cursor-pointer"
+              class="search-tab h-6 px-2 rounded-full cursor-pointer"
               data-type={item.toLowerCase()}
               data-label={labelOf(item)}
             >
@@ -80,16 +80,15 @@ const maxItems = parseTuple(maxItemsPerPage, 'maxItemsPerPage')
     <!-- Search Bar -->
     <div
       class="grid grid-cols-[auto_1fr] items-center
-        h-10 px-3 rounded-md
-        bg-[#88888811] dark:bg-[#88888818]"
+        h-12 px-3 border-b border-[var(--c-border)]"
     >
-      <div u-i-grommet-icons-search></div>
+      <span class="i-ri-search-line text-lg text-[var(--ds-gray-900)]" aria-hidden="true"></span>
       <label for="search-input" id="search-label" class="sr-only"></label>
       <input
         type="search"
         role="combobox"
         id="search-input"
-        class="h-full pl-2 bg-transparent outline-0"
+        class="h-full pl-3 bg-transparent outline-0 text-base"
         autocomplete="off"
         autocorrect="off"
         spellcheck="false"
@@ -104,7 +103,7 @@ const maxItems = parseTuple(maxItemsPerPage, 'maxItemsPerPage')
   <div
     role="listbox"
     id="search-results"
-    class="overflow-y-auto my-1"
+    class="overflow-y-auto my-1 px-1"
     aria-labelledby="search-input"
     tabindex="-1"
     data-base={withBasePath('/')}
@@ -121,14 +120,14 @@ const maxItems = parseTuple(maxItemsPerPage, 'maxItemsPerPage')
       class="items-center justify-center gap-4 pt-4 pb-3 text-xs"
     >
       <button
-        class="flex items-center justify-center gap-1 op-40 hover:op-100 op-transition"
+        class="ds-button h-7! text-xs!"
         data-action="more"
       >
         <div u-i-material-symbols-arrow-cool-down></div>
         <span></span>
       </button>
       <button
-        class="flex items-center justify-center gap-1 op-40 hover:op-100 op-transition"
+        class="ds-button h-7! text-xs!"
         data-action="all"
       >
         <div u-i-material-symbols-expand-all></div>
@@ -140,26 +139,26 @@ const maxItems = parseTuple(maxItemsPerPage, 'maxItemsPerPage')
   <footer role="note" aria-label="Keyboard shortcuts">
     <ul
       class="flex flex-wrap items-center gap-4.5 lt-md:hidden
-        pt-3 border-t border-[#7d7d7d4d]
-        text-xs op-40 select-none"
+        px-2 pt-2.5 pb-1 border-t border-[var(--c-border)]
+        text-xs text-[var(--ds-gray-900)] select-none"
     >
       <li class="flex items-center gap-1">
-        <kbd class="search-kbd-key">
+        <kbd class="ds-kbd">
           <div u-i-material-symbols-arrow-upward></div>
         </kbd>
-        <kbd class="search-kbd-key">
+        <kbd class="ds-kbd">
           <div u-i-material-symbols-arrow-downward></div>
         </kbd>
         <span>Navigate</span>
       </li>
       <li class="flex items-center gap-1">
-        <kbd class="search-kbd-key">
+        <kbd class="ds-kbd">
           <div u-i-grommet-icons-return></div>
         </kbd>
         <span>Go to Page</span>
       </li>
       <li class="flex items-center gap-1">
-        <kbd class="search-kbd-key">esc</kbd>
+        <kbd class="ds-kbd">esc</kbd>
         <span>Close</span>
       </li>
     </ul>
@@ -184,6 +183,31 @@ const maxItems = parseTuple(maxItemsPerPage, 'maxItemsPerPage')
 
     const searchSwitch = document.getElementById('search-switch')
     searchSwitch?.addEventListener('click', handleToggle)
+
+    // the shortcut as this keyboard writes it
+    const platform =
+      (navigator as Navigator & { userAgentData?: { platform: string } })
+        .userAgentData?.platform ?? navigator.userAgent
+    const isApple = /mac|iphone|ipad/i.test(platform)
+    const kbd = searchSwitch?.querySelector('.search-trigger-kbd')
+    if (kbd && !isApple) kbd.textContent = 'Ctrl K'
+  })
+
+  /* ⌘K / Ctrl+K anywhere, or / when not typing, opens search */
+  document.addEventListener('keydown', (event) => {
+    const target = event.target as HTMLElement | null
+    const typing =
+      target?.isContentEditable ||
+      ['INPUT', 'TEXTAREA', 'SELECT'].includes(target?.tagName ?? '')
+    const combo =
+      event.key.toLowerCase() === 'k' && (event.metaKey || event.ctrlKey)
+    if (!combo && !(event.key === '/' && !typing)) return
+    const panel = document.getElementById('search-panel')
+    if (!panel) return
+    event.preventDefault()
+    if (panel.classList.contains('hidden'))
+      document.getElementById('search-switch')?.click()
+    else document.getElementById('search-input')?.focus()
   })
 </script>
 
@@ -750,3 +774,48 @@ const maxItems = parseTuple(maxItemsPerPage, 'maxItemsPerPage')
       pagefindHighlight.highlight()
     })
   </script>}
+
+<style>
+  .search-trigger {
+    width: 15rem;
+    justify-content: flex-start;
+    padding-right: 0.375rem;
+    color: var(--ds-gray-900);
+    font-weight: 400;
+  }
+  .search-trigger-kbd {
+    margin-left: auto;
+  }
+  @media (max-width: 1023.98px) {
+    .search-trigger {
+      width: auto;
+    }
+  }
+  @media (max-width: 767.98px) {
+    .search-trigger {
+      width: 2rem;
+      padding: 0;
+      justify-content: center;
+      box-shadow: none;
+    }
+    .search-trigger-text,
+    .search-trigger-kbd {
+      display: none;
+    }
+  }
+  .search-tab {
+    color: var(--ds-gray-900);
+    box-shadow: var(--ds-shadow-border);
+    transition:
+      background-color 0.15s,
+      color 0.15s;
+  }
+  .search-tab:hover {
+    color: var(--ds-gray-1000);
+  }
+  .search-tab[aria-selected='true'] {
+    background: var(--ds-gray-1000);
+    color: var(--ds-background-100);
+    box-shadow: none;
+  }
+</style>

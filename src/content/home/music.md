@@ -1,0 +1,1 @@
+Rock, above all. The classics, from The Beatles, Led Zeppelin and Pink Floyd to Queen, AC/DC and Black Sabbath; the blues of Eric Clapton's guitar; and the heavier side, from Metallica to Motörhead. In Turkish it is Anatolian rock, with Cem Karaca and Erkin Koray first. And now and then, the new psychedelic sound that grew out of it.

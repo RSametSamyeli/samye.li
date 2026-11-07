@@ -102,125 +102,6 @@ export interface Site {
 /* UI */
 export type Icon = `i-${string}-${string}` | `i-${string}:${string}`
 
-interface BaseNavItem {
-  /**
-   * Specifies the navigation path. It must start with `/`.
-   *
-   * @example
-   * '/blog'、'/blog/'
-   */
-  path: Path
-
-  /**
-   * Sets the content displayed on hover for accessibility.
-   */
-  title: string
-}
-
-interface TextNavItem extends BaseNavItem {
-  /**
-   * Defines how the navigation item is displayed responsively. Allowed values:
-   *  - `'alwaysText'`: Always display text, regardless of screen size.
-   *  - `'alwaysIcon'`: Always display as an icon, regardless of screen size.
-   *  - `'textHiddenOnMobile'`: Display text when viewport is ≥768px, hide text when <768px.
-   *  - `'iconHiddenOnMobile'`: Display icon when viewport is ≥768px, hide icon when <768px.
-   *  - `'textToIconOnMobile'`: Display text when viewport is ≥768px, switch to icon when <768px.
-   *  - `'iconToTextOnMobile'`: Display icon when viewport is ≥768px, switch to text when <768px.
-   *
-   * The `text` property is required for `'alwaysText'`, `'textHiddenOnMobile'`,
-   * `'iconToTextOnMobile'` or `'textToIconOnMobile'`.
-   * The `icon` property is required for `'alwaysIcon'`, `'iconHiddenOnMobile'`,
-   * `'iconToTextOnMobile'` or `'textToIconOnMobile'`.
-   */
-  displayMode: 'alwaysText' | 'textHiddenOnMobile'
-
-  /**
-   * Sets the text displayed for the navigation item.
-   *
-   * Required for `displayMode` values `'alwaysText'`, `'textHiddenOnMobile'`,
-   * `'iconToTextOnMobile'` or `'textToIconOnMobile'`.
-   */
-  text: string
-}
-
-export interface IconNavItem extends BaseNavItem {
-  /**
-   * Defines how the navigation item is displayed responsively. Allowed values:
-   *  - `'alwaysText'`: Always display text, regardless of screen size.
-   *  - `'alwaysIcon'`: Always display as an icon, regardless of screen size.
-   *  - `'textHiddenOnMobile'`: Display text when viewport is ≥768px, hide text when <768px.
-   *  - `'iconHiddenOnMobile'`: Display icon when viewport is ≥768px, hide icon when <768px.
-   *  - `'textToIconOnMobile'`: Display text when viewport is ≥768px, switch to icon when <768px.
-   *  - `'iconToTextOnMobile'`: Display icon when viewport is ≥768px, switch to text when <768px.
-   *
-   * The `text` property is required for `'alwaysText'`, `'textHiddenOnMobile'`,
-   * `'iconToTextOnMobile'` or `'textToIconOnMobile'`.
-   * The `icon` property is required for `'alwaysIcon'`, `'iconHiddenOnMobile'`,
-   * `'iconToTextOnMobile'` or `'textToIconOnMobile'`.
-   */
-  displayMode: 'alwaysIcon' | 'iconHiddenOnMobile'
-
-  /**
-   * Sets the icon displayed for the navigation item.
-   *
-   * Icon must be in the format `i-<collection>-<icon>` or `i-<collection>:<icon>`
-   * as per {@link https://unocss.dev/presets/icons UnoCSS} specs.
-   *
-   * Required for `displayMode` values `'alwaysIcon'`, `'iconHiddenOnMobile'`,
-   * `'iconToTextOnMobile'` or `'textToIconOnMobile'`.
-   *
-   * @example
-   * "i-ri:twitter-x-fill", "i-ri-twitter-x-fill", "i-mdi:github", "i-mdi-github"
-   *
-   * @see {@link https://icon-sets.iconify.design/ Check all available icons}
-   */
-  icon: Icon
-}
-
-export interface ResponsiveNavItem extends BaseNavItem {
-  /**
-   * Defines how the navigation item is displayed responsively. Allowed values:
-   *  - `'alwaysText'`: Always display text, regardless of screen size.
-   *  - `'alwaysIcon'`: Always display as an icon, regardless of screen size.
-   *  - `'textHiddenOnMobile'`: Display text when viewport is ≥768px, hide text when <768px.
-   *  - `'iconHiddenOnMobile'`: Display icon when viewport is ≥768px, hide icon when <768px.
-   *  - `'textToIconOnMobile'`: Display text when viewport is ≥768px, switch to icon when <768px.
-   *  - `'iconToTextOnMobile'`: Display icon when viewport is ≥768px, switch to text when <768px.
-   *
-   * The `text` property is required for `'alwaysText'`, `'textHiddenOnMobile'`,
-   * `'iconToTextOnMobile'` or `'textToIconOnMobile'`.
-   * The `icon` property is required for `'alwaysIcon'`, `'iconHiddenOnMobile'`,
-   * `'iconToTextOnMobile'` or `'textToIconOnMobile'`.
-   */
-  displayMode: 'textToIconOnMobile' | 'iconToTextOnMobile'
-
-  /**
-   * Sets the text displayed for the navigation item.
-   *
-   * Required for `displayMode` values `'alwaysText'`, `'textHiddenOnMobile'`,
-   * `'iconToTextOnMobile'` or `'textToIconOnMobile'`.
-   */
-  text: string
-
-  /**
-   * Sets the icon displayed for the navigation item.
-   *
-   * Icon must be in the format `i-<collection>-<icon>` or `i-<collection>:<icon>`
-   * as per {@link https://unocss.dev/presets/icons UnoCSS} specs.
-   *
-   * Required for `displayMode` values `'alwaysIcon'`, `'iconHiddenOnMobile'`,
-   * `'iconToTextOnMobile'` or `'textToIconOnMobile'`.
-   *
-   * @example
-   * "i-ri:twitter-x-fill", "i-ri-twitter-x-fill", "i-mdi:github", "i-mdi-github"
-   *
-   * @see {@link https://icon-sets.iconify.design/ Check all available icons}
-   */
-  icon: Icon
-}
-
-export type InternalNav = TextNavItem | IconNavItem | ResponsiveNavItem
-
 interface BaseSocialItem {
   /**
    * Set the URL to the social platform.
@@ -343,45 +224,6 @@ export interface ResponsiveSocialItem extends BaseSocialItem {
 
 export type SocialLink = TextSocialItem | IconSocialItem | ResponsiveSocialItem
 
-type NavBarComponentType =
-  | 'internalNavs'
-  | 'socialLinks'
-  | 'searchButton'
-  | 'themeButton'
-  | 'rssLink'
-  | 'langSwitch'
-  | 'hr'
-
-export interface NavBarLayout {
-  /**
-   * Defines which components ('internalNavs', 'socialLinks', 'searchButton', themeButton',
-   * 'rssLink', 'hr') are positioned on the left side of the navigation bar. Note:
-   *
-   * - Leave empty to place all components on the right.
-   * - No duplicates allowed between `left` and `right`.
-   * - The order defines the display sequence.
-   * - Use `'hr'` to insert a divider between components.
-   */
-  left: NavBarComponentType[]
-
-  /**
-   * Defines which components ('internalNavs', 'socialLinks', 'searchButton', 'themeButton',
-   * 'rssLink', 'hr') are positioned on the right side of the navigation bar. Note:
-   *
-   * - Leave empty to place all components on the right.
-   * - No duplicates allowed between `left` and `right`.
-   * - The order defines the display sequence.
-   * - Use `'hr'` to insert a divider between components.
-   */
-  right: NavBarComponentType[]
-
-  /**
-   * Controls whether the 'internalNavs' and 'socialLinks' section are combined into
-   * a single navigation menu on mobile, managed through a hamburger icon.
-   */
-  mergeOnMobile: boolean
-}
-
 interface PostView {
   /**
    * Controls the display style of post metadata (publication date, read time, modified date, and tags):
@@ -444,25 +286,11 @@ interface ExternalLink {
 
 export interface Ui {
   /**
-   * Sets internal navigation links in display order.
-   *
-   * Used in `src/components/nav/NavBar.astro`.
-   */
-  internalNavs: InternalNav[]
-
-  /**
    * Sets external social links in display order.
    *
-   * Used in `src/components/nav/NavBar.astro`.
+   * Used in `src/components/nav/SideNav.astro`.
    */
   socialLinks: SocialLink[]
-
-  /**
-   * Controls the layout of the navigation bar.
-   *
-   * Used in `src/components/nav/NavBar.astro`.
-   */
-  navBarLayout: NavBarLayout
 
   /**
    * Configures the post UIs.

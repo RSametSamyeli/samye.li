@@ -1,11 +1,12 @@
 ---
 import '~/styles/main.css'
+import '~/styles/layout.css'
 import '~/styles/prose.css'
 import '~/styles/markdown.css'
 
 import Head from '~/components/base/Head.astro'
-import Link from '~/components/base/Link.astro'
 import NavBar from '~/components/nav/NavBar.astro'
+import SideNav from '~/components/nav/SideNav.astro'
 import BackLink from '~/components/widgets/BackLink.astro'
 import Footer from '~/components/base/Footer.astro'
 import ToTopButton from '~/components/widgets/ToTopButton.astro'
@@ -24,11 +25,25 @@ interface Props {
   tags?: string[]
   /** keep this page out of search results (the 404 page) */
   noindex?: boolean
+  /** extra JSON-LD nodes for this page's graph (a reading list) */
+  schema?: Record<string, unknown>[]
 }
 
-const { title, description, ogImage, pubDate, lastModDate, tags, noindex } =
-  Astro.props
+const {
+  title,
+  description,
+  ogImage,
+  pubDate,
+  lastModDate,
+  tags,
+  noindex,
+  schema,
+} = Astro.props
 const locale = localeOf(Astro.url.pathname)
+/** a home page, in any language: no back link or share row there */
+const isHome = Object.values(LOCALES).some(
+  (l) => Astro.url.pathname === withBasePath(l.home)
+)
 
 let style: Record<string, string> = {}
 
@@ -56,47 +71,39 @@ if (hasCustomCursor) style['--external-link-cursor'] = cursorType
       {lastModDate}
       {tags}
       {noindex}
+      {schema}
     />
   </head>
 
   <body
-    class="relative flex flex-col min-h-screen
-      font-sans text-gray-700 dark:text-gray-200"
+    class="min-h-screen font-sans"
     style={Object.keys(style).length !== 0 ? style : undefined}
     data-no-sliding={enableSlideEnterAnim ? undefined : ''}
   >
     <!-- Cloudflare email obfuscation breaks on client-side navigation, so opt out. -->
     <!--email_off-->
 
-    <!-- Skip Link -->
-    <Link
-      href="#main"
-      class="sr-only focus:(not-sr-only fixed start-1 top-1.5 op-20)"
-    >
-      {STRINGS[locale].skipToContent}
-    </Link>
+    <a class="skip-link" href="#main">{STRINGS[locale].skipToContent}</a>
 
-    <!-- Nav Bar -->
     <NavBar />
 
-    <!-- Main -->
-    <main id="main" class="px-7 py-10">
-      <!-- Content -->
-      <slot />
-      <!-- Share -->
-      {
-        Astro.url.pathname !== withBasePath('/') && (
-          <footer class="slide-enter animate-delay-1000! prose mx-auto mt-8 print:hidden">
-            <slot name="share" />
-            <br />
-            <BackLink />
-          </footer>
-        )
-      }
-    </main>
-
-    <!-- Footer -->
-    <Footer />
+    <div class="site-shell">
+      <SideNav />
+      <div class="site-main">
+        <main id="main">
+          <slot />
+          {
+            !isHome && (
+              <footer class="max-w-[42rem] mx-auto mt-16 pt-6 border-t border-[var(--c-border)] flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-sm print:hidden">
+                <BackLink />
+                <slot name="share" />
+              </footer>
+            )
+          }
+        </main>
+        <Footer />
+      </div>
+    </div>
     <ToTopButton />
     <!--/email_off-->
 

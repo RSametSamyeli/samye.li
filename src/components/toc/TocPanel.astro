@@ -2,8 +2,11 @@
 import TocItem from '~/components/toc/TocItem.astro'
 import { generateToc } from '~/utils/toc'
 import { FEATURES } from '~/config'
+import { stringsFor } from '~/i18n'
 
 import type { MarkdownHeading } from 'astro'
+
+const S = stringsFor(Astro.url.pathname)
 
 type Props =
   | {
@@ -30,11 +33,15 @@ const specHeadings = generateToc(headings, minHeadingLevel, maxHeadingLevel)
   id="toc-panel"
   class="hidden! z-200 fixed top-10% left-50% translate-x--50%
     overflow-y-auto flex flex-col
-    w-90% max-h-80vh py-4 px-6 rounded-lg
-    bg-[var(--c-bg)] shadow-custom_0_0_10_0 text-[var(--c-text)]"
+    w-[calc(100%-2rem)] max-w-md max-h-80vh py-4 px-5 rounded-xl
+    bg-[var(--ds-background-100)] shadow-[var(--ds-shadow-modal)] text-[var(--ds-gray-1000)]"
   {style}
 >
-  <div class="pb-1 b-b b-[var(--c-text)] op-50">Table of Contents</div>
+  <div
+    class="pb-2 border-b border-[var(--c-border)] text-sm font-500 text-[var(--ds-gray-900)]"
+  >
+    {S.onThisPage}
+  </div>
   <ul class="text-sm">
     {
       !!specHeadings.length &&

@@ -13,11 +13,11 @@ export const BRAND = {
   /** background of the mark and the share cards */
   ink: '#0a0a0a',
   /** the letter and the card titles */
-  paper: '#f5f5f7',
+  paper: '#ededed',
   /** the dot, and accents on dark backgrounds */
   accent: '#ff2d6a',
   /** secondary text on the cards */
-  muted: '#8e8e93',
+  muted: '#a1a1a1',
 } as const
 
 /** The icons generated from the mark (see `src/pages/[brandIcon].ts`). */
@@ -73,7 +73,7 @@ export function markHtml(size: number, variant: MarkVariant = 'rounded') {
       style="display: flex; align-items: flex-end; margin-top: -${Math.round(fontSize * 0.23)}px;"
     >
       <div
-        style="display: flex; font-family: 'Inter'; font-weight: 700; font-size: ${fontSize}px; line-height: 1; letter-spacing: -0.04em; color: ${BRAND.paper};"
+        style="display: flex; font-family: 'Geist'; font-weight: 700; font-size: ${fontSize}px; line-height: 1; letter-spacing: -0.04em; color: ${BRAND.paper};"
       >
         s
       </div>

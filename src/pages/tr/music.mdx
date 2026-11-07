@@ -1,0 +1,29 @@
+---
+title: 'Müzik'
+subtitle: 'Rock, Anadolu rock ve yeni psikedelik'
+description: "Samet Samyeli ne dinliyor: üç Spotify listesinde 225 şarkı; Queen, AC/DC ve Metallica'dan Cem Karaca, Erkin Koray ve yeni Anadolu psikedeliğine."
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+import MusicPlaylists from '~/components/views/MusicPlaylists.astro'
+import { musicSchema } from '~/data/music'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+  schema={musicSchema('tr', 'https://samye.li/tr/music/')}
+>
+  <StandardLayout
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    wide={true}
+    articleClass="wide-page"
+  >
+    <RenderPage slot="article" collectionType="home" id="tr/music" />
+    <MusicPlaylists slot="article" />
+  </StandardLayout>
+</BaseLayout>

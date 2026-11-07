@@ -1,30 +1,49 @@
 name: CI
 
-# Every push and pull request is checked the way a deploy builds it: formatting,
-# lint, types and content schemas, then the full static build. The deploy itself
-# runs on Coolify from the GitHub webhook; this catches what would break it.
+# Every push and pull request is checked the way it will be served: formatting,
+# lint, types and content schemas, the full static build, and verify-build
+# (titles, links, structured data, and the host's _headers and _redirects).
+# The build that passed is the build that ships: a push to main deploys that
+# same dist/ to Cloudflare Pages and then tells IndexNow; a pull request from
+# this repository gets a preview of its own on *.pages.dev (never indexed).
+#
+# Needs, once: the repository secrets CLOUDFLARE_API_TOKEN (Account >
+# Cloudflare Pages > Edit) and CLOUDFLARE_ACCOUNT_ID. Nothing secret is in
+# this public repository; every action is pinned to a commit.
 on:
   push:
     branches: [main]
   pull_request:
+  # The daily stats commit (stats.yml) is pushed with GITHUB_TOKEN, which starts
+  # no push run; it starts this one instead.
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # a new push supersedes a pull request's run; on main, deploys queue in order
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  PROJECT: samye-li
+  SITE: https://samye.li
+  WRANGLER: wrangler@4.158.0
 
 jobs:
   verify:
+    name: Verify
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
       SKIP_SIMPLE_GIT_HOOKS: 1
     steps:
-      - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v4 # the version is package.json's packageManager
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false # nothing here pushes
+      - uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0; pnpm itself is package.json's packageManager
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
           node-version: 24
           cache: pnpm
@@ -37,5 +56,106 @@ jobs:
         run: pnpm check
       - name: Build
         run: pnpm build
-      - name: Verify the build (SEO, links, structured data)
+      - name: Verify the build (SEO, links, structured data, host rules)
         run: pnpm verify
+      - name: Keep the build for the deploy
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist
+          path: dist/
+          include-hidden-files: true # .well-known/security.txt
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    name: Deploy
+    needs: verify
+    # main (a push, or a run started by hand or by stats.yml), and pull requests
+    # from this repository: a fork's run gets no secrets
+    if: >-
+      (github.event_name != 'pull_request' && github.ref == 'refs/heads/main') ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: ${{ github.event_name == 'pull_request' && 'preview' || 'production' }}
+      url: ${{ steps.deploy.outputs.url }}
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WRANGLER_SEND_METRICS: false
+    steps:
+      # the commit, for wrangler to label the deployment with
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false # nothing here pushes
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: dist
+      - name: Check the Cloudflare credentials
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::Set the secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+      - name: Create the Pages project on the first deploy
+        run: |
+          status=$(curl -sS -o /dev/null -w '%{http_code}' \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$PROJECT")
+          case "$status" in
+            200) echo "Pages project $PROJECT exists." ;;
+            404) npx --yes "$WRANGLER" pages project create "$PROJECT" --production-branch=main ;;
+            *)
+              echo "::error::Cloudflare answered HTTP $status for the project $PROJECT: check the token's permission (Account > Cloudflare Pages > Edit) and the account ID."
+              exit 1
+              ;;
+          esac
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        env:
+          # a branch name is passed as data, never spliced into the script
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+          WRANGLER_OUTPUT_FILE_PATH: ${{ runner.temp }}/wrangler.ndjson
+        run: |
+          npx --yes "$WRANGLER" pages deploy dist --project-name="$PROJECT" --branch="$BRANCH"
+          url=$(jq -r 'select(.type == "pages-deploy-detailed") | .alias // .url' "$WRANGLER_OUTPUT_FILE_PATH" | tail -n 1)
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Deployed **$BRANCH** to $url" >> "$GITHUB_STEP_SUMMARY"
+
+  indexnow:
+    name: IndexNow
+    needs: deploy
+    # new and changed pages, after a push to main is live (not on the daily
+    # stats run, which changes no page's text)
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      # public by design: the engines check it at https://samye.li/<key>.txt
+      KEY: 1d2215ef99afb2d26b93e99d7856a10c
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: dist
+      # Tells IndexNow search engines (Bing, and through it ChatGPT search and
+      # Copilot; Yandex, Naver, Seznam) which pages exist, so new and changed
+      # pages are crawled in minutes instead of weeks.
+      - name: Submit the sitemap's pages
+        run: |
+          if ! curl -fsS --retry 3 "$SITE/$KEY.txt" | grep -qx "$KEY"; then
+            echo "::warning::$SITE/$KEY.txt does not answer (is the domain attached to the Pages project?); nothing submitted."
+            exit 0
+          fi
+          urls=$(grep -oE '<loc>[^<]+</loc>' dist/sitemap-0.xml | sed -E 's#</?loc>##g' | jq -R . | jq -sc .)
+          echo "Submitting $(echo "$urls" | jq length) URLs"
+          jq -n --arg host "${SITE#https://}" --arg key "$KEY" --arg loc "$SITE/$KEY.txt" --argjson urls "$urls" \
+            '{host: $host, key: $key, keyLocation: $loc, urlList: $urls}' |
+            curl -fsS -X POST https://api.indexnow.org/indexnow \
+              -H 'Content-Type: application/json; charset=utf-8' --data-binary @- \
+              -o /dev/null -w 'IndexNow: HTTP %{http_code}\n'

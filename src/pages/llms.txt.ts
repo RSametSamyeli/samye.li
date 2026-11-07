@@ -86,6 +86,24 @@ export async function GET() {
       'his community work: the Open Software Network (AYA) after the 2023 Türkiye earthquakes, gazla.co, open source.'
     ),
     entry(
+      'Into the wind',
+      '/outdoors/',
+      '/outdoors.md',
+      'sailing since 2002 at Eğirdir Sailing Club (Optimist, then ILCA; Mediterranean ILCA champion, 13 medals, 2 cups), diving, mountaineering, paragliding.'
+    ),
+    entry(
+      'Music',
+      '/music/',
+      '/music.md',
+      'what he listens to: 225 tracks in three Spotify playlists, every one listed.'
+    ),
+    entry(
+      'Reading',
+      '/reading/',
+      '/reading.md',
+      'his reading list by shelf: the Stoics, strategy and power, mind and decisions, entrepreneurship.'
+    ),
+    entry(
       'Now',
       '/now/',
       '/now.md',
@@ -141,6 +159,24 @@ export async function GET() {
       '/tr/community.md',
       'topluluk çalışmaları: Açık Yazılım Ağı (AYA), gazla.co, açık kaynak.'
     ),
+    entry(
+      'Rüzgarın peşinde',
+      '/tr/outdoors/',
+      '/tr/outdoors.md',
+      "2002'den beri Eğirdir Yelken Kulübü'nde yelken (ILCA'da Akdeniz şampiyonu, 13 madalya, 2 kupa), dalış, dağcılık, yamaç paraşütü."
+    ),
+    entry(
+      'Müzik',
+      '/tr/music/',
+      '/tr/music.md',
+      'ne dinlediği: üç Spotify listesinde 225 şarkı, hepsi listeli.'
+    ),
+    entry(
+      'Okuduklarım',
+      '/tr/reading/',
+      '/tr/reading.md',
+      'raf raf okudukları: Stoacılar, strateji, zihin ve kararlar, girişimcilik.'
+    ),
     entry('Şu an', '/tr/now/', '/tr/now.md', 'şu sıralar neye odaklandığı.'),
     entry(
       'İnandıklarım',
@@ -181,10 +217,10 @@ export async function GET() {
     '',
     '## Reading this site',
     '',
-    `Every page above has a plain-markdown mirror (linked as "markdown"). The same file is`,
-    'returned at the page URL itself when you send `Accept: text/markdown`, and HTML',
-    'responses carry `Link: <…>; rel="alternate"; type="text/markdown"`. The markdown is',
-    'a projection of the page, never a separate document.',
+    `Every page above has a plain-markdown mirror (linked as "markdown"). Each page names`,
+    'its mirror in `<link rel="alternate" type="text/markdown">` and in its response',
+    'headers, `Link: <…>; rel="alternate"; type="text/markdown"`. The markdown is a',
+    'projection of the page, never a separate document.',
     '',
     `Everything in one file: ${abs('/llms-full.txt')}`,
     `Every page, with when it last changed: ${abs('/sitemap-index.xml')}`,

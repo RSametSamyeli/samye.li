@@ -8,24 +8,14 @@ import {
 
 import { UI } from './src/config'
 import projecstData from './src/content/projects/data.json'
+import { HOME } from './src/data/home'
+import { NAV_GROUPS } from './src/data/navigation'
 
 import type { PresetWind3Theme } from 'unocss'
-import type {
-  IconNavItem,
-  ResponsiveNavItem,
-  IconSocialItem,
-  ResponsiveSocialItem,
-} from './src/types'
+import type { IconSocialItem, ResponsiveSocialItem } from './src/types'
 
-const { internalNavs, socialLinks } = UI
+const { socialLinks } = UI
 
-const navIcons = internalNavs
-  .filter(
-    (item) =>
-      item.displayMode !== 'alwaysText' &&
-      item.displayMode !== 'textHiddenOnMobile'
-  )
-  .map((item) => (item as IconNavItem | ResponsiveNavItem).icon)
 const socialIcons = socialLinks
   .filter(
     (item) =>
@@ -34,9 +24,10 @@ const socialIcons = socialLinks
   )
   .map((item) => (item as IconSocialItem | ResponsiveSocialItem).icon)
 
+// brands have a `logo` instead of an icon
 const projectIcons = projecstData
-  .map((item) => item.icon)
-  .filter((icon) => icon.startsWith('i-'))
+  .map((item) => ('icon' in item ? (item.icon ?? '') : ''))
+  .filter((icon): icon is string => icon.startsWith('i-'))
 
 export default defineConfig<PresetWind3Theme>({
   content: {
@@ -98,5 +89,11 @@ export default defineConfig<PresetWind3Theme>({
     }),
   ],
   transformers: [transformerVariantGroup()],
-  safelist: [...navIcons, ...socialIcons, ...projectIcons],
+  safelist: [
+    ...socialIcons,
+    ...projectIcons,
+    // icon classes named in data, which the content scan does not read
+    ...HOME.facts.map((f) => f.icon),
+    ...NAV_GROUPS.flatMap((g) => g.items.map((item) => item.icon)),
+  ],
 })

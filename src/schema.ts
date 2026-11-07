@@ -168,29 +168,56 @@ export const postSchema = ({ image }: SchemaContext) =>
   })
 
 /* Projects */
-export const projectSchema = z.object({
-  id: z.string().describe('**Required**. Name of the project to be displayed.'),
-  link: z
-    .union([z.url(), z.string().regex(/^\/[^/]/, 'A path on this site')])
-    .describe(
-      '**Required**. URL linking to the project page or repository, or a path on this site (`/lodos/`).'
-    ),
-  desc: z
-    .string()
-    .describe('**Required**. A brief description summarizing the project.'),
-  descTr: z
-    .string()
-    .describe(
-      '**Required**. The description in Turkish, for the /tr/projects/ page.'
-    ),
-  icon: z
-    .string()
-    .regex(
-      /^(i-[\w-]+(:[\w-]+)?|\/[\w./-]+\.(svg|png|webp))$/,
-      'Icon must be a UnoCSS icon (`i-<collection>-<icon>`) or an image in `public/` (`/icons/x.svg`).'
-    )
-    .describe(
-      "**Required**. Icon representing the project: a [UnoCSS icon](https://icones.js.org/) as `i-<collection>-<icon>` or `i-<collection>:<icon>`, or the path of an image in `public/` such as `/icons/lodos.svg` for the project's own logo."
-    ),
-  category: z.string().describe('**Required**. Category of the project.'),
-})
+export const projectSchema = z
+  .object({
+    id: z
+      .string()
+      .describe('**Required**. Name of the project to be displayed.'),
+    link: z
+      .union([z.url(), z.string().regex(/^\/[^/]/, 'A path on this site')])
+      .describe(
+        '**Required**. URL linking to the project page or repository, or a path on this site (`/lodos/`).'
+      ),
+    desc: z
+      .string()
+      .describe('**Required**. A brief description summarizing the project.'),
+    descTr: z
+      .string()
+      .describe(
+        '**Required**. The description in Turkish, for the /tr/projects/ page.'
+      ),
+    via: z
+      .string()
+      .optional()
+      .describe(
+        'Client work: the company it was done at and when (`Akinon · 2022–2023`), shown under the description.'
+      ),
+    repo: z
+      .url()
+      .optional()
+      .describe(
+        'The source code, when the project link is the product (nfsu2.xyz): shown as its own link on the card.'
+      ),
+    icon: z
+      .string()
+      .regex(
+        /^(i-[\w-]+(:[\w-]+)?|\/[\w./-]+\.(svg|png|webp))$/,
+        'Icon must be a UnoCSS icon (`i-<collection>-<icon>`) or an image in `public/` (`/icons/x.svg`).'
+      )
+      .optional()
+      .describe(
+        "Icon representing the project (or `logo`): a [UnoCSS icon](https://icones.js.org/) as `i-<collection>-<icon>` or `i-<collection>:<icon>`, or the path of an image in `public/` such as `/icons/lodos.svg` for the project's own logo."
+      ),
+    facts: z
+      .object({ en: z.string(), tr: z.string() })
+      .optional()
+      .describe('A line of facts at the foot of the card, in each language.'),
+    logo: z
+      .string()
+      .optional()
+      .describe(
+        'A brand (src/data/logos.ts): its wordmark in place of the icon and the name.'
+      ),
+    category: z.string().describe('**Required**. Category of the project.'),
+  })
+  .refine((p) => p.icon || p.logo, 'A project needs an `icon` or a `logo`.')

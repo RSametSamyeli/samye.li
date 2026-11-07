@@ -1,0 +1,330 @@
+---
+import { authorOf, SHELVES } from '~/data/books'
+import { LOCALES, localeOf } from '~/i18n'
+
+/**
+ * The reading list (src/data/books.ts) in the music page's layout: the
+ * numbers first, then each shelf as one block, its photo at the left and at
+ * the right what it is about and its first five books, the rest a click
+ * away. On phones the two columns stack.
+ */
+const locale = localeOf(Astro.url.pathname)
+const tr = locale === 'tr'
+const n = new Intl.NumberFormat(LOCALES[locale].intl)
+
+const books = SHELVES.flatMap((s) => s.books)
+const authorCounts = new Map<string, number>()
+for (const book of books) {
+  const author = authorOf(book, locale)
+  authorCounts.set(author, (authorCounts.get(author) ?? 0) + 1)
+}
+const topAuthors = [...authorCounts]
+  .filter(([, count]) => count > 1)
+  .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], locale))
+
+/** books shown before "show more" */
+const SHOWN = 5
+
+const T = {
+  stats: [
+    [n.format(books.length), tr ? 'kitap' : 'books'],
+    [n.format(authorCounts.size), tr ? 'yazar' : 'authors'],
+    [n.format(SHELVES.length), tr ? 'raf' : 'shelves'],
+  ],
+  mostRead: tr ? 'En çok okuduğum yazarlar' : 'Most read',
+  books: tr ? 'kitap' : 'books',
+  authors: tr ? 'yazar' : 'authors',
+  photo: tr ? 'Fotoğraf' : 'Photo',
+  more: (count: number) =>
+    tr
+      ? `Devamını göster (${count} kitap daha)`
+      : `Show more (${count} more books)`,
+  less: tr ? 'Daha az göster' : 'Show less',
+}
+
+/** A book's title, marked as English where the Turkish page keeps the original. */
+const titleLang = (title: Record<string, string>) =>
+  locale !== 'en' && title[locale] === title.en ? LOCALES.en.lang : undefined
+---
+
+<div class="reading">
+  <dl class="reading-stats">
+    {
+      T.stats.map(([value, label]) => (
+        <div>
+          <dt>{label}</dt>
+          <dd>{value}</dd>
+        </div>
+      ))
+    }
+  </dl>
+  <p class="reading-top">
+    <span>{T.mostRead}:</span>{' '}
+    {
+      topAuthors
+        .map(([name, count]) => `${name} (${n.format(count)})`)
+        .join(', ')
+    }.
+  </p>
+
+  {
+    SHELVES.map((shelf) => {
+      const authors = new Set(shelf.books.map((b) => authorOf(b, locale)))
+      return (
+        <section class="shelf" aria-labelledby={`shelf-${shelf.id}`}>
+          <figure class="shelf-media">
+            <img
+              src={shelf.image}
+              alt=""
+              width="1200"
+              height="1500"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              {T.photo}:{' '}
+              <a href={shelf.credit.url} rel="noopener">
+                {shelf.credit.name}
+              </a>
+              , Unsplash
+            </figcaption>
+          </figure>
+          <div class="shelf-body">
+            <h2 id={`shelf-${shelf.id}`}>{shelf.title[locale]}</h2>
+            <p class="shelf-meta">
+              {n.format(shelf.books.length)} {T.books} ·{' '}
+              {n.format(authors.size)} {T.authors}
+            </p>
+            <p class="shelf-about">{shelf.about[locale]}</p>
+            <div class="shelf-books" data-collapsed>
+              <ol id={`books-${shelf.id}`}>
+                {shelf.books.map((book) => (
+                  <li>
+                    <cite class="book-title" lang={titleLang(book.title)}>
+                      {book.title[locale]}
+                    </cite>
+                    <span class="book-author">{authorOf(book, locale)}</span>
+                    <span class="book-note">{book.note[locale]}</span>
+                  </li>
+                ))}
+              </ol>
+              {shelf.books.length > SHOWN && (
+                <button
+                  type="button"
+                  class="shelf-more"
+                  aria-controls={`books-${shelf.id}`}
+                  aria-expanded="false"
+                  data-more={T.more(shelf.books.length - SHOWN)}
+                  data-less={T.less}
+                >
+                  {T.more(shelf.books.length - SHOWN)}
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+      )
+    })
+  }
+</div>
+
+<script>
+  // "Show more" / "Show less": one listener for every shelf, and after
+  // client navigation
+  document.addEventListener('click', (event) => {
+    const button = (event.target as Element | null)?.closest<HTMLElement>(
+      '.shelf-more'
+    )
+    const box = button?.closest<HTMLElement>('.shelf-books')
+    if (!button || !box) return
+    const open = box.toggleAttribute('data-collapsed') === false
+    button.setAttribute('aria-expanded', String(open))
+    button.textContent =
+      (open ? button.dataset.less : button.dataset.more) ?? ''
+    if (!open) box.scrollIntoView({ block: 'nearest' })
+  })
+</script>
+
+<style>
+  /* The numbers: three tiles, as on the music page */
+  .reading-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 2.5rem 0 0;
+    border-radius: var(--radius-md);
+    box-shadow: var(--ds-shadow-border);
+    overflow: hidden;
+  }
+  .reading-stats > div {
+    padding: 1rem 1.25rem;
+  }
+  .reading-stats > div + div {
+    border-left: 1px solid var(--c-border);
+  }
+  .reading-stats dt {
+    color: var(--ds-gray-900);
+    font-size: 0.8125rem;
+  }
+  .reading-stats dd {
+    margin: 0.25rem 0 0;
+    color: var(--ds-gray-1000);
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+  }
+  .reading-top {
+    margin: 1rem 0 0;
+    color: var(--ds-text-body);
+    font-size: 0.875rem;
+  }
+  .reading-top span {
+    color: var(--ds-gray-900);
+  }
+
+  /* A shelf: its photo at the left, its books at the right */
+  .shelf {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: 2.5rem;
+    align-items: start;
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--c-border);
+  }
+  .shelf-media {
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+    margin: 0 !important;
+  }
+  .shelf-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    margin: 0 !important;
+    border-radius: var(--radius-md);
+    box-shadow: var(--ds-shadow-border);
+    object-fit: cover;
+  }
+  .shelf-media figcaption {
+    margin-top: 0.625rem !important;
+    color: var(--ds-gray-900);
+    font-size: 0.75rem;
+  }
+  .shelf-media figcaption a {
+    color: inherit;
+    font-weight: 400;
+    text-decoration-color: var(--ds-gray-alpha-500);
+  }
+  .shelf-body h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  .shelf-meta {
+    margin: 0.25rem 0 0;
+    color: var(--ds-gray-900);
+    font-size: 0.875rem;
+  }
+  .shelf-about {
+    margin: 1rem 0 0;
+  }
+
+  /* The books: numbered rows, the title, its author, a line about it */
+  .shelf-books ol {
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: book;
+  }
+  .shelf-books li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    column-gap: 0.75rem;
+    margin: 0;
+    padding: 0.625rem 0.75rem 0.625rem 0;
+    border-radius: var(--radius-sm);
+    counter-increment: book;
+    transition: background-color 0.15s ease;
+  }
+  .shelf-books li::before {
+    content: counter(book) !important;
+    position: static !important;
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    width: auto !important;
+    height: auto !important;
+    background: none !important;
+    color: var(--ds-gray-900);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .shelf-books li:hover {
+    background: var(--ds-gray-alpha-100);
+  }
+  .book-title {
+    grid-column: 2;
+    color: var(--ds-gray-1000);
+    font-style: normal;
+    font-weight: 500;
+  }
+  .book-author {
+    grid-column: 2;
+    color: var(--ds-gray-900);
+    font-size: 0.8125rem;
+  }
+  .book-note {
+    grid-column: 2;
+    margin-top: 0.25rem;
+    color: var(--ds-text-body);
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+  .shelf-books[data-collapsed] li:nth-child(n + 6) {
+    display: none;
+  }
+  .shelf-more {
+    display: inline-flex;
+    align-items: center;
+    height: 2rem;
+    margin: 0.5rem 0 0 -0.5rem;
+    padding: 0 0.5rem;
+    border-radius: var(--radius-sm);
+    color: var(--ds-gray-900);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+  .shelf-more:hover {
+    background: var(--ds-gray-alpha-100);
+    color: var(--ds-gray-1000);
+  }
+
+  @media (max-width: 767.98px) {
+    .shelf {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+    .shelf-media {
+      position: static;
+    }
+    .shelf-media img {
+      aspect-ratio: 16 / 9;
+    }
+    .reading-stats dd {
+      font-size: 1.375rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shelf-books li,
+    .shelf-more {
+      transition: none;
+    }
+  }
+</style>

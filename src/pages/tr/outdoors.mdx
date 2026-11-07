@@ -1,0 +1,20 @@
+---
+title: 'Rüzgarın peşinde'
+subtitle: 'Yelken, su, dağ ve gökyüzü'
+description: "Samet Samyeli'nin rüzgârla hikâyesi: 2002'den beri Eğirdir Yelken Kulübü'nde yelken, Optimist'ten ILCA'ya, ILCA'da Akdeniz şampiyonluğu ve 13 madalya; rüzgâr sörfü, dalış, dağcılık, yamaç paraşütü ve motor."
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+>
+  <StandardLayout title={frontmatter.title} subtitle={frontmatter.subtitle}>
+    <RenderPage slot="article" collectionType="home" id="tr/outdoors" />
+  </StandardLayout>
+</BaseLayout>

@@ -1,0 +1,273 @@
+---
+import { UI } from '~/config'
+import { LOCALES, localeOf, pathIn, STRINGS } from '~/i18n'
+import { withBasePath } from '~/utils/path'
+import { NAV_GROUPS } from '~/data/navigation'
+
+/**
+ * The sidebar, as on vercel.com: what the site is for first (home, projects),
+ * then the writing, then the life outside work, then who I am, and where else
+ * to find me at the foot. Each item has an icon to scan by; the page you are
+ * on, or the section it belongs to (the blog, for a post), is marked. From
+ * 1024px it is a column beside the content that stays put while the page
+ * scrolls; below, a sheet under the header that the menu button opens, the
+ * page behind it inert while it is open. The colophon lives in the footer.
+ */
+const locale = localeOf(Astro.url.pathname)
+const S = STRINGS[locale]
+
+/** A page in the reader's language: its translation, or its Turkish-interface mirror */
+const href = (path: string) => withBasePath(pathIn(path, locale))
+
+/** The groups (src/data/navigation.ts), in the page's language. */
+const groups = NAV_GROUPS.map((group) => ({
+  title: group.title && (S[group.title] as string),
+  items: group.items
+    .filter((item) => !item.hidden)
+    .map((item) => ({
+      path: item.path,
+      text: S[item.label] as string,
+      icon: item.icon,
+    })),
+}))
+
+/** The page itself ('page'), or the section it is in ('true'); home only exactly. */
+const here = Astro.url.pathname.endsWith('/')
+  ? Astro.url.pathname
+  : `${Astro.url.pathname}/`
+const homes = new Set(Object.values(LOCALES).map((l) => withBasePath(l.home)))
+const current = (link: string) =>
+  here === link
+    ? 'page'
+    : !homes.has(link) && here.startsWith(link)
+      ? 'true'
+      : undefined
+---
+
+<nav id="side-nav" class="side-nav print:hidden" aria-label={S.navigation}>
+  <div class="side-nav-groups">
+    {
+      groups.map(({ title, items }, i) => (
+        <div
+          class="side-nav-group"
+          role={title ? 'group' : undefined}
+          aria-labelledby={title ? `side-nav-group-${i}` : undefined}
+        >
+          {title && (
+            <p class="side-nav-title" id={`side-nav-group-${i}`}>
+              {title}
+            </p>
+          )}
+          <ul>
+            {items.map(({ path, text, icon }) => (
+              <li>
+                <a
+                  class="side-nav-link"
+                  href={href(path)}
+                  aria-current={current(href(path))}
+                >
+                  <span class={`side-nav-icon ${icon}`} aria-hidden="true" />
+                  {text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+  <ul class="side-nav-social" aria-label={S.elsewhere}>
+    {
+      UI.socialLinks.map((item) => (
+        <li>
+          <a
+            class="ds-icon-button"
+            href={item.link}
+            rel={item.link.startsWith('mailto:') ? undefined : 'me'}
+            title={item.title}
+            aria-label={item.title}
+          >
+            {'icon' in item && <span class={item.icon} aria-hidden="true" />}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<script>
+  /*
+   * Below 1024px: the sheet, opened and closed by the header's menu button.
+   * While it is open the page behind is inert (no focus, no clicks, hidden
+   * from screen readers) and does not scroll; Escape closes it.
+   */
+  const media = window.matchMedia('(max-width: 1023.98px)')
+
+  const setOpen = (open: boolean, restoreFocus = false) => {
+    const nav = document.getElementById('side-nav')
+    const button = document.getElementById('side-nav-button')
+    if (!nav || !button) return
+    nav.toggleAttribute('data-open', open)
+    button.setAttribute('aria-expanded', String(open))
+    document.querySelector('.site-main')?.toggleAttribute('inert', open)
+    document.documentElement.style.overflow = open ? 'hidden' : ''
+    if (open) nav.querySelector<HTMLElement>('a')?.focus()
+    else if (restoreFocus) button.focus()
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    setOpen(false)
+    document
+      .getElementById('side-nav-button')
+      ?.addEventListener('click', (event) => {
+        const open =
+          (event.currentTarget as HTMLElement).getAttribute('aria-expanded') !==
+          'true'
+        setOpen(open, !open)
+      })
+  })
+
+  document.addEventListener('keydown', (event) => {
+    if (
+      event.key === 'Escape' &&
+      document.getElementById('side-nav')?.hasAttribute('data-open')
+    )
+      setOpen(false, true)
+  })
+
+  // grown past the breakpoint with the sheet open: the page comes back
+  media.addEventListener('change', (event) => {
+    if (!event.matches) setOpen(false)
+  })
+</script>
+
+<style>
+  .side-nav {
+    position: sticky;
+    top: var(--header-h);
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: 2rem;
+    width: var(--sidebar-w);
+    height: calc(100dvh - var(--header-h));
+    padding: 1rem 0.75rem;
+    border-right: 1px solid var(--c-border);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .side-nav-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .side-nav-title {
+    margin: 0 0 0.25rem;
+    padding: 0 0.625rem;
+    color: var(--ds-gray-900);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.5rem;
+  }
+
+  .side-nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .side-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    height: 2rem;
+    padding: 0 0.625rem;
+    border-radius: var(--radius-sm);
+    color: var(--ds-gray-900);
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  .side-nav-icon {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    color: var(--ds-gray-900);
+    transition: color 0.15s ease;
+  }
+
+  .side-nav-link:hover {
+    background: var(--ds-gray-alpha-100);
+    color: var(--ds-gray-1000);
+  }
+
+  .side-nav-link:hover .side-nav-icon,
+  .side-nav-link[aria-current] .side-nav-icon {
+    color: var(--ds-gray-1000);
+  }
+
+  .side-nav-link[aria-current] {
+    background: var(--ds-gray-alpha-200);
+    color: var(--ds-gray-1000);
+    font-weight: 500;
+  }
+
+  .side-nav-social {
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 0.25rem !important;
+    margin-top: auto !important;
+    padding: 1rem 0.25rem 0 !important;
+    border-top: 1px solid var(--c-border);
+  }
+
+  /* Below 1024px: hidden until opened, then the whole screen under the header. */
+  @media (max-width: 1023.98px) {
+    .side-nav {
+      position: fixed;
+      inset: var(--header-h) 0 0 0;
+      z-index: 40;
+      display: none;
+      width: auto;
+      height: auto;
+      padding: 1.25rem 1rem 2rem;
+      border-right: 0;
+      background: var(--ds-background-100);
+    }
+
+    .side-nav[data-open] {
+      display: flex;
+    }
+
+    .side-nav-groups {
+      gap: 1.75rem;
+    }
+
+    /* touch targets of 44px */
+    .side-nav-link {
+      height: 2.75rem;
+      gap: 0.75rem;
+      font-size: 1rem;
+    }
+
+    .side-nav-icon {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .side-nav-link,
+    .side-nav-icon {
+      transition: none;
+    }
+  }
+</style>

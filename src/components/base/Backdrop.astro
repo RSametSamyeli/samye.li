@@ -4,7 +4,7 @@
 
 <div
   id="backdrop"
-  class="hidden z-150 fixed inset-0 bg-[#ffffffcc] dark:bg-[#000000cc]"
+  class="hidden z-150 fixed inset-0 bg-[rgb(0_0_0/0.2)] dark:bg-[rgb(0_0_0/0.6)]"
   aria-hidden="true"
 >
 </div>
@@ -13,7 +13,6 @@
   import { toggleFadeEffect } from '~/utils/misc'
 
   const PANELS = [
-    { id: 'nav-panel', button: 'nav-open-button', hiddenClass: 'hidden!' },
     { id: 'toc-panel', button: 'toc-open-button', hiddenClass: 'hidden!' },
     { id: 'tag-panel', button: 'tag-open-button', hiddenClass: 'hidden!' },
     { id: 'search-panel', button: 'search-switch', hiddenClass: 'hidden' },

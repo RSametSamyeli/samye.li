@@ -36,6 +36,7 @@ if (collectionType === 'projects') {
   isEmpty = projects.length === 0
   if (isEmpty) return
 
+  // data.json order: the collection loader does not keep it
   const projectOrder = new Map(
     projectsData.map(({ id }, index) => [id, index] as const)
   )
@@ -64,20 +65,13 @@ const tocEnabled = Array.isArray(toc) && toc[0] && pageToc
     <>
       {tocEnabled && (
         <>
-          <DesktopAside
-            anchors={Object.keys(data).map(categoryName)}
-            style={
-              toc[1].displayPosition === 'right'
-                ? 'left: calc(100vw - 15.625rem + 5rem)'
-                : undefined
-            }
-          />
+          <DesktopAside anchors={Object.keys(data).map(categoryName)} />
           <MobileControl anchors={Object.keys(data).map(categoryName)} />
         </>
       )}
       {Object.keys(data).map((key, idx) => (
         <section
-          class="slide-enter mx-auto text-left lt-lgp:max-w-[712px] lt-md:max-w-[350px]"
+          class="slide-enter mx-auto text-left"
           style={{
             '--enter-stage': idx,
             'max-width': `calc(350px * ${UI.groupView.maxGroupColumns} + ${UI.groupView.maxGroupColumns - 1} * 0.75rem)`,

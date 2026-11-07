@@ -8,7 +8,7 @@ This is a [now page](https://nownownow.com/about): what I'm focused on at this p
 ## On the side
 
 - **NFS World in the browser**: a 2010 Windows game lifted to WebAssembly and WebGPU. I wrote about [taking it from 11 fps to 80](/blog/nfs-world-in-the-browser-performance/).
-- **Need for Speed Underground 2, in Turkish**: I translated the [browser port](https://github.com/th0mk/nfsu2-web) by hand, all 3,918 of the game's texts.
+- **Need for Speed Underground 2 in the browser**: contributing to the [browser port](https://github.com/th0mk/nfsu2-web) ([nfsu2.xyz](https://nfsu2.xyz)) and keeping an eye on the repository; the Turkish translation, all 3,918 of the game's texts, is mine.
 
 ## Writing
 

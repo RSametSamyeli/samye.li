@@ -1,0 +1,354 @@
+---
+import VideoEmbed from '~/components/widgets/VideoEmbed.astro'
+import {
+  formatHours,
+  formatTrack,
+  LEAD,
+  PLAYLISTS,
+  TOTALS,
+  VIDEOS,
+} from '~/data/music'
+import { LOCALES, localeOf } from '~/i18n'
+
+/**
+ * The music page below its intro: two videos, the numbers of the three
+ * playlists together, then each playlist as one block, its video at the left
+ * and at the right what it is, a link to Spotify and its first five tracks,
+ * the rest a click away. On phones the two columns stack.
+ */
+const locale = localeOf(Astro.url.pathname)
+const tr = locale === 'tr'
+const n = new Intl.NumberFormat(LOCALES[locale].intl)
+const hours = Math.round(TOTALS.seconds / 3600)
+const T = {
+  stats: [
+    [n.format(TOTALS.tracks), tr ? 'şarkı' : 'songs'],
+    [n.format(TOTALS.artists), tr ? 'sanatçı' : 'artists'],
+    [`~${hours}`, tr ? 'saat müzik' : 'hours of music'],
+  ],
+  mostFeatured: tr ? 'En çok yer alanlar' : 'Most featured',
+  songs: tr ? 'şarkı' : 'songs',
+  artists: tr ? 'sanatçı' : 'artists',
+  listen: tr ? "Spotify'da dinle" : 'Listen on Spotify',
+  more: (count: number) =>
+    tr
+      ? `Devamını göster (${count} şarkı daha)`
+      : `Show more (${count} more songs)`,
+  less: tr ? 'Daha az göster' : 'Show less',
+}
+/** tracks shown before "show more" */
+const SHOWN = 5
+const list = (artists: { name: string; count: number }[], max: number) =>
+  artists
+    .slice(0, max)
+    .map((a) => `${a.name} (${n.format(a.count)})`)
+    .join(', ')
+---
+
+<div class="music">
+  <div class="music-featured">
+    {
+      VIDEOS.top.map((v) => (
+        <VideoEmbed
+          id={v.id}
+          title={v.title}
+          caption={v.caption[locale]}
+          start={v.start}
+        />
+      ))
+    }
+  </div>
+
+  <p class="music-lead">{LEAD[locale]}</p>
+  <dl class="music-stats">
+    {
+      T.stats.map(([value, label]) => (
+        <div>
+          <dt>{label}</dt>
+          <dd>{value}</dd>
+        </div>
+      ))
+    }
+  </dl>
+  <p class="music-top">
+    <span>{T.mostFeatured}:</span>{' '}
+    {list(TOTALS.topArtists, 10)}.
+  </p>
+
+  {
+    PLAYLISTS.map((p) => (
+      <section class="playlist" aria-labelledby={`pl-${p.id}`}>
+        {VIDEOS[p.id] && (
+          <div class="playlist-media">
+            {VIDEOS[p.id].map((v) => (
+              <VideoEmbed
+                id={v.id}
+                title={v.title}
+                caption={v.caption[locale]}
+                start={v.start}
+              />
+            ))}
+          </div>
+        )}
+        <div class="playlist-body">
+          <header class="playlist-head">
+            <div class="min-w-0">
+              <h2 id={`pl-${p.id}`}>{p.name}</h2>
+              <p class="playlist-meta">
+                {n.format(p.tracks.length)} {T.songs} ·{' '}
+                {n.format(p.artists.length)} {T.artists} ·{' '}
+                {formatHours(p.seconds, locale)}
+              </p>
+            </div>
+            <a class="ds-button playlist-listen" href={p.url} rel="noopener">
+              <span class="i-ri-spotify-fill" aria-hidden="true" />
+              {T.listen}
+            </a>
+          </header>
+          <p class="playlist-about">
+            {!tr && p.about && <span>“{p.about.tagline}.” </span>}
+            {p.about?.sound[locale]}
+          </p>
+          <div class="music-tracks" data-collapsed>
+            <ol id={`tracks-${p.id}`}>
+              {p.tracks.map((t) => (
+                <li>
+                  <span class="track-title">{t.title}</span>
+                  <span class="track-artist">{t.artists.join(', ')}</span>
+                  <span class="track-time">{formatTrack(t.duration)}</span>
+                </li>
+              ))}
+            </ol>
+            {p.tracks.length > SHOWN && (
+              <button
+                type="button"
+                class="music-more"
+                aria-controls={`tracks-${p.id}`}
+                aria-expanded="false"
+                data-more={T.more(p.tracks.length - SHOWN)}
+                data-less={T.less}
+              >
+                {T.more(p.tracks.length - SHOWN)}
+              </button>
+            )}
+          </div>
+        </div>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  /* Two videos side by side, then the numbers as three tiles */
+  .music-featured {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    margin: 2.5rem 0 3rem;
+  }
+  .music-lead {
+    max-width: 42rem;
+    margin: 0 0 1.25rem;
+  }
+  .music-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    border-radius: var(--radius-md);
+    box-shadow: var(--ds-shadow-border);
+    overflow: hidden;
+  }
+  .music-stats > div {
+    padding: 1rem 1.25rem;
+  }
+  .music-stats > div + div {
+    border-left: 1px solid var(--c-border);
+  }
+  .music-stats dt {
+    color: var(--ds-gray-900);
+    font-size: 0.8125rem;
+  }
+  .music-stats dd {
+    margin: 0.25rem 0 0;
+    color: var(--ds-gray-1000);
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+  }
+  .music-top {
+    margin: 1rem 0 0;
+    color: var(--ds-text-body);
+    font-size: 0.875rem;
+  }
+  .music-top span {
+    color: var(--ds-gray-900);
+  }
+
+  /* A playlist: its video at the left, the list at the right */
+  .playlist {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: 2.5rem;
+    align-items: start;
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--c-border);
+  }
+  .playlist:not(:has(.playlist-media)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .playlist-media {
+    position: sticky;
+    top: calc(var(--header-h) + 1.5rem);
+  }
+  .playlist-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .playlist-head h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  .playlist-meta {
+    margin: 0.25rem 0 0;
+    color: var(--ds-gray-900);
+    font-size: 0.875rem;
+  }
+  .playlist .playlist-listen {
+    color: var(--ds-gray-1000);
+    text-decoration: none;
+  }
+  .playlist-about {
+    margin: 1rem 0 0;
+  }
+  .playlist-about span {
+    color: var(--ds-gray-900);
+  }
+
+  @media (max-width: 767.98px) {
+    .music-featured,
+    .playlist {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .playlist {
+      gap: 1.5rem;
+    }
+    .playlist-media {
+      position: static;
+    }
+    .music-stats dd {
+      font-size: 1.375rem;
+    }
+  }
+  @media (max-width: 479.98px) {
+    .playlist-head {
+      flex-direction: column;
+    }
+  }
+
+  /* collapsed: the first five tracks; the button shows the rest */
+  .music-tracks[data-collapsed] li:nth-child(n + 6) {
+    display: none;
+  }
+  /* a quiet text button under the list, no frame */
+  .music-more {
+    display: inline-flex;
+    align-items: center;
+    height: 2rem;
+    margin: 0.5rem 0 0 -0.5rem;
+    padding: 0 0.5rem;
+    border-radius: var(--radius-sm);
+    color: var(--ds-gray-900);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+  .music-more:hover {
+    background: var(--ds-gray-alpha-100);
+    color: var(--ds-gray-1000);
+  }
+
+  /* Our own numbering in its own column: the prose list's absolutely
+     placed markers would sit on top of the grid. */
+  .music-tracks ol {
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: track;
+    font-size: 0.9rem;
+  }
+  .music-tracks li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+    column-gap: 0.75rem;
+    margin: 0;
+    padding: 0.5rem 0.75rem 0.5rem 0;
+    border-radius: var(--radius-sm);
+    counter-increment: track;
+    transition: background-color 0.15s ease;
+  }
+  .music-tracks li::before {
+    content: counter(track) !important;
+    position: static !important;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: center;
+    width: auto !important;
+    height: auto !important;
+    background: none !important;
+    color: var(--c-muted);
+    font-size: 0.8rem;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .track-title {
+    grid-column: 2;
+  }
+  .track-artist {
+    grid-column: 2;
+    font-size: 0.85rem;
+    color: var(--c-muted);
+  }
+  .track-time {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: center;
+    color: var(--c-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .music-tracks li:hover {
+    background: var(--ds-gray-alpha-100);
+  }
+  .music-tracks li:hover .track-title {
+    color: var(--ds-gray-1000);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .music-tracks li {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // "Show more" / "Show less": one listener for every list, and after
+  // client navigation
+  document.addEventListener('click', (event) => {
+    const button = (event.target as Element | null)?.closest<HTMLElement>(
+      '.music-more'
+    )
+    const box = button?.closest<HTMLElement>('.music-tracks')
+    if (!button || !box) return
+    const open = box.toggleAttribute('data-collapsed') === false
+    button.setAttribute('aria-expanded', String(open))
+    button.textContent =
+      (open ? button.dataset.less : button.dataset.more) ?? ''
+    if (!open) box.scrollIntoView({ block: 'nearest' })
+  })
+</script>

@@ -8,7 +8,7 @@ Bu bir ["şu an" sayfası](https://nownownow.com/about): şu dönemde neye odakl
 ## Yan projeler
 
 - **NFS World tarayıcıda**: 2010 yapımı bir Windows oyununu WebAssembly ve WebGPU'ya taşıyoruz. [11 fps'ten 80'e nasıl çıktığını](/blog/nfs-world-in-the-browser-performance/) İngilizce olarak yazdım.
-- **Need for Speed Underground 2, Türkçe**: oyunun [tarayıcı sürümünü](https://github.com/th0mk/nfsu2-web) elle Türkçeye çevirdim; oyundaki 3.918 metnin tamamı.
+- **Tarayıcıda Need for Speed Underground 2**: oyunun [tarayıcı sürümüne](https://github.com/th0mk/nfsu2-web) ([nfsu2.xyz](https://nfsu2.xyz)) katkı veriyor, repoyu takip ediyorum; Türkçe çevirisi, oyundaki 3.918 metnin tamamı, benim.
 
 ## Yazı
 

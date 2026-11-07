@@ -1,10 +1,12 @@
-samye.li is a static site, built from Markdown and a few TypeScript files. The source is [on GitHub](https://github.com/RSametSamyeli/samye.li).
+A personal site should be fast, readable, and honest about how it is made. This page is the honest part.
+
+samye.li is a static site, built from Markdown and a few TypeScript files: no database, no tracking, nothing that runs on a server when you read it. The source is [on GitHub](https://github.com/RSametSamyeli/samye.li).
 
 ## Stack
 
-- **[Astro](https://astro.build)** with Markdown and MDX content collections, **UnoCSS**, and the **Inter** and **DM Mono** typefaces.
+- **[Astro](https://astro.build)** with Markdown and MDX content collections, **UnoCSS**, and Vercel's **Geist** and **Geist Mono** typefaces.
 - Started from the [AntfuStyle](https://github.com/lin-stephanie/astro-antfustyle-theme) theme by Stephanie Lin, then trimmed and rebuilt.
-- Built in Docker and served by nginx on **Coolify** (Hetzner), behind **Cloudflare**. Every push to `main` deploys.
+- Static files on **Cloudflare Pages**, served from Cloudflare's network. A push to `main` goes live only after CI passes: formatting, lint, types, the build, and a check of every page's links, metadata and response headers.
 
 ## Design
 
@@ -14,7 +16,7 @@ samye.li is a static site, built from Markdown and a few TypeScript files. The s
 
 ## For machines
 
-- Every page has a plain Markdown copy, also returned at the page's own URL to clients that ask for `text/markdown`. [llms.txt](/llms.txt) and [llms-full.txt](/llms-full.txt) describe the whole site.
+- Every page has a plain Markdown copy, named in its `<head>` and in a `Link` header for clients that look for `text/markdown`. [llms.txt](/llms.txt) and [llms-full.txt](/llms-full.txt) describe the whole site.
 - Linked JSON-LD (Person, ProfilePage, BlogPosting, breadcrumbs), English and Turkish pages paired with hreflang, a sitemap with last-change dates, and IndexNow pings after each deploy.
 - robots.txt welcomes search engines, answer engines and training.
 
@@ -25,4 +27,4 @@ samye.li is a static site, built from Markdown and a few TypeScript files. The s
 
 ## Privacy
 
-- No cookies and no third-party trackers.
+- No cookies and no third-party trackers. A video loads from YouTube's privacy-enhanced domain only when you press play.

@@ -1,14 +1,18 @@
 ---
-import Link from '~/components/base/Link.astro'
 import { ensureTrailingSlash } from '~/utils/path'
+import { stringsFor } from '~/i18n'
 
+const S = stringsFor(Astro.url.pathname)
 const pathSegments = ensureTrailingSlash(Astro.url.pathname)
   .split('/')
   .slice(0, -2)
 const href = pathSegments.length > 1 ? pathSegments.join('/') + '/' : '/'
 ---
 
-<span class="font-mono muted">&gt; </span>
-<Link class="font-mono op-100! muted! hover:c-[var(--c-text)]!" {href}
-  >cd ..</Link
+<a
+  class="inline-flex items-center gap-1.5 text-[var(--ds-gray-900)] hover:text-[var(--ds-gray-1000)] no-underline transition-colors"
+  {href}
 >
+  <span class="i-ri-arrow-left-line" aria-hidden="true"></span>
+  {S.back}
+</a>

@@ -117,13 +117,14 @@ if (images && images.length > 0) {
 <section class={className} data-tags={tags}>
   <div
     class={`overflow-hidden flex flex-col
-      h-full b b-[#8884] rounded-lg bg-white dark:bg-black
-      shadow-transition-500`}
+      h-full rounded-xl bg-[var(--ds-background-100)]
+      shadow-[var(--ds-shadow-border)] hover:shadow-[0_0_0_1px_var(--ds-gray-alpha-500)]
+      transition-shadow duration-150`}
   >
     {
       ((images && images.length > 0) || video) && (
         <MediaContainer
-          class="b-b b-b-[#8884] op-100!"
+          class="b-b b-b-[var(--c-border)] op-100!"
           href={link || undefined}
         >
           {images &&
@@ -165,13 +166,13 @@ if (images && images.length > 0) {
       external && (
         <Link
           class={`overflow-hidden flex flex-col
-            b b-[#8884] rounded-lg mt-3 mx-3
-            op-100! shadow-transition-500 hover:(shadow-custom_0_5_15_-3)`}
+            border border-[var(--c-border)] rounded-lg mt-3 mx-3
+            op-100! transition-colors hover:bg-[var(--ds-gray-alpha-100)]`}
           href={external.uri}
         >
           {!COMPACT && external.img && (
             <Image
-              class="b-b b-b-[#8884] aspect-[1.91/1] object-cover"
+              class="b-b b-b-[var(--c-border)] aspect-[1.91/1] object-cover"
               src={external.img}
               alt={external.title}
               inferSize
@@ -179,11 +180,11 @@ if (images && images.length > 0) {
             />
           )}
           <div class="flex flex-col px-3 pt-2 pb-1">
-            <div class="flex flex-col gap-1 pb-1.5 b-b b-b-[#8884]">
+            <div class="flex flex-col gap-1 pb-1.5 b-b b-b-[var(--c-border)]">
               <p class="text-sm font-600">{external.title}</p>
               <p class="text-xs">{external.description}</p>
             </div>
-            <div class="flex items-center gap-1 pt-1 text-[0.72rem] op-70">
+            <div class="flex items-center gap-1 pt-1 text-[0.72rem] text-[var(--ds-gray-900)]">
               <div u-i-hugeicons-earth class="size-1em" aria-hidden="true" />
               <p>{new URL(external.uri).hostname}</p>
             </div>
@@ -195,8 +196,8 @@ if (images && images.length > 0) {
       quote && (
         <div
           class={`overflow-hidden flex flex-col gap-2
-            b b-[#8884] rounded-lg p-2 mt-3 mx-3
-            text-sm shadow-transition-500 hover:(shadow-custom_0_5_15_-3)`}
+            border border-[var(--c-border)] rounded-lg p-2 mt-3 mx-3
+            text-sm transition-colors hover:bg-[var(--ds-gray-alpha-100)]`}
         >
           <div class="flex items-center gap-1">
             <Image
@@ -247,11 +248,11 @@ if (images && images.length > 0) {
             {date && <p class="text-sm muted">{formatDate(date)}</p>}
             <div
               role="none"
-              class="w-[calc(100%+2rem)] h-[1px] my-3.5 ml--4 bg-[#8884]"
+              class="w-[calc(100%+2rem)] h-[1px] my-3.5 ml--4 bg-[var(--c-border)]"
             />
             <div
               class="flex justify-start items-center gap-y-3 gap-x-2.5 mt-0.5 mb-1
-                text-sm color-[var(--c-text)] op-60 inner-x-scroll"
+                text-sm text-[var(--ds-gray-900)] inner-x-scroll"
             >
               {tags.map((tag) => (
                 <Tag tag={tag} />

@@ -1,5 +1,6 @@
 ---
 import Link from '~/components/base/Link.astro'
+import { stringsFor } from '~/i18n'
 import type { ShareConfig } from '~/types'
 
 interface ShareLink {
@@ -92,23 +93,21 @@ const links = Object.entries(config)
       title: linkConfig.title,
     }
   })
+const S = stringsFor(Astro.url.pathname)
 ---
 
-<span class="font-mono muted">&gt; </span>
-<span class="muted">share on</span>
-{' '}
-{
-  links.map((link, idx) => (
-    <>
+<span class="inline-flex flex-wrap items-center gap-x-3 gap-y-1">
+  <span class="text-[var(--ds-gray-900)]">{S.shareOn}</span>
+  {
+    links.map((link) => (
       <Link
-        class="op-100! muted! hover:c-[var(--c-text)]!"
+        class="op-100! text-[var(--ds-gray-900)] hover:text-[var(--ds-gray-1000)] transition-colors"
         href={link.url}
         title={link.title}
         external={true}
       >
         {link.label}
       </Link>
-      {idx < links.length - 1 && <span class="op-25"> / </span>}
-    </>
-  ))
-}
+    ))
+  }
+</span>

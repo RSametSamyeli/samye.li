@@ -6,26 +6,12 @@ ogImage: true
 ---
 
 import BaseLayout from '~/layouts/BaseLayout.astro'
-import StandardLayout from '~/layouts/StandardLayout.astro'
-import RenderPage from '~/components/views/RenderPage.astro'
-import HomeStats from '~/components/widgets/HomeStats.astro'
-import HomeAside from '~/components/widgets/HomeAside.astro'
-import portrait from '~/assets/samet-samyeli.jpg'
+import Home from '~/components/views/Home.astro'
 
 <BaseLayout
   title={frontmatter.title}
   description={frontmatter.description}
   ogImage={frontmatter.ogImage}
 >
-  <HomeAside />
-  <StandardLayout
-    title={frontmatter.title}
-    subtitle={frontmatter.subtitle}
-    articleClass="home"
-    avatar={{ src: portrait, alt: 'Portrait of Samet Samyeli' }}
-  >
-    <RenderPage slot="article" collectionType="home" id="intro" />
-    <HomeStats slot="article" />
-    <RenderPage slot="article" collectionType="home" id="index" />
-  </StandardLayout>
+  <Home name={frontmatter.title} role={frontmatter.subtitle} />
 </BaseLayout>

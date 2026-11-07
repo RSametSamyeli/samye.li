@@ -40,6 +40,9 @@ export const TRANSLATED_PAGES = [
   '/blog/',
   '/security-by-construction/',
   '/community/',
+  '/outdoors/',
+  '/music/',
+  '/reading/',
 ] as const
 
 const withSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`)
@@ -74,17 +77,44 @@ export function alternatesOf(pathname: string) {
 }
 
 /**
+ * English-only content shown with a Turkish interface: the posts (/blog/x/)
+ * and the notes (/shorts/, /shorts/x/) are written in English, and a reader
+ * on the Turkish site keeps the Turkish sidebar, header and footer around
+ * them at /tr/blog/x/ and /tr/shorts/. These mirrors are noindex and out of
+ * the sitemap: search engines see the English page only.
+ */
+export function isMirrored(pathname: string) {
+  const en = englishPath(pathname)
+  return /^\/(blog\/[^/]+|shorts(\/[^/]+)?)\/$/.test(en)
+}
+
+/** Whether this page is the Turkish-interface mirror of an English page. */
+export const isMirror = (pathname: string) =>
+  localeOf(pathname) !== 'en' && isMirrored(pathname)
+
+/**
+ * A page's path in the reader's language: its translation or its mirror when
+ * it has one, else the English page (the sidebar's links).
+ */
+export function pathIn(path: string, locale: Locale) {
+  const en = englishPath(path)
+  return (TRANSLATED_PAGES as readonly string[]).includes(en) || isMirrored(en)
+    ? localized(en, locale)
+    : en
+}
+
+/**
  * Where the language switch leads: the same page in the other language when it
- * has one, else that language's home page.
+ * has one (a translation or a mirror), else that language's home page.
  */
 export function counterpartOf(pathname: string) {
   const from = localeOf(pathname)
   const to: Locale = from === 'en' ? 'tr' : 'en'
   const alternates = alternatesOf(pathname)
-  return {
-    locale: to,
-    path: alternates?.find((a) => a.locale === to)?.path ?? LOCALES[to].home,
-  }
+  const path =
+    alternates?.find((a) => a.locale === to)?.path ??
+    (isMirrored(pathname) ? localized(pathname, to) : LOCALES[to].home)
+  return { locale: to, path }
 }
 
 /** Interface text, in each language. */
@@ -126,9 +156,17 @@ export const STRINGS = {
     portraitAlt: 'Portrait of Samet Samyeli',
     categories: {} as Record<string, string>,
     pages: 'Pages',
-    onThisSite: 'On this site',
+    writing: 'Writing',
+    onThisPage: 'On this page',
+    menu: 'Menu',
+    back: 'Back',
+    shareOn: 'Share on',
+    aboutMe: 'About me',
     beyondCode: 'Beyond code',
     community: 'Community',
+    outdoors: 'Into the wind',
+    music: 'Music',
+    reading: 'Reading',
     securityByConstruction: 'Security by construction',
     minutes: 'min',
     now: 'Now',
@@ -180,13 +218,22 @@ export const STRINGS = {
     portraitAlt: "Samet Samyeli'nin portresi",
     categories: {
       'Building Now': 'Şu an geliştirdiklerim',
+      "Brands I've Worked With": 'Çalıştığım markalar',
       'Open Source & Community': 'Açık kaynak ve topluluk',
       'Side Projects': 'Yan projeler',
     } as Record<string, string>,
     pages: 'Sayfalar',
-    onThisSite: 'Bu sitede',
+    writing: 'Yazılar',
+    onThisPage: 'Bu sayfada',
+    menu: 'Menü',
+    back: 'Geri',
+    shareOn: 'Paylaş:',
+    aboutMe: 'Hakkımda',
     beyondCode: 'Kodun ötesinde',
     community: 'Topluluk',
+    outdoors: 'Rüzgarın peşinde',
+    music: 'Müzik',
+    reading: 'Okuduklarım',
     securityByConstruction: 'Yapısal güvenlik',
     minutes: 'dk',
     now: 'Şu an',

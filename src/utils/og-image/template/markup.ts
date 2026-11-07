@@ -8,7 +8,8 @@ const LONG_TITLE = 48
 /**
  * The share card, 1200 × 630: the mark and the site's name at the top, then
  * the kicker (what the page is, and when), the title, and a line of
- * description. Dark, like the site, with a glow of the accent in one corner.
+ * description. Geist on Vercel's near-black, a hairline frame, no gradients:
+ * the accent is the dot of the name and nothing else.
  */
 export function ogImageMarkup({
   kicker,
@@ -25,7 +26,7 @@ export function ogImageMarkup({
   const titleSize = title.length > LONG_TITLE ? 64 : 76
 
   const kickerHtml = kicker
-    ? `<div style="display: flex; margin-bottom: 24px; font-size: ${portrait ? 21 : 26}px; font-weight: 700; letter-spacing: 0.08em; color: ${BRAND.accent};">${escapeHtml(kicker.toLocaleUpperCase(lang))}</div>`
+    ? `<div style="display: flex; margin-bottom: 24px; font-size: ${portrait ? 21 : 26}px; font-weight: 400; letter-spacing: 0.06em; color: ${BRAND.muted};">${escapeHtml(kicker.toLocaleUpperCase(lang))}</div>`
     : ''
   const descriptionHtml = description
     ? `<div style="display: block; margin-top: 28px; font-size: 30px; line-height: 1.4; color: ${BRAND.muted}; overflow: hidden; line-clamp: 2;">${escapeHtml(description)}</div>`
@@ -36,17 +37,17 @@ export function ogImageMarkup({
     : ''
 
   return toSatori(`<div
-    style="display: flex; flex-direction: column; justify-content: space-between; width: 100%; height: 100%; padding: 72px ${portrait ? 440 : 80}px 72px 80px; background-color: ${BRAND.ink}; background-image: radial-gradient(circle at 100% 0%, rgba(255, 45, 106, 0.22) 0%, rgba(255, 45, 106, 0) 52%); font-family: 'Inter'; color: ${BRAND.paper};"
+    style="display: flex; flex-direction: column; justify-content: space-between; width: 100%; height: 100%; padding: 72px ${portrait ? 440 : 80}px 72px 80px; background-color: ${BRAND.ink}; border: 1px solid rgba(255, 255, 255, 0.14); font-family: 'Geist'; color: ${BRAND.paper};"
   >
     <div style="display: flex; align-items: center;">
       ${markHtml(64)}
-      <div style="display: flex; margin-left: 20px; font-size: 32px; font-weight: 700; letter-spacing: -0.02em;">
-        samye<span style="color: ${BRAND.accent};">.</span>li
+      <div style="display: flex; margin-left: 20px; font-size: 32px; font-weight: 700; letter-spacing: -0.04em;">
+        sam<span style="color: ${BRAND.accent};">@</span>samye.li
       </div>
     </div>
     <div style="display: flex; flex-direction: column;">
       ${kickerHtml}
-      <div style="display: block; font-size: ${titleSize}px; font-weight: 700; line-height: 1.08; letter-spacing: -0.03em; overflow: hidden; line-clamp: 3;">${escapeHtml(title)}</div>
+      <div style="display: block; font-size: ${titleSize}px; font-weight: 700; line-height: 1.08; letter-spacing: -0.045em; overflow: hidden; line-clamp: 3;">${escapeHtml(title)}</div>
       ${descriptionHtml}
     </div>
     ${portraitHtml}

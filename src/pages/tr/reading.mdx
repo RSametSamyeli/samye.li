@@ -1,0 +1,29 @@
+---
+title: 'Okuduklarım'
+subtitle: 'Felsefe, strateji ve girişimcilik'
+description: "Samet Samyeli'nin okudukları: Stoacılar; strateji üzerine Robert Greene ve Sun Tzu; zihin üzerine Peterson, Frankl, Kahneman ve Taleb; ve girişimcilik üzerine kitaplar."
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+import ReadingList from '~/components/views/ReadingList.astro'
+import { readingListSchema } from '~/data/books'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+  schema={[readingListSchema('tr', 'https://samye.li/tr/reading/')]}
+>
+  <StandardLayout
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    wide={true}
+    articleClass="wide-page"
+  >
+    <RenderPage slot="article" collectionType="home" id="tr/reading" />
+    <ReadingList slot="article" />
+  </StandardLayout>
+</BaseLayout>

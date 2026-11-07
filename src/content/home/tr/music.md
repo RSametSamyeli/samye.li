@@ -1,0 +1,1 @@
+Her şeyden önce rock. The Beatles, Led Zeppelin ve Pink Floyd'dan Queen, AC/DC ve Black Sabbath'a klasikler; Eric Clapton'ın gitarındaki blues; Metallica'dan Motörhead'e daha ağır taraf. Türkçede Anadolu rock; en başta Cem Karaca ve Erkin Koray. Bir de ara ara, onun içinden çıkan yeni psikedelik ses.

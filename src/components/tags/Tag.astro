@@ -13,14 +13,7 @@ const Container = interactive ? 'button' : 'span'
 <Container
   type={interactive ? 'button' : undefined}
   role={interactive ? 'option' : undefined}
-  class={`py-0.4 px-1.2 rounded whitespace-nowrap
-    bg-[#88888825] dark:bg-[#88888840] op-transition
-    ${
-      interactive
-        ? `aria-[selected=true]:op-100 aria-[selected=false]:op-60 disabled:op-20
-           aria-[selected=false]:hover:op-100 disabled:cursor-not-allowed disabled:hover:op-50`
-        : 'op-60 data-[active=true]:op-100'
-    }`}
+  class="ds-tag"
   aria-selected={interactive ? 'false' : undefined}
   data-active={interactive ? undefined : 'false'}
   data-tag={tag}
@@ -28,3 +21,38 @@ const Container = interactive ? 'button' : 'span'
 >
   {tag}
 </Container>
+
+<style>
+  /* Geist's pill: a hairline chip, filled when chosen */
+  .ds-tag {
+    display: inline-flex;
+    align-items: center;
+    height: 1.5rem;
+    padding: 0 0.5rem;
+    border-radius: 9999px;
+    box-shadow: var(--ds-shadow-border);
+    color: var(--ds-gray-900);
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+  button.ds-tag {
+    cursor: pointer;
+  }
+  button.ds-tag:hover:not(:disabled),
+  .ds-tag[data-active='true'] {
+    color: var(--ds-gray-1000);
+  }
+  .ds-tag[aria-selected='true'] {
+    background: var(--ds-gray-1000);
+    color: var(--ds-background-100);
+    box-shadow: none;
+  }
+  .ds-tag:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+</style>

@@ -1,5 +1,4 @@
 ---
-import Link from '~/components/base/Link.astro'
 import { withBasePath } from '~/utils/path'
 import { SITE } from '~/config'
 import { LOCALES, localeOf, STRINGS } from '~/i18n'
@@ -8,45 +7,29 @@ const locale = localeOf(Astro.url.pathname)
 const home = withBasePath(LOCALES[locale].home)
 ---
 
-<Link
-  class="select-none op-100! op-transition"
+<a
+  class="logo"
   href={home}
   aria-label={`${SITE.author}, ${STRINGS[locale].homeLabel}`}
-  aria-current={Astro.url.pathname === home ? 'page' : false}
+  aria-current={Astro.url.pathname === home ? 'page' : undefined}
 >
-  <div class="logo-container">
-    <span class="logo-text">samye<span class="logo-dot">.</span>li</span>
-  </div>
-</Link>
+  sam<span class="logo-at">@</span>samye.li
+</a>
 
 <style>
-  .logo-container {
-    display: flex;
-    justify-content: center;
+  .logo {
+    display: inline-flex;
     align-items: center;
-    gap: 0.8rem;
-
-    transform: scale(1.05);
-  }
-
-  @media (max-width: 767.9px) {
-    .logo-container {
-      margin-top: 0.125rem;
-
-      transform-origin: 0%;
-      transform: scale(0.95);
-    }
-  }
-
-  .logo-dot {
-    color: var(--c-accent);
-  }
-
-  .logo-text {
-    font-size: 1.35rem;
+    height: 2rem;
+    padding: 0 0.25rem;
+    color: var(--ds-gray-1000);
+    font-size: 1.125rem;
     font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: 2rem;
-    color: var(--fg-deeper, currentColor);
+    letter-spacing: -0.04em;
+    text-decoration: none;
+    user-select: none;
+  }
+  .logo-at {
+    color: var(--c-accent);
   }
 </style>

@@ -1,0 +1,25 @@
+---
+title: Notlar
+subtitle: Kısa notlar ve anlık düşünceler; İngilizce yazılıyor
+description: "Samet Samyeli'nin kısa notları: mühendislik, yapay zekâ ve ürün geliştirme üzerine anlık düşünceler. Notlar İngilizce."
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import CardView from '~/components/views/CardView.astro'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+  noindex={true}
+>
+  <StandardLayout
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    wide={true}
+  >
+    <CardView collectionType="shorts" pageTag={true} />
+  </StandardLayout>
+</BaseLayout>

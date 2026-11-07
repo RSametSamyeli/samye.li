@@ -70,7 +70,7 @@ async function getSatoriFonts(requestUrl: URL): Promise<SatoriFont[]> {
       }
 
       return {
-        name: 'Inter',
+        name: 'Geist',
         weight: Number(face.weight) >= 600 ? 700 : 400,
         style: 'normal',
         data: await data,

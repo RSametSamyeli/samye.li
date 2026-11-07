@@ -1,5 +1,4 @@
 ---
-import Link from '~/components/base/Link.astro'
 import { SITE } from '~/config'
 import { localeOf, localized, STRINGS } from '~/i18n'
 import { withBasePath } from '~/utils/path'
@@ -8,9 +7,22 @@ const locale = localeOf(Astro.url.pathname)
 const S = STRINGS[locale]
 const year = new Date().getFullYear()
 
-/** The site's "slash pages", in the page's language. */
+/**
+ * The site's "slash pages", in the page's language: in the sidebar too, but
+ * the sidebar is behind a button on small screens, and a footer is where
+ * readers look for them.
+ */
 const pages = (
-  ['now', 'beliefs', 'uses', 'community', 'colophon'] as const
+  [
+    'now',
+    'beliefs',
+    'uses',
+    'community',
+    'outdoors',
+    'music',
+    'reading',
+    'colophon',
+  ] as const
 ).map((key) => ({
   href: withBasePath(localized(`/${key}/`, locale)),
   text: S[key],
@@ -24,43 +36,88 @@ const elsewhere = [
 ]
 ---
 
-<footer class="slide-enter animate-delay-1600! px-7 mt-auto mb-8">
-  <div
-    class="prose mx-auto flex flex-col gap-3 text-sm muted lt-sm:items-center"
-  >
-    <nav
-      aria-label={S.pages}
-      class="flex flex-wrap items-center gap-x-4 gap-y-1 lt-sm:justify-center"
-    >
+<footer class="site-footer print:hidden">
+  <div class="site-footer-inner">
+    <nav aria-label={S.pages} class="site-footer-links">
       {
         pages.map(({ href, text }) => (
-          <Link
-            class="op-100! muted! no-underline! hover:underline!"
+          <a
             href={href}
             aria-current={Astro.url.pathname === href ? 'page' : undefined}
           >
             {text}
-          </Link>
+          </a>
         ))
       }
     </nav>
-    <div
-      class="flex lt-sm:flex-col items-center justify-between gap-2 lt-sm:gap-1"
-    >
+    <div class="site-footer-bottom">
       <span>© {year} {SITE.author}</span>
-      <nav aria-label={S.elsewhere} class="flex items-center gap-4">
+      <nav aria-label={S.elsewhere} class="site-footer-links">
         {
           elsewhere.map(({ href, text }) => (
-            <Link
-              class="op-100! muted! no-underline! hover:underline!"
+            <a
               href={href}
-              external={href.startsWith('http')}
+              rel={href.startsWith('http') ? 'noopener' : undefined}
             >
               {text}
-            </Link>
+            </a>
           ))
         }
       </nav>
     </div>
   </div>
 </footer>
+
+<style>
+  .site-footer {
+    padding: 2rem 2.5rem;
+    border-top: 1px solid var(--c-border);
+    color: var(--ds-gray-900);
+    font-size: 0.875rem;
+  }
+
+  .site-footer-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 42rem;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 1280px) {
+    :global(.site-main:has(#desktop-aside:not([data-inline]))) .site-footer {
+      padding-right: calc(var(--toc-w) + 4rem);
+    }
+  }
+
+  .site-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+  }
+
+  .site-footer a {
+    color: var(--ds-gray-900);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .site-footer a:hover,
+  .site-footer a[aria-current] {
+    color: var(--ds-gray-1000);
+  }
+
+  .site-footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1.25rem;
+  }
+
+  @media (max-width: 767.98px) {
+    .site-footer {
+      padding: 2rem 1.25rem;
+    }
+  }
+</style>

@@ -6,7 +6,8 @@ import { LOCALES, localeOf, STRINGS } from '~/i18n'
 interface Props {
   title?: string
   subtitle?: string
-  isCentered?: boolean
+  /** the page's content is a wide grid (projects, notes): the title spans it */
+  wide?: boolean
   isSearchable?: boolean
   searchFilter?: string
   class?: string
@@ -16,18 +17,21 @@ interface Props {
   avatar?: { src: ImageMetadata; alt: string }
   /** when the page last changed (ISO date): shown as "Last updated" */
   updated?: string
+  /** the language of the title and the text, when it is not the page's (an English post on the Turkish site) */
+  contentLang?: string
 }
 
 const {
   title,
   subtitle,
-  isCentered = false,
+  wide = false,
   isSearchable,
   searchFilter,
   class: className,
   articleClass,
   avatar,
   updated,
+  contentLang,
 } = Astro.props
 
 const locale = localeOf(Astro.url.pathname)
@@ -44,16 +48,15 @@ const updatedText =
 ---
 
 <header
-  class:list={{
-    'prose mx-auto mb-8': true,
-    'text-center': isCentered,
-  }}
+  class="page-header prose mx-auto"
+  data-wide={wide ? '' : undefined}
+  lang={contentLang}
 >
   {
     avatar ? (
       <div class="flex items-center gap-5 lt-sm:gap-4">
         <Image
-          class="block flex-none m-0! w-22 h-22 lt-sm:(w-18 h-18) rounded-full! object-cover ring-1 ring-[#8884]"
+          class="block flex-none m-0! w-20 h-20 lt-sm:(w-16 h-16) rounded-full! object-cover shadow-[var(--ds-shadow-border)]"
           src={avatar.src}
           alt={avatar.alt}
           widths={[88, 176, 264]}
@@ -64,16 +67,20 @@ const updatedText =
           fetchpriority="high"
         />
         <div class="min-w-0">
-          {title && <h1 class="mb-2!">{title}</h1>}
-          {subtitle && <p class="m-0! muted italic">{subtitle}</p>}
+          {title && <h1 class="mb-1.5!">{title}</h1>}
+          {subtitle && (
+            <p class="m-0! text-lg text-[var(--ds-gray-900)]">{subtitle}</p>
+          )}
         </div>
       </div>
     ) : (
       <>
-        {title && <h1>{title}</h1>}
-        {subtitle && <p class="mt--4! muted italic">{subtitle}</p>}
+        {title && <h1 class="mb-3!">{title}</h1>}
+        {subtitle && (
+          <p class="mt-0! text-lg text-[var(--ds-gray-900)]">{subtitle}</p>
+        )}
         {updatedText && (
-          <p class="mt--2! text-sm muted">
+          <p class="mt-2! text-sm muted">
             <time datetime={updated}>{updatedText}</time>
           </p>
         )}
@@ -86,6 +93,7 @@ const updatedText =
   Astro.slots.has('article') && (
     <article
       class:list={['slide-enter-content prose mx-auto', articleClass]}
+      lang={contentLang}
       data-pagefind-body={isSearchable ? '' : undefined}
       data-pagefind-filter={
         isSearchable && searchFilter ? searchFilter : undefined
@@ -102,3 +110,13 @@ const updatedText =
     </div>
   )
 }
+
+<style>
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+  /* over a grid (projects, notes): as wide as the grid, so the title lines up */
+  .page-header[data-wide] {
+    max-width: 67.125rem;
+  }
+</style>

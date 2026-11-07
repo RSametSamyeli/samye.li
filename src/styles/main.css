@@ -1,28 +1,110 @@
 :root {
-  --c-bg: #fff;
-  /* the brand's accent (src/utils/brand.ts): the dot of samye.li */
+  /*
+   * Geist, Vercel's design system: a neutral scale, hairline borders drawn
+   * with alpha so they sit on any surface, one blue for focus. Text tokens
+   * are chosen for contrast, not taken on faith: body text clears WCAG AAA
+   * (7:1) and secondary text AA (4.5:1) on the background, in both themes.
+   */
+  --ds-background-100: #ffffff;
+  --ds-background-200: #fafafa;
+  --ds-gray-100: #f2f2f2;
+  --ds-gray-200: #ebebeb;
+  --ds-gray-300: #e6e6e6;
+  --ds-gray-400: #eaeaea;
+  --ds-gray-500: #c9c9c9;
+  --ds-gray-600: #a8a8a8;
+  --ds-gray-700: #8f8f8f;
+  --ds-gray-800: #7d7d7d;
+  /* secondary text: 5.7:1 on white */
+  --ds-gray-900: #666666;
+  --ds-gray-1000: #171717;
+  --ds-gray-alpha-100: rgb(0 0 0 / 0.05);
+  --ds-gray-alpha-200: rgb(0 0 0 / 0.08);
+  --ds-gray-alpha-300: rgb(0 0 0 / 0.1);
+  --ds-gray-alpha-400: rgb(0 0 0 / 0.08);
+  --ds-gray-alpha-500: rgb(0 0 0 / 0.21);
+  --ds-gray-alpha-600: rgb(0 0 0 / 0.34);
+  --ds-blue-700: #006bff;
+  /* long-form reading text, between the two: 9.7:1 on white */
+  --ds-text-body: #454545;
+
+  --ds-shadow-border: 0 0 0 1px var(--ds-gray-alpha-400);
+  --ds-shadow-small:
+    0 0 0 1px var(--ds-gray-alpha-400), 0 2px 2px rgb(0 0 0 / 0.04);
+  --ds-shadow-menu:
+    0 0 0 1px var(--ds-gray-alpha-400), 0 4px 8px -4px rgb(0 0 0 / 0.04),
+    0 16px 24px -8px rgb(0 0 0 / 0.06);
+  --ds-shadow-modal:
+    0 0 0 1px var(--ds-gray-alpha-400), 0 1px 1px rgb(0 0 0 / 0.02),
+    0 8px 16px -4px rgb(0 0 0 / 0.04), 0 24px 32px -8px rgb(0 0 0 / 0.06);
+  --ds-focus-ring:
+    0 0 0 2px var(--ds-background-100), 0 0 0 4px var(--ds-blue-700);
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --header-h: 4rem;
+  --sidebar-w: 15rem;
+  --toc-w: 14rem;
+
+  /* the brand's accent (src/utils/brand.ts): the dot of samye.li, nothing else */
   --c-accent: #d90e47;
-  /* secondary text: 4.8:1 on white (WCAG AA), in place of dimming with opacity */
-  --c-muted: #6b7280;
-  --c-scrollbar: #ddd;
-  --c-scrollbar-hover: #bbb;
-  --c-text: #000;
+
+  /* the names the components were written against, on the scale above */
+  --c-bg: var(--ds-background-100);
+  --c-text: var(--ds-gray-1000);
+  --c-muted: var(--ds-gray-900);
+  --c-border: var(--ds-gray-alpha-400);
+  --c-scrollbar: var(--ds-gray-500);
+  --c-scrollbar-hover: var(--ds-gray-600);
 }
 
 :root.dark {
-  --c-bg: #050505;
+  --ds-background-100: #0a0a0a;
+  --ds-background-200: #000000;
+  --ds-gray-100: #1a1a1a;
+  --ds-gray-200: #1f1f1f;
+  --ds-gray-300: #292929;
+  --ds-gray-400: #2e2e2e;
+  --ds-gray-500: #454545;
+  --ds-gray-600: #878787;
+  --ds-gray-700: #8f8f8f;
+  --ds-gray-800: #7d7d7d;
+  /* secondary text: 7.6:1 on #0a0a0a */
+  --ds-gray-900: #a1a1a1;
+  --ds-gray-1000: #ededed;
+  --ds-gray-alpha-100: rgb(255 255 255 / 0.06);
+  --ds-gray-alpha-200: rgb(255 255 255 / 0.09);
+  --ds-gray-alpha-300: rgb(255 255 255 / 0.12);
+  --ds-gray-alpha-400: rgb(255 255 255 / 0.14);
+  --ds-gray-alpha-500: rgb(255 255 255 / 0.24);
+  --ds-gray-alpha-600: rgb(255 255 255 / 0.51);
+  --ds-blue-700: #0a72ef;
+  /* 11:1 on #0a0a0a */
+  --ds-text-body: #c7c7c7;
+
+  --ds-shadow-small: 0 0 0 1px var(--ds-gray-alpha-400);
+  --ds-shadow-menu:
+    0 0 0 1px var(--ds-gray-alpha-400), 0 4px 8px -4px rgb(0 0 0 / 0.32),
+    0 16px 24px -8px rgb(0 0 0 / 0.48);
+  --ds-shadow-modal:
+    0 0 0 1px var(--ds-gray-alpha-400), 0 8px 16px -4px rgb(0 0 0 / 0.48),
+    0 24px 32px -8px rgb(0 0 0 / 0.64);
+
   --c-accent: #ff2d6a;
-  /* secondary text: 6:1 on #050505 */
-  --c-muted: #8e8e93;
-  --c-scrollbar: #222;
-  --c-scrollbar-hover: #444;
-  --c-text: #fff;
 }
 
 html {
   scroll-behavior: smooth;
+  /* headings jumped to by anchor clear the sticky header */
+  scroll-padding-top: calc(var(--header-h) + 1.5rem);
 
-  background-color: var(--c-bg);
+  background-color: var(--ds-background-100);
+  color: var(--ds-gray-1000);
+  font-family: var(--font-sans);
+  font-feature-settings: 'liga', 'calt';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
@@ -31,16 +113,14 @@ body {
 }
 
 ::selection {
-  background: #8884;
+  background: color-mix(in srgb, var(--ds-blue-700) 24%, transparent);
 }
 
 :focus-visible:not(input) {
   outline: 2px solid transparent;
   outline-offset: 2px;
-  box-shadow:
-    0 0 0 2px var(--c-bg),
-    0 0 0 5px #8884,
-    var(--un-shadow, 0 0 #0000);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--ds-focus-ring), var(--un-shadow, 0 0 #0000);
 }
 
 /* NProgress */
@@ -57,8 +137,7 @@ body {
   width: 100%;
   height: 2px;
 
-  background: #888;
-  opacity: 0.75;
+  background: var(--ds-blue-700);
 }
 
 /* Scrollbar */
@@ -68,7 +147,6 @@ body {
   }
 
   #search-results,
-  #nav-panel,
   #toc-panel,
   #tag-panel,
   #toc-sidebar > ul,
@@ -79,7 +157,7 @@ body {
 
 @supports (scrollbar-color: auto) {
   * {
-    scrollbar-color: var(--c-scrollbar) var(--c-bg);
+    scrollbar-color: var(--c-scrollbar) transparent;
   }
 }
 
@@ -221,14 +299,13 @@ body {
   animation: fade-out var(--fade-out-duration, 0.3s) forwards;
 }
 
-/* Search */
+/* Search: the command menu */
 #search-input:focus {
   outline: none;
 }
 
 #search-input::placeholder {
-  color: inherit;
-  opacity: 0.4;
+  color: var(--ds-gray-900);
 }
 
 #search-input::-webkit-search-cancel-button {
@@ -237,15 +314,12 @@ body {
 
 .search-result-h1 {
   padding: 0 0.625rem 0.375rem;
-  border-bottom: 1px solid #7d7d7d4d;
-  margin: 0.75rem 0 0.375rem;
+  margin: 0.75rem 0 0.25rem;
 
-  opacity: 0.4;
-
+  color: var(--ds-gray-900);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1rem;
-  text-transform: uppercase;
 
   user-select: none;
 }
@@ -253,73 +327,47 @@ body {
 .search-result-item {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
 
   padding: 0.5rem 0.625rem;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
 
   background: transparent;
   outline: none;
 
-  font-size: 1rem;
-  transition: opacity 0.2s ease;
+  color: var(--ds-gray-1000);
+  font-size: 0.9375rem;
+  text-decoration: none;
 }
 
 .search-result-item:first-child {
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .search-result-item[aria-selected='true'] {
-  background-color: #88888811;
-}
-
-html.dark .search-result-item[aria-selected='true'] {
-  background-color: #88888818;
+  background-color: var(--ds-gray-alpha-100);
 }
 
 .search-result-excerpt {
-  font-size: 0.875rem;
-  line-height: 1.3rem;
+  color: var(--ds-gray-900);
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
   font-weight: 400;
-
-  opacity: 0.5;
 }
 
 .search-result-excerpt mark,
 mark.pagefind-highlight {
-  color: var(--c-text);
-  background-color: #88888830;
+  color: var(--ds-gray-1000);
+  background-color: color-mix(in srgb, var(--ds-blue-700) 22%, transparent);
+  border-radius: 2px;
 }
 
-html.dark .search-result-excerpt mark,
-html.dark mark.pagefind-highlight {
-  background-color: #8888884d;
+/* Toc: "On this page", Geist's sidebar list */
+#toc-sidebar,
+#tag-sidebar {
+  opacity: 1 !important;
 }
 
-.search-kbd-key {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  min-width: 1.5rem;
-  height: 1.25rem;
-  padding: 0 0.375rem;
-  border-radius: 0.375rem;
-  border-width: 1px;
-  border-color: #0000002e;
-
-  font-size: 0.625rem;
-  line-height: 1;
-  text-transform: uppercase;
-  background-color: #ffffffd9;
-}
-
-html.dark .search-kbd-key {
-  border-color: #ffffff38;
-  background-color: #ffffff0f;
-}
-
-/* Toc */
 #toc-panel ul {
   margin-top: 0;
   margin-bottom: 0;
@@ -332,15 +380,15 @@ html.dark .search-kbd-key {
 
 #toc-sidebar ul > li,
 #toc-panel ul > li {
-  padding-left: 0.8rem;
-  margin-top: 0.5em;
+  padding-left: 0.75rem;
+  margin-top: 0.5rem;
 
-  line-height: 1.6em;
+  line-height: 1.4;
 }
 
 #toc-sidebar > ul > li,
 #toc-panel > ul > li {
-  padding-left: 0rem;
+  padding-left: 0;
 }
 
 #toc-sidebar ul > li > a,
@@ -348,30 +396,26 @@ html.dark .search-kbd-key {
   display: block;
   overflow-x: hidden;
 
-  border-bottom: 0px;
+  border-bottom: 0;
 
-  color: var(--c-text);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: var(--ds-gray-900);
+  text-decoration: none;
+  text-wrap: pretty;
 
-  opacity: 0.75;
+  opacity: 1;
 
-  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-#toc-panel ul > li > a {
-  color: inherit;
-  opacity: 0.5;
+  transition: color 0.15s ease;
 }
 
 #toc-sidebar ul > li > a:hover,
 #toc-panel ul > li > a:hover {
-  border-bottom: 0px;
+  color: var(--ds-gray-1000);
 }
 
 #toc-sidebar [aria-current='true'],
 #toc-panel [aria-current='true'] {
-  opacity: 1;
+  color: var(--ds-gray-1000) !important;
+  font-weight: 500;
 }
 
 /* Tag */

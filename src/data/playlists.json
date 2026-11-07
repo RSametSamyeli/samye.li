@@ -1,0 +1,1135 @@
+{
+  "playlists": [
+    {
+      "id": "5RTS12RZR2eHCv4LKigZdG",
+      "name": "Yabanci Efsanelerim",
+      "url": "https://open.spotify.com/playlist/5RTS12RZR2eHCv4LKigZdG",
+      "tracks": [
+        {
+          "title": "Come Together",
+          "artists": ["The Beatles"],
+          "duration": 260
+        },
+        {
+          "title": "Sympathy For The Devil",
+          "artists": ["The Rolling Stones"],
+          "duration": 378
+        },
+        {
+          "title": "Stairway to Heaven",
+          "artists": ["Led Zeppelin"],
+          "duration": 478
+        },
+        {
+          "title": "Highway to Hell",
+          "artists": ["AC/DC"],
+          "duration": 208
+        },
+        {
+          "title": "We Are The Champions",
+          "artists": ["Queen"],
+          "duration": 179
+        },
+        {
+          "title": "Blackout",
+          "artists": ["Scorpions"],
+          "duration": 228
+        },
+        {
+          "title": "Smoke on the Water",
+          "artists": ["Deep Purple"],
+          "duration": 338
+        },
+        {
+          "title": "Money",
+          "artists": ["Pink Floyd"],
+          "duration": 383
+        },
+        {
+          "title": "Man On The Silver Mountain",
+          "artists": ["Rainbow"],
+          "duration": 277
+        },
+        {
+          "title": "Don't Cry (Original)",
+          "artists": ["Guns N' Roses"],
+          "duration": 285
+        },
+        {
+          "title": "Black Dog",
+          "artists": ["Led Zeppelin"],
+          "duration": 295
+        },
+        {
+          "title": "Dream On",
+          "artists": ["Aerosmith"],
+          "duration": 267
+        },
+        {
+          "title": "Still Loving You",
+          "artists": ["Scorpions"],
+          "duration": 403
+        },
+        {
+          "title": "Don't Stop Me Now",
+          "artists": ["Queen"],
+          "duration": 209
+        },
+        {
+          "title": "Thunderstruck",
+          "artists": ["AC/DC"],
+          "duration": 292
+        },
+        {
+          "title": "Another Brick In The Wall",
+          "artists": ["Pink Floyd"],
+          "duration": 241
+        },
+        {
+          "title": "Michelle",
+          "artists": ["The Beatles"],
+          "duration": 162
+        },
+        {
+          "title": "Wish You Were Here",
+          "artists": ["Pink Floyd"],
+          "duration": 335
+        },
+        {
+          "title": "T.N.T.",
+          "artists": ["AC/DC"],
+          "duration": 215
+        },
+        {
+          "title": "Paint It Black",
+          "artists": ["The Rolling Stones"],
+          "duration": 224
+        },
+        {
+          "title": "Let It Be",
+          "artists": ["The Beatles"],
+          "duration": 243
+        },
+        {
+          "title": "Yesterday",
+          "artists": ["The Beatles"],
+          "duration": 126
+        },
+        {
+          "title": "Bohemian Rhapsody",
+          "artists": ["Queen"],
+          "duration": 354
+        },
+        {
+          "title": "Another One Bites The Dust",
+          "artists": ["Queen"],
+          "duration": 215
+        },
+        {
+          "title": "I Want To Break Free - Single Remix",
+          "artists": ["Queen"],
+          "duration": 258
+        },
+        {
+          "title": "Sweet Child O' Mine",
+          "artists": ["Guns N' Roses"],
+          "duration": 355
+        },
+        {
+          "title": "Smells Like Teen Spirit",
+          "artists": ["Nirvana"],
+          "duration": 302
+        },
+        {
+          "title": "Nothing Else Matters",
+          "artists": ["Metallica"],
+          "duration": 389
+        },
+        {
+          "title": "Paradise City",
+          "artists": ["Guns N' Roses"],
+          "duration": 406
+        },
+        {
+          "title": "You Give Love A Bad Name",
+          "artists": ["Bon Jovi"],
+          "duration": 224
+        },
+        {
+          "title": "Iron Man",
+          "artists": ["Black Sabbath"],
+          "duration": 355
+        },
+        {
+          "title": "Losing My Religion",
+          "artists": ["R.E.M."],
+          "duration": 269
+        },
+        {
+          "title": "I Wanna Rock",
+          "artists": ["Twisted Sister"],
+          "duration": 180
+        },
+        {
+          "title": "Enter Sandman",
+          "artists": ["Metallica"],
+          "duration": 332
+        },
+        {
+          "title": "Come As You Are",
+          "artists": ["Nirvana"],
+          "duration": 219
+        },
+        {
+          "title": "Welcome To The Jungle",
+          "artists": ["Guns N' Roses"],
+          "duration": 272
+        },
+        {
+          "title": "Lithium",
+          "artists": ["Nirvana"],
+          "duration": 257
+        },
+        {
+          "title": "Eye of the Tiger",
+          "artists": ["Survivor"],
+          "duration": 244
+        },
+        {
+          "title": "Ace of Spades",
+          "artists": ["Motörhead"],
+          "duration": 167
+        },
+        {
+          "title": "Knockin' On Heaven's Door",
+          "artists": ["Guns N' Roses"],
+          "duration": 336
+        },
+        {
+          "title": "The Unforgiven",
+          "artists": ["Metallica"],
+          "duration": 387
+        },
+        {
+          "title": "Sweet Dreams (Are Made Of This)",
+          "artists": ["Marilyn Manson"],
+          "duration": 293
+        },
+        {
+          "title": "I Want To Break Free",
+          "artists": ["Queen"],
+          "duration": 199
+        },
+        {
+          "title": "Still Loving You",
+          "artists": ["Scorpions"],
+          "duration": 389
+        },
+        {
+          "title": "Bring Me To Life",
+          "artists": ["Evanescence"],
+          "duration": 236
+        },
+        {
+          "title": "My Immortal",
+          "artists": ["Evanescence"],
+          "duration": 263
+        },
+        {
+          "title": "California Dreamin'",
+          "artists": ["The Mamas & The Papas"],
+          "duration": 159
+        },
+        {
+          "title": "Do I Wanna Know?",
+          "artists": ["Arctic Monkeys"],
+          "duration": 272
+        },
+        {
+          "title": "Take A Look Around",
+          "artists": ["Limp Bizkit"],
+          "duration": 321
+        },
+        {
+          "title": "Rollin' (Air Raid Vehicle)",
+          "artists": ["Limp Bizkit"],
+          "duration": 214
+        },
+        {
+          "title": "Call Me When You're Sober",
+          "artists": ["Evanescence"],
+          "duration": 215
+        },
+        {
+          "title": "R U Mine?",
+          "artists": ["Arctic Monkeys"],
+          "duration": 202
+        },
+        {
+          "title": "Coming Undone",
+          "artists": ["Korn"],
+          "duration": 200
+        },
+        {
+          "title": "My Generation",
+          "artists": ["Limp Bizkit"],
+          "duration": 221
+        },
+        {
+          "title": "Another Day in Paradise",
+          "artists": ["Phil Collins"],
+          "duration": 322
+        },
+        {
+          "title": "My Way",
+          "artists": ["Limp Bizkit"],
+          "duration": 273
+        },
+        {
+          "title": "Seven Nation Army",
+          "artists": ["The White Stripes"],
+          "duration": 232
+        },
+        {
+          "title": "Pretty Fly (For A White Guy)",
+          "artists": ["The Offspring"],
+          "duration": 188
+        },
+        {
+          "title": "Psycho",
+          "artists": ["Puddle Of Mudd"],
+          "duration": 211
+        },
+        {
+          "title": "Feel So Numb",
+          "artists": ["Rob Zombie"],
+          "duration": 234
+        },
+        {
+          "title": "Ace of Spades",
+          "artists": ["Motörhead"],
+          "duration": 166
+        },
+        {
+          "title": "Back In Black",
+          "artists": ["AC/DC"],
+          "duration": 256
+        },
+        {
+          "title": "November Rain",
+          "artists": ["Guns N' Roses"],
+          "duration": 538
+        },
+        {
+          "title": "Wind Of Change",
+          "artists": ["Scorpions"],
+          "duration": 313
+        },
+        {
+          "title": "Crazy Train",
+          "artists": ["Ozzy Osbourne"],
+          "duration": 296
+        },
+        {
+          "title": "We Will Rock You",
+          "artists": ["Queen"],
+          "duration": 122
+        },
+        {
+          "title": "Hotel California",
+          "artists": ["Eagles"],
+          "duration": 391
+        },
+        {
+          "title": "Walk This Way",
+          "artists": ["Aerosmith"],
+          "duration": 220
+        },
+        {
+          "title": "No One Like You",
+          "artists": ["Scorpions"],
+          "duration": 247
+        },
+        {
+          "title": "Californication",
+          "artists": ["Red Hot Chili Peppers"],
+          "duration": 330
+        },
+        {
+          "title": "Kashmir",
+          "artists": ["Led Zeppelin"],
+          "duration": 517
+        },
+        {
+          "title": "Zombie",
+          "artists": ["The Cranberries"],
+          "duration": 306
+        },
+        {
+          "title": "You Shook Me All Night Long",
+          "artists": ["AC/DC"],
+          "duration": 210
+        },
+        {
+          "title": "It's My Life",
+          "artists": ["Bon Jovi"],
+          "duration": 224
+        },
+        {
+          "title": "Black Betty",
+          "artists": ["Ram Jam"],
+          "duration": 240
+        },
+        {
+          "title": "Sweet Home Alabama",
+          "artists": ["Lynyrd Skynyrd"],
+          "duration": 284
+        },
+        {
+          "title": "Otherside",
+          "artists": ["Red Hot Chili Peppers"],
+          "duration": 255
+        },
+        {
+          "title": "Shoot to Thrill",
+          "artists": ["AC/DC"],
+          "duration": 318
+        },
+        {
+          "title": "Can't Stop",
+          "artists": ["Red Hot Chili Peppers"],
+          "duration": 269
+        },
+        {
+          "title": "Sad But True",
+          "artists": ["Metallica"],
+          "duration": 324
+        },
+        {
+          "title": "Song 2 (Live)",
+          "artists": ["Blur"],
+          "duration": 170
+        },
+        {
+          "title": "American Idiot",
+          "artists": ["Green Day"],
+          "duration": 176
+        },
+        {
+          "title": "Uprising",
+          "artists": ["Muse"],
+          "duration": 305
+        },
+        {
+          "title": "Paranoid",
+          "artists": ["Black Sabbath"],
+          "duration": 168
+        },
+        {
+          "title": "Master Of Puppets",
+          "artists": ["Metallica"],
+          "duration": 515
+        },
+        {
+          "title": "Are You Gonna Go My Way",
+          "artists": ["Lenny Kravitz"],
+          "duration": 212
+        }
+      ]
+    },
+    {
+      "id": "0vfhsfluwMrsT03LwEQo4K",
+      "name": "Türkçe Efsanelerim",
+      "url": "https://open.spotify.com/playlist/0vfhsfluwMrsT03LwEQo4K",
+      "tracks": [
+        {
+          "title": "Bir Sevmek Bin Defa Ölmek Demekmiş",
+          "artists": ["3 Hürel"],
+          "duration": 303
+        },
+        {
+          "title": "O Leyli",
+          "artists": ["Cem Karaca"],
+          "duration": 154
+        },
+        {
+          "title": "Sözlerimi Geri Alamam",
+          "artists": ["Bulutsuzluk Özlemi"],
+          "duration": 344
+        },
+        {
+          "title": "Gönül",
+          "artists": ["Fikret Kızılok"],
+          "duration": 379
+        },
+        {
+          "title": "Bu Kalp Seni Unutur mu",
+          "artists": ["Fikret Kızılok", "Sibel Sezal"],
+          "duration": 275
+        },
+        {
+          "title": "Yeter Ki",
+          "artists": ["Fikret Kızılok"],
+          "duration": 207
+        },
+        {
+          "title": "Sevince",
+          "artists": ["Erkin Koray"],
+          "duration": 315
+        },
+        {
+          "title": "Seni Her Gördüğümde",
+          "artists": ["Erkin Koray"],
+          "duration": 199
+        },
+        {
+          "title": "Kol Düğmeleri",
+          "artists": ["Barış Manço"],
+          "duration": 206
+        },
+        {
+          "title": "Yalnızlık Ömür Boyu",
+          "artists": ["MFÖ"],
+          "duration": 244
+        },
+        {
+          "title": "Güllerin İçinden",
+          "artists": ["MFÖ"],
+          "duration": 236
+        },
+        {
+          "title": "Yandım",
+          "artists": ["Mazhar Alanson"],
+          "duration": 188
+        },
+        {
+          "title": "Dinleyiverin Gayri",
+          "artists": ["Moğollar"],
+          "duration": 236
+        },
+        {
+          "title": "Düşler Sokağı",
+          "artists": ["Ezginin Günlügü"],
+          "duration": 278
+        },
+        {
+          "title": "Fabrika Kızı",
+          "artists": ["Alpay"],
+          "duration": 139
+        },
+        {
+          "title": "Yalan Yalan",
+          "artists": ["Yeliz"],
+          "duration": 206
+        },
+        {
+          "title": "Bağrı Yanık Dostlara",
+          "artists": ["Asu Maralman"],
+          "duration": 313
+        },
+        {
+          "title": "Aç Kapıyı Gir İçeri",
+          "artists": ["Özdemir Erdoğan"],
+          "duration": 236
+        },
+        {
+          "title": "Öyle Sarhoş Olsam ki",
+          "artists": ["Tanju Okan"],
+          "duration": 215
+        },
+        {
+          "title": "Tamirci Çırağı",
+          "artists": ["Cem Karaca"],
+          "duration": 297
+        },
+        {
+          "title": "Ölüm",
+          "artists": ["Cem Karaca"],
+          "duration": 408
+        },
+        {
+          "title": "Yağmur",
+          "artists": ["Erkin Koray"],
+          "duration": 217
+        },
+        {
+          "title": "Sevdan Bir Ateş",
+          "artists": ["Düş Sokağı Sakinleri"],
+          "duration": 326
+        },
+        {
+          "title": "Hüzün Kovan Kuşu",
+          "artists": ["Düş Sokağı Sakinleri"],
+          "duration": 305
+        },
+        {
+          "title": "Ele Güne Karşı",
+          "artists": ["MFÖ"],
+          "duration": 189
+        },
+        {
+          "title": "Mavi Duvar",
+          "artists": ["Haramiler"],
+          "duration": 248
+        },
+        {
+          "title": "Resimdeki Gözyaslari (Apaslar)",
+          "artists": ["Cem Karaca"],
+          "duration": 183
+        },
+        {
+          "title": "Islak Islak",
+          "artists": ["Cem Karaca"],
+          "duration": 291
+        },
+        {
+          "title": "Ceviz Ağacı",
+          "artists": ["Cem Karaca"],
+          "duration": 349
+        },
+        {
+          "title": "Kimse Bilmez",
+          "artists": [
+            "Kemal Sahir Gürel",
+            "Erdal Güney",
+            "Hüseyin Yıldız",
+            "Mehmet Güreli"
+          ],
+          "duration": 207
+        },
+        {
+          "title": "Sevenler Ağlarmış",
+          "artists": ["3 Hürel"],
+          "duration": 354
+        },
+        {
+          "title": "Aldırma Gönül",
+          "artists": ["Edip Akbayram"],
+          "duration": 294
+        },
+        {
+          "title": "Kendim Ettim Kendim Buldum",
+          "artists": ["Cem Karaca"],
+          "duration": 239
+        },
+        {
+          "title": "Herkes Gibisin",
+          "artists": ["Cem Karaca"],
+          "duration": 242
+        },
+        {
+          "title": "Dağlar Dağlar - 1. Versiyon",
+          "artists": ["Barış Manço"],
+          "duration": 265
+        },
+        {
+          "title": "Böyle Gelmiş Böyle Geçer Dünya",
+          "artists": ["Gönül Akkor"],
+          "duration": 185
+        },
+        {
+          "title": "Çok Yorgunum",
+          "artists": ["Cem Karaca"],
+          "duration": 224
+        },
+        {
+          "title": "Tatlı Dillim",
+          "artists": ["Selda Bağcan"],
+          "duration": 121
+        },
+        {
+          "title": "İyi Düşün Taşın",
+          "artists": ["Mavi Işıklar"],
+          "duration": 151
+        },
+        {
+          "title": "Sultan-ı Yegah",
+          "artists": ["Nur Yoldas"],
+          "duration": 194
+        },
+        {
+          "title": "Dalkavuk",
+          "artists": ["Şenay"],
+          "duration": 307
+        },
+        {
+          "title": "Dilek Taşı",
+          "artists": ["Gülden Karaböcek"],
+          "duration": 284
+        },
+        {
+          "title": "Sen Evlisin",
+          "artists": ["Gülden Karaböcek"],
+          "duration": 220
+        },
+        {
+          "title": "Aşk Eski Bir Yalan",
+          "artists": ["Kamuran Akkor"],
+          "duration": 142
+        },
+        {
+          "title": "Bana Yalan Söylediler",
+          "artists": ["Semiramis Pekkan"],
+          "duration": 239
+        },
+        {
+          "title": "Günaydın Çocuklar",
+          "artists": ["Barış Manço"],
+          "duration": 224
+        },
+        {
+          "title": "Aşkımız Bitecek",
+          "artists": ["Erkin Koray"],
+          "duration": 199
+        },
+        {
+          "title": "Mihrimah",
+          "artists": ["Nur Yoldas"],
+          "duration": 304
+        },
+        {
+          "title": "Haram",
+          "artists": ["3 Hürel"],
+          "duration": 159
+        },
+        {
+          "title": "Aman Yavaş Aheste",
+          "artists": ["Barış Manço"],
+          "duration": 300
+        },
+        {
+          "title": "Nem Alacak Felek Benim",
+          "artists": ["Cem Karaca"],
+          "duration": 286
+        },
+        {
+          "title": "Karacaoğlan",
+          "artists": ["Cem Karaca"],
+          "duration": 205
+        },
+        {
+          "title": "İnce İnce Bir Kar Yağar",
+          "artists": ["Selda Bağcan"],
+          "duration": 224
+        },
+        {
+          "title": "Alla Beni Pulla Beni",
+          "artists": ["Barış Manço"],
+          "duration": 246
+        },
+        {
+          "title": "Deniz Üstü Köpürür",
+          "artists": ["Cem Karaca"],
+          "duration": 250
+        },
+        {
+          "title": "Her Akşam \"Sarhoş\"",
+          "artists": ["Dario Moreno"],
+          "duration": 181
+        },
+        {
+          "title": "Cemalim",
+          "artists": ["Erkin Koray"],
+          "duration": 357
+        },
+        {
+          "title": "Tutamıyorum Zamanı",
+          "artists": ["Müslüm Gürses"],
+          "duration": 268
+        },
+        {
+          "title": "Olmalı mı Olmamalı mı",
+          "artists": ["Bülent Ortaçgil"],
+          "duration": 131
+        },
+        {
+          "title": "Sevda Çiçeği",
+          "artists": ["Fikret Kızılok"],
+          "duration": 266
+        },
+        {
+          "title": "Şimdi Uzaklardasın",
+          "artists": ["Zeki Müren"],
+          "duration": 198
+        },
+        {
+          "title": "Okyanus",
+          "artists": ["Nihat Işıklar"],
+          "duration": 163
+        },
+        {
+          "title": "Ayrılık Olsa Bile",
+          "artists": ["Esmeray"],
+          "duration": 191
+        },
+        {
+          "title": "36-24-36",
+          "artists": ["The Shadows"],
+          "duration": 104
+        },
+        {
+          "title": "Yalnızlar Rıhtımı",
+          "artists": ["Korkut Koray"],
+          "duration": 189
+        },
+        {
+          "title": "Krallar (Kings)",
+          "artists": ["Erkin Koray"],
+          "duration": 241
+        },
+        {
+          "title": "Karlı Dağlar",
+          "artists": ["Erkin Koray"],
+          "duration": 221
+        },
+        {
+          "title": "Ala Geyik Destanı",
+          "artists": ["Cem Karaca", "Moğollar"],
+          "duration": 654
+        },
+        {
+          "title": "Maden Ocağının Dibinde",
+          "artists": ["Cem Karaca", "Dervişan"],
+          "duration": 279
+        },
+        {
+          "title": "Şık Latife",
+          "artists": ["Bülent Ortaçgil"],
+          "duration": 226
+        },
+        {
+          "title": "Aşk Çiçeği",
+          "artists": ["Mavi Işıklar"],
+          "duration": 151
+        },
+        {
+          "title": "İntizar",
+          "artists": ["Neşe Karaböcek"],
+          "duration": 291
+        },
+        {
+          "title": "Yıldızların Altında",
+          "artists": ["Zeki Müren"],
+          "duration": 179
+        },
+        {
+          "title": "Ağrı Dağı Efsanesi",
+          "artists": ["Moğollar"],
+          "duration": 225
+        },
+        {
+          "title": "Kabahat Seni Sevende",
+          "artists": ["Kamuran Akkor"],
+          "duration": 285
+        },
+        {
+          "title": "Bana Yalan Söylediler",
+          "artists": ["Semiramis Pekkan"],
+          "duration": 239
+        },
+        {
+          "title": "Çöpçatan",
+          "artists": ["Semiramis Pekkan"],
+          "duration": 182
+        },
+        {
+          "title": "Çaresizim",
+          "artists": ["Funda"],
+          "duration": 214
+        },
+        {
+          "title": "İşte Öyle Bir Şey",
+          "artists": ["Erol Evgin"],
+          "duration": 180
+        },
+        {
+          "title": "Deniz Ve Mehtap / Aşkımız Bitti",
+          "artists": ["Dario Moreno"],
+          "duration": 182
+        },
+        {
+          "title": "Sessiz Gemi",
+          "artists": ["Hümeyra"],
+          "duration": 210
+        },
+        {
+          "title": "Zaman Zaman",
+          "artists": ["Fikret Kızılok"],
+          "duration": 225
+        },
+        {
+          "title": "Sen De Başını Alıp Gitme",
+          "artists": ["Cem Karaca"],
+          "duration": 275
+        },
+        {
+          "title": "Arap Saçı",
+          "artists": ["Erkin Koray"],
+          "duration": 216
+        },
+        {
+          "title": "Eksik Bir Şey",
+          "artists": ["Ezginin Günlügü"],
+          "duration": 248
+        },
+        {
+          "title": "Gül Güzeli",
+          "artists": ["Leman Sam"],
+          "duration": 270
+        },
+        {
+          "title": "Eylül'de Gel",
+          "artists": ["Alpay"],
+          "duration": 182
+        },
+        {
+          "title": "Haberin Var Mı",
+          "artists": ["Fikret Kızılok"],
+          "duration": 271
+        },
+        {
+          "title": "Estarabim",
+          "artists": ["Erkin Koray"],
+          "duration": 314
+        },
+        {
+          "title": "Adimiz Miskindir Bizim",
+          "artists": ["Mazhar Ve Fuat"],
+          "duration": 325
+        },
+        {
+          "title": "Deymen Benim Gamlı Yaslı Gönlüme",
+          "artists": ["Edip Akbayram"],
+          "duration": 294
+        },
+        {
+          "title": "Dönence",
+          "artists": ["Barış Manço"],
+          "duration": 410
+        },
+        {
+          "title": "Kerkük Zindanı",
+          "artists": ["Cem Karaca"],
+          "duration": 201
+        },
+        {
+          "title": "Kara Sevda",
+          "artists": ["Barış Manço"],
+          "duration": 265
+        },
+        {
+          "title": "Yok Yok Yalan Deme",
+          "artists": ["Ferdi Özbeğen"],
+          "duration": 245
+        },
+        {
+          "title": "Beni Siz Delirttiniz",
+          "artists": ["Cem Karaca", "Dervişan"],
+          "duration": 189
+        },
+        {
+          "title": "Aman Yavaş Aheste",
+          "artists": ["Barış Manço"],
+          "duration": 300
+        },
+        {
+          "title": "Akrebin Gözleri",
+          "artists": ["Erkin Koray"],
+          "duration": 424
+        },
+        {
+          "title": "Tek Başına",
+          "artists": ["Erkin Koray"],
+          "duration": 302
+        },
+        {
+          "title": "Anlamazdın",
+          "artists": ["Ayla Dikmen"],
+          "duration": 222
+        }
+      ]
+    },
+    {
+      "id": "20Drs7DsecnABZWNOE1PKu",
+      "name": "Elektro Müezzin",
+      "url": "https://open.spotify.com/playlist/20Drs7DsecnABZWNOE1PKu",
+      "tracks": [
+        {
+          "title": "Güneşin Kızkardeşi",
+          "artists": ["Gökçe Kılınçer"],
+          "duration": 277
+        },
+        {
+          "title": "Sev Derim",
+          "artists": ["Gökçe Kılınçer"],
+          "duration": 219
+        },
+        {
+          "title": "Aya Bak Yıldıza Bak",
+          "artists": ["Replikas"],
+          "duration": 193
+        },
+        {
+          "title": "Deli Halayı",
+          "artists": ["Replikas"],
+          "duration": 219
+        },
+        {
+          "title": "Hem Evimsin Hem Cehennemim",
+          "artists": ["Lalalar"],
+          "duration": 266
+        },
+        {
+          "title": "Yolunda",
+          "artists": ["Ayyuka"],
+          "duration": 144
+        },
+        {
+          "title": "Avucunu Yalıyor",
+          "artists": ["Lalalar"],
+          "duration": 243
+        },
+        {
+          "title": "Göt",
+          "artists": ["Lalalar"],
+          "duration": 211
+        },
+        {
+          "title": "Anadolu Ejderi",
+          "artists": ["Gaye Su Akyol"],
+          "duration": 243
+        },
+        {
+          "title": "Sen Benim Mağaramsın",
+          "artists": ["Gaye Su Akyol"],
+          "duration": 226
+        },
+        {
+          "title": "Hemşerim Memleket Nire",
+          "artists": ["Gaye Su Akyol"],
+          "duration": 289
+        },
+        {
+          "title": "Kendimden Kaçmaktan - İpek İpekçioğlu Remix",
+          "artists": ["Gaye Su Akyol", "Ipek Ipekcioglu"],
+          "duration": 288
+        },
+        {
+          "title": "Bir Sana Bir De Bana",
+          "artists": ["Baba Zula", "Mad Professor", "Brenna MacCrimmon"],
+          "duration": 179
+        },
+        {
+          "title": "Olan Olur",
+          "artists": ["Bubituzak", "Gaye Su Akyol"],
+          "duration": 220
+        },
+        {
+          "title": "Bugün Dünya Tersine Dönüyor",
+          "artists": ["Bubituzak"],
+          "duration": 197
+        },
+        {
+          "title": "Sensiz Aşk",
+          "artists": ["Elektro Hafiz"],
+          "duration": 273
+        },
+        {
+          "title": "Kaptan",
+          "artists": ["Tuğçe Şenoğul"],
+          "duration": 167
+        },
+        {
+          "title": "Eğri Eğri Doğru Doğru",
+          "artists": ["Barış Manço"],
+          "duration": 189
+        },
+        {
+          "title": "Cinler Tepemde",
+          "artists": ["Görkem Karabudak"],
+          "duration": 300
+        },
+        {
+          "title": "Yıllar Yılan",
+          "artists": ["Gaye Su Akyol"],
+          "duration": 256
+        },
+        {
+          "title": "Bana Göre Değil",
+          "artists": ["Bubituzak"],
+          "duration": 227
+        },
+        {
+          "title": "Ateş Olsan",
+          "artists": ["Bubituzak"],
+          "duration": 192
+        },
+        {
+          "title": "Bu Izdırabın Panzehiri",
+          "artists": ["Gaye Su Akyol"],
+          "duration": 265
+        },
+        {
+          "title": "Neye Geldim Dünyaya",
+          "artists": ["L.S.D. Orkestrası"],
+          "duration": 175
+        },
+        {
+          "title": "Fantastiktir Bahtı Yarimin",
+          "artists": ["Gaye Su Akyol"],
+          "duration": 198
+        },
+        {
+          "title": "Yeryüzü Cenneti",
+          "artists": ["Erkut Taçkın"],
+          "duration": 241
+        },
+        {
+          "title": "İkimiz Bir Fidanın",
+          "artists": ["Gökçe Kılınçer"],
+          "duration": 253
+        },
+        {
+          "title": "Uzay Yolları Taşlı",
+          "artists": ["Bubituzak"],
+          "duration": 276
+        },
+        {
+          "title": "Gurbet",
+          "artists": ["Fasıl-ı Jazz"],
+          "duration": 239
+        },
+        {
+          "title": "Seyyah",
+          "artists": ["Replikas"],
+          "duration": 235
+        },
+        {
+          "title": "Beni̇ Yalniz Koma",
+          "artists": ["Boom Pam", "Melike Şahin"],
+          "duration": 218
+        },
+        {
+          "title": "Don Kafa",
+          "artists": ["Peyk"],
+          "duration": 274
+        },
+        {
+          "title": "Harakiri",
+          "artists": ["Bubituzak"],
+          "duration": 251
+        },
+        {
+          "title": "Emrah",
+          "artists": ["Cem Karaca Ve Apaşlar"],
+          "duration": 282
+        },
+        {
+          "title": "ah güzel kafam",
+          "artists": ["Korhan Futacı", "Haluk Bilginer"],
+          "duration": 223
+        }
+      ]
+    }
+  ]
+}

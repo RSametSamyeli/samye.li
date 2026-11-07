@@ -1,0 +1,29 @@
+---
+title: 'Reading'
+subtitle: 'Philosophy, strategy and entrepreneurship'
+description: "Samet Samyeli's reading list: the Stoics, Robert Greene and Sun Tzu on strategy, Peterson, Frankl, Kahneman and Taleb on the mind, and the books on entrepreneurship."
+ogImage: true
+---
+
+import BaseLayout from '~/layouts/BaseLayout.astro'
+import StandardLayout from '~/layouts/StandardLayout.astro'
+import RenderPage from '~/components/views/RenderPage.astro'
+import ReadingList from '~/components/views/ReadingList.astro'
+import { readingListSchema } from '~/data/books'
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  ogImage={frontmatter.ogImage}
+  schema={[readingListSchema('en', 'https://samye.li/reading/')]}
+>
+  <StandardLayout
+    title={frontmatter.title}
+    subtitle={frontmatter.subtitle}
+    wide={true}
+    articleClass="wide-page"
+  >
+    <RenderPage slot="article" collectionType="home" id="reading" />
+    <ReadingList slot="article" />
+  </StandardLayout>
+</BaseLayout>

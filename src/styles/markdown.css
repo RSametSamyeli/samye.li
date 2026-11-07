@@ -1,80 +1,10 @@
 @import 'viewerjs/dist/viewer.css';
 @import 'rehype-callouts/theme/vitepress';
-@import url('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css');
+/* KaTeX's stylesheet is not loaded: no page has math yet, and the CSP keeps
+   styles on this origin. The first post with math adds it from the katex
+   package (scripts/verify-build.mjs fails until it does). */
 
-/* Prose Complement */
-.prose {
-  --fg-light: #888;
-  --fg: #555;
-  --fg-deep: #222;
-  --fg-deeper: var(--c-text);
-
-  color: var(--fg);
-}
-
-html.dark .prose {
-  --fg-light: #888;
-  --fg: #bbb;
-  --fg-deep: #ddd;
-  --fg-deeper: var(--c-text);
-}
-
-.prose a {
-  border-bottom: 1px solid rgba(125, 125, 125, 0.3);
-  transition: border 0.3s ease-in-out;
-}
-
-.prose a:hover {
-  border-bottom: 1px solid var(--fg);
-}
-
-.prose a code {
-  color: inherit;
-}
-
-.prose hr {
-  width: 50px;
-  margin: 2em auto;
-}
-
-.prose blockquote {
-  font-weight: 400;
-  font-style: normal;
-  line-height: 1.6em;
-  padding: 0.5em 1em;
-  margin-left: -1.1em;
-}
-
-.prose blockquote > * {
-  opacity: 0.7;
-}
-
-.prose blockquote > :first-child {
-  margin-top: 0;
-}
-
-.prose blockquote > :last-child {
-  margin-bottom: 0;
-}
-
-.prose blockquote p:first-of-type::before {
-  content: none;
-}
-
-.prose blockquote p:first-of-type::after {
-  content: none;
-}
-
-.prose s {
-  opacity: 0.5;
-}
-
-.prose em {
-  color: var(--fg-deep);
-  font-size: 1.05em;
-  font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
-}
-
+/* Prose Complement: what the plugins add to markdown, in the same tokens */
 .prose details summary {
   padding-left: 1px;
   cursor: pointer;
@@ -96,13 +26,10 @@ html.dark .prose {
 }
 
 .prose code:not(.expressive-code code) {
-  border-radius: 0.25rem;
-  padding: 0.15rem 0.3rem;
-  background-color: #88888820;
-}
-
-html.dark .prose code:not(.expressive-code code) {
-  background-color: #88888830;
+  padding: 0.125em 0.35em;
+  border-radius: var(--radius-sm);
+  background-color: var(--ds-gray-alpha-100);
+  box-shadow: inset 0 0 0 1px var(--ds-gray-alpha-400);
 }
 
 .prose div:has(> table) {
@@ -117,7 +44,7 @@ html.dark .prose code:not(.expressive-code code) {
 
 /* Expressive Code */
 .expressive-code {
-  margin: 1em 0;
+  margin: 1.75em 0;
 }
 
 .expressive-code .copy {
@@ -225,12 +152,14 @@ h5:hover .header-anchor,
 h5:focus .header-anchor,
 h6:hover .header-anchor,
 h6:focus .header-anchor {
-  opacity: 0.5;
+  opacity: 1;
+  color: var(--ds-gray-600);
 }
 
 /* rehype-callouts */
 .callout {
   padding-left: 16px;
+  border-radius: var(--radius-sm);
   font-size: 15px;
 }
 
@@ -254,7 +183,7 @@ html:not(.dark) .img-dark {
 
 /* ::vedio */
 .rds-video {
-  z-index: 150;
+  z-index: 10;
   position: relative;
 
   width: 100%;
@@ -286,12 +215,12 @@ html:not(.dark) .img-dark {
   border-radius: 9999px;
   border-width: 0px !important;
 
-  font-family: var(--font-condensed);
+  font-family: var(--font-mono);
   color: var(--fg-light) !important;
   font-size: 0.875rem;
   line-height: 1.25rem;
 
-  background: #8882;
+  background: var(--ds-gray-alpha-100);
   transform: translateY(6px);
   transition: all 300ms ease-in-out !important;
 }
@@ -315,11 +244,11 @@ html:not(.dark) .img-dark {
   border-radius: 0.25rem;
   border-width: 0px !important;
 
-  font-family: var(--font-condensed);
+  font-family: var(--font-mono);
   color: var(--fg-light) !important;
   line-height: 100%;
 
-  background: #8882;
+  background: var(--ds-gray-alpha-100);
   transform: translateY(3px);
   transition: all 300ms ease-in-out !important;
 }
@@ -341,7 +270,7 @@ html:not(.dark) .img-dark {
 [data-link='custom-url'].square:hover {
   color: var(--fg) !important;
 
-  background: #8883;
+  background: var(--ds-gray-alpha-200);
 }
 
 [data-link='github-repo'].github,

@@ -116,14 +116,12 @@ const groupedBlogItems: {
         <div class="py-2 muted">nothing here yet</div>
       ) : (
         groupedBlogItems.map((group) => {
-          const idx = group.items[0].idx
-
           return (
             <section
-              class="[&:not(:has([data-tags]:not(.hidden)))]:hidden"
+              class="not-first:mt-12 [&:not(:has([data-tags]:not(.hidden)))]:hidden"
               data-year={group.year}
             >
-              <Categorizer {idx} needId={tocEnabled} text={group.year} />
+              <Categorizer needId={tocEnabled} text={group.year} />
 
               {group.items.map(({ data, id, minutesRead, idx }) => (
                 <ListItem

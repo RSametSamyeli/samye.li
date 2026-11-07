@@ -2,15 +2,32 @@
 import Link from '~/components/base/Link.astro'
 import { UI } from '~/config'
 import { localized } from '~/i18n'
+import { LOGOS, logoUrl, opticalSize } from '~/data/logos'
+import { getWordmark } from '~/utils/logo-fetch'
 
 import type { Locale } from '~/i18n'
+import type { Logo, LogoSlug } from '~/data/logos'
 
+/**
+ * A grid of project cards, one shape for all of them: a 2rem band at the top
+ * (the project's icon and name, or a brand's wordmark), what it is, and a
+ * line of facts ruled off at the foot, level across a row. The whole card is
+ * the link; a source-code link sits above it as its own target.
+ */
 export interface GroupItemData {
   id: string
   link: string
   desc: string
   descTr: string
-  icon: string
+  /** an icon; brands have a `logo` (src/data/logos.ts) instead */
+  icon?: string
+  logo?: string
+  /** the source, when the link is the product */
+  repo?: string
+  /** brands: the company the work was done at, and when */
+  via?: string
+  /** a line of facts at the foot of the card */
+  facts?: Record<Locale, string>
 }
 
 interface Props {
@@ -20,47 +37,219 @@ interface Props {
 
 const { items, locale = 'en' } = Astro.props
 const { showGroupItemColorOnHover } = UI.groupView
+
+const href = (link: string) =>
+  link.startsWith('/') ? localized(link, locale) : link
+const wordmark = (logo: string) => logoUrl(logo as LogoSlug)
+/** each brand's wordmark size: equal visual weight across the grid */
+const marks = new Map(
+  await Promise.all(
+    items
+      .filter((item) => item.logo && wordmark(item.logo))
+      .map(async (item) => {
+        const logo: Logo = LOGOS[item.logo as LogoSlug]
+        return [
+          item.logo,
+          opticalSize(await getWordmark(logo), 2600, 34, logo.scale),
+        ] as const
+      })
+  )
+)
+const footer = (item: GroupItemData) => item.via ?? item.facts?.[locale]
 ---
 
 <div
-  class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3 pt-3 pb-10"
+  class="grid grid-cols-[repeat(auto-fill,minmax(17rem,1fr))] gap-3 pt-4 pb-12"
 >
   {
     items.map((item) => (
-      <Link
-        class={`op-100! group relative flex items-center
-          px-3.5 pt-2 pb-3.5 rounded-md
-          bg-transparent hover:bg-[#88888811]
-          text-4.4 transition-all duration-300`}
-        href={
-          item.link.startsWith('/') ? localized(item.link, locale) : item.link
-        }
-        external={/^https?:/.test(item.link)}
-      >
-        <div class="flex-none pt-2 pr-5" aria-hidden="true">
-          {item.icon.startsWith('i-') ? (
-            <div
-              class={`group-hover:data-[show-color]:saturate-100 op-50 saturate-0 leading-9 text-7.5 ${item.icon}`}
-              data-show-color={showGroupItemColorOnHover ? '' : undefined}
-            />
-          ) : (
-            <img
-              class="block flex-none w-7.5 h-7.5 rounded-md ring-1 ring-[#8883] op-80 group-hover:op-100 transition-opacity"
-              src={item.icon}
-              alt=""
-              width="30"
-              height="30"
-              decoding="async"
-            />
-          )}
-        </div>
-        <div class="flex-auto">
-          <div>{item.id}</div>
-          <div class="muted text-sm font-normal">
-            {locale === 'tr' ? item.descTr : item.desc}
+      <div class="group ds-card project">
+        {item.logo ? (
+          <Link
+            class="card-link op-100! project-head"
+            href={href(item.link)}
+            external={/^https?:/.test(item.link)}
+          >
+            {wordmark(item.logo) ? (
+              <img
+                class="brand-logo"
+                src={wordmark(item.logo)}
+                alt={item.id}
+                width={marks.get(item.logo)?.width}
+                height={marks.get(item.logo)?.height}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <span class="brand-name">{item.id}</span>
+            )}
+          </Link>
+        ) : (
+          <div class="project-head project-lockup">
+            <span
+              class="project-icon"
+              data-image={item.icon?.startsWith('i-') ? undefined : ''}
+              aria-hidden="true"
+            >
+              {item.icon?.startsWith('i-') ? (
+                <span
+                  class={`group-hover:data-[show-color]:saturate-100 saturate-0 text-[1.375rem] ${item.icon}`}
+                  data-show-color={showGroupItemColorOnHover ? '' : undefined}
+                />
+              ) : (
+                <img
+                  src={item.icon}
+                  alt=""
+                  width="40"
+                  height="40"
+                  decoding="async"
+                />
+              )}
+            </span>
+            <Link
+              class="card-link op-100! project-name"
+              href={href(item.link)}
+              external={/^https?:/.test(item.link)}
+            >
+              {item.id}
+            </Link>
           </div>
-        </div>
-      </Link>
+        )}
+        <p class="project-desc">{locale === 'tr' ? item.descTr : item.desc}</p>
+        {item.repo && (
+          <a class="repo-link" href={item.repo} rel="noopener">
+            <span class="i-uil-github-alt" aria-hidden="true" />
+            {locale === 'tr' ? 'Kaynak kod' : 'Source code'}
+          </a>
+        )}
+        {footer(item) && (
+          <div class="project-foot">
+            <p>{footer(item)}</p>
+          </div>
+        )}
+      </div>
     ))
   }
 </div>
+
+<style>
+  .project {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+  }
+  /* the top band: an icon and the name, or a brand's wordmark, 2rem tall */
+  .project-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    height: 2rem;
+    text-decoration: none;
+  }
+  /* our own: an app icon and the name, as one lockup */
+  .project-lockup {
+    height: 2.5rem;
+  }
+  .project-icon {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    overflow: hidden;
+    border-radius: 0.625rem;
+    background: var(--ds-gray-alpha-100);
+    box-shadow: var(--ds-shadow-border);
+    color: var(--ds-gray-1000);
+  }
+  /* a logo that is its own tile (lodos.md, gazla.co): edge to edge, no rule */
+  .project-icon[data-image] {
+    background: none;
+    box-shadow: none;
+  }
+  .project-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .project-name {
+    color: var(--ds-gray-1000);
+    font-size: 1.1875rem;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.2;
+  }
+  .brand-logo {
+    display: block;
+    opacity: 0.9;
+    transition: opacity 0.15s ease;
+  }
+  .project:hover .brand-logo {
+    opacity: 1;
+  }
+  .brand-name {
+    color: var(--ds-gray-1000);
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .project-desc {
+    margin: 0.875rem 0 0;
+    color: var(--ds-gray-900);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .repo-link {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    width: fit-content;
+    margin-top: 0.75rem;
+    color: var(--ds-gray-900);
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+  .repo-link:hover {
+    color: var(--ds-gray-1000);
+  }
+  /* the facts sit at the foot of the card, level across a row */
+  .project-foot {
+    margin-top: auto;
+    padding-top: 0.875rem;
+  }
+  .project-foot p {
+    margin: 0;
+    padding-top: 0.625rem;
+    border-top: 1px solid var(--c-border);
+    color: var(--ds-gray-900);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+  /* The whole card is the project's link (the name's box stretched over it);
+     the source link sits above that layer, so it stays its own target. */
+  .card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+  .card-link:focus-visible {
+    box-shadow: none;
+  }
+  .ds-card:has(.card-link:focus-visible) {
+    box-shadow: var(--ds-focus-ring);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .brand-logo,
+    .repo-link {
+      transition: none;
+    }
+  }
+</style>

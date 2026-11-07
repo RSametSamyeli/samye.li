@@ -6,6 +6,7 @@ import MobileControl from '~/components/base/MobileControl.astro'
 
 import { getFilteredPosts, getSortedPosts } from '~/utils/data'
 import { withBasePath } from '~/utils/path'
+import { localeOf, pathIn } from '~/i18n'
 import { FEATURES } from '~/config'
 
 import type { CardItemData } from '~/components/views/CardItem.astro'
@@ -34,10 +35,13 @@ const { tag } = FEATURES
 const tagEnabled = Array.isArray(tag) && tag[0] && pageTag
 const tags: string[][] = []
 
-/* Cards: newest first */
+/* Cards: newest first, linking within the reader's language */
+const locale = localeOf(Astro.url.pathname)
 const sorted = getSortedPosts(await getFilteredPosts(collectionType))
 const dataForGrid: CardItemData[] = sorted.map((item) => ({
-  link: item.data.redirect || withBasePath(`/${collectionType}/${item.id}/`),
+  link:
+    item.data.redirect ||
+    withBasePath(pathIn(`/${collectionType}/${item.id}/`, locale)),
   text: item.data.title,
   date: item.data.pubDate,
   tags: item.data.tags,
@@ -60,7 +64,7 @@ const isEmpty = dataForGrid.length === 0
     <>
       {!haveTags && (
         <div
-          class="grid auto-rows-[minmax(12.5rem,1fr)] mx-20 lt-md:mx-1 fade-in"
+          class="grid auto-rows-[minmax(12.5rem,1fr)] max-w-[67.125rem] mx-auto fade-in"
           style={{
             '--fade-in-duration': '0.6s',
             'gap': `${gap}px`,
@@ -70,7 +74,7 @@ const isEmpty = dataForGrid.length === 0
           {dataForGrid.map((item) => (
             <CardItem
               class="min-h-40 lt-md:min-h-0
-                [&>*:first-child]:rounded-xl [&:hover>*:first-child]:(shadow-custom_0_0_15_-3 scale-103 transition-transform)"
+                [&>*:first-child]:rounded-xl"
               item={item}
             />
           ))}
@@ -78,10 +82,7 @@ const isEmpty = dataForGrid.length === 0
       )}
       {haveTags && (
         <>
-          <div
-            class="grid items-start gap-8 grid-cols-[minmax(0,1fr)_15.625rem] lt-lgp:(grid-cols-1)
-              mx-20 lt-lgp:mx-10 lt-md:mx-1 fade-in"
-          >
+          <div class="grid items-start gap-8 grid-cols-[minmax(0,1fr)_var(--toc-w)] lt-xl:(grid-cols-1) max-w-[67.125rem] mx-auto fade-in">
             <div
               class="grid items-stretch auto-rows-[minmax(12.5rem,1fr)]"
               style={{
@@ -91,17 +92,14 @@ const isEmpty = dataForGrid.length === 0
               }}
             >
               {dataForGrid.map((item) => (
-                <CardItem
-                  class="[&>*:first-child]:rounded-xl [&:hover>*:first-child]:(shadow-custom_0_0_15_-3 scale-103 transition-transform)"
-                  item={item}
-                />
+                <CardItem class="[&>*:first-child]:rounded-xl" item={item} />
               ))}
             </div>
             {tagEnabled && tags.length > 0 && (
               <DesktopAside
                 tags={tags}
-                style="position: sticky"
-                tagStyle="max-height: 54vh; opacity: 0.6"
+                inline
+                tagStyle="max-height: 54vh"
                 tagButtonText="Choose Tags"
               />
             )}

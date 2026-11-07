@@ -6,9 +6,10 @@ import mdx from '@astrojs/mdx'
 import { unified } from '@astrojs/markdown-remark'
 
 import { remarkPlugins, rehypePlugins } from './plugins'
+import cloudflarePages from './src/integrations/cloudflare-pages'
 import { SITE } from './src/config'
 import { sitemapIndex } from './src/utils/sitemap'
-import { alternatesOf, LOCALES } from './src/i18n'
+import { alternatesOf, isMirror, LOCALES } from './src/i18n'
 
 const sansFallbacks = [
   'ui-sans-serif',
@@ -42,7 +43,10 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      filter: (page) => !sitemapPosts.skip.has(page),
+      // posts published elsewhere, and the Turkish-interface mirrors of
+      // English pages (noindex: the English page is the one to find)
+      filter: (page) =>
+        !sitemapPosts.skip.has(page) && !isMirror(new URL(page).pathname),
       serialize: (item) => {
         const lastmod = sitemapPosts.lastmod.get(item.url)
         // a page that exists in both languages lists both, and English as the
@@ -64,6 +68,8 @@ export default defineConfig({
     unocss({ injectReset: true }),
     astroExpressiveCode(),
     mdx(),
+    // last: reads the finished pages to write dist/_headers and dist/_redirects
+    cloudflarePages(),
   ],
   markdown: {
     syntaxHighlight: false,
@@ -73,52 +79,38 @@ export default defineConfig({
     }),
   },
   fonts: [
+    // Geist and Geist Mono, Vercel's typefaces (SIL OFL). latin-ext carries
+    // Turkish: ğ, ş, ı, İ are not in the latin subset.
     {
       provider: fontProviders.fontsource(),
-      name: 'Inter',
+      name: 'Geist',
       cssVariable: '--font-sans',
       weights: ['100 900'],
       styles: ['normal'],
-      subsets: ['latin'],
+      subsets: ['latin', 'latin-ext'],
       formats: ['woff2'],
       fallbacks: sansFallbacks,
     },
     {
       provider: fontProviders.fontsource(),
-      name: 'DM Mono',
+      name: 'Geist Mono',
       cssVariable: '--font-mono',
-      weights: [400],
+      weights: ['100 900'],
       styles: ['normal'],
-      subsets: ['latin'],
+      subsets: ['latin', 'latin-ext'],
       formats: ['woff2'],
       fallbacks: monoFallbacks,
     },
-    {
-      provider: fontProviders.fontsource(),
-      name: 'Roboto Condensed',
-      cssVariable: '--font-condensed',
-      weights: [400],
-      styles: ['normal'],
-      subsets: ['latin'],
-      formats: ['woff2'],
-      fallbacks: sansFallbacks,
-    },
+    // the share cards: Satori reads WOFF, not WOFF2
     {
       provider: fontProviders.google(),
-      name: 'Inter',
+      name: 'Geist',
       cssVariable: '--font-og-sans',
       weights: [400, 700],
       styles: ['normal'],
-      subsets: ['latin'],
+      subsets: ['latin', 'latin-ext'],
       formats: ['woff'],
       fallbacks: sansFallbacks,
-      options: {
-        experimental: {
-          variableAxis: {
-            opsz: ['24'],
-          },
-        },
-      },
     },
   ],
   image: {

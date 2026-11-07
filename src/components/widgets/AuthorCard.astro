@@ -28,7 +28,7 @@ const links = [
 
 <aside
   aria-label={S.aboutAuthor}
-  class="not-prose mt-12 flex gap-4 items-start p-5 rounded-xl border border-[#8883]"
+  class="not-prose mt-16 flex gap-4 items-start p-5 rounded-xl shadow-[var(--ds-shadow-border)]"
 >
   <a
     href={withBasePath(localized('/', locale))}
@@ -36,7 +36,7 @@ const links = [
     class="flex-none border-none!"
   >
     <Image
-      class="block m-0! w-14 h-14 rounded-full! object-cover ring-1 ring-[#8884]"
+      class="block m-0! w-14 h-14 rounded-full! object-cover shadow-[var(--ds-shadow-border)]"
       src={portrait}
       alt={S.portraitAlt}
       widths={[56, 112, 168]}
